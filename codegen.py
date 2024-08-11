@@ -79,8 +79,9 @@ class CodeGeneratorApp:
         items = self.canvas.find_withtag(unique_tag)
         for item in items:
             self.canvas.move(item, dx, dy)
-            
+
         self.update_arrows()
+        
 
     def on_output_circle_press(self, event):
         print("on_output_circle_press")

@@ -28,20 +28,21 @@ class OutputBlock:
         self.output_channel  = 0
 
         # Define the options for the dropdown menu
-        options = ["Loop1 Out", "Loop2 Out", "Loop3 Out", "Loop4 Out"]
+        self.options = ["Loop1 Out", "Loop2 Out", "Loop3 Out", "Loop4 Out"]
 
         # Create Block
         x = 200
         y = 50
-        output_block    = canvas.create_rectangle(x, y, x+100, y+150, fill="lightgreen", tags=("block", tag))
-        output_text     = canvas.create_text(x+50, y+25, text="OUTPUT", font=("Arial", 14), tags=("block", tag))
-        input_circle    = canvas.create_oval(x-10, y+15, x+10, y+35, fill="green", tags=("input_circle", tag))
+        
          # Variable to hold the selected option
         self.selected_option = StringVar()
-        self.selected_option.set(options[0])  # Set the default option
+        self.selected_option.set(self.options[0])  # Set the default option
         
         # Create the dropdown menu
-        dropdown = OptionMenu(canvas.master, self.selected_option, *options)
+        self.dropdown = OptionMenu(canvas.master, self.selected_option, *self.options)
 
+        output_block    = canvas.create_rectangle(x, y, x+120, y+80, fill="lightgreen", tags=("block", tag))
+        output_text     = canvas.create_text(x+50, y+25, text="OUTPUT", font=("Arial", 14), tags=("block", tag))
+        input_circle    = canvas.create_oval(x-10, y+15, x+10, y+35, fill="green", tags=("input_circle", tag))
         # Add the dropdown menu to the canvas, above the text
-        dropdown_window = canvas.create_window(x + 50, y + 80, window=dropdown, anchor="center")
+        dropdown_window = canvas.create_window(x + 60, y + 60, window=self.dropdown, anchor="center", tags=("block", tag))
