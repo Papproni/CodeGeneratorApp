@@ -5,10 +5,10 @@ from tkinter import Canvas, Menu, StringVar, OptionMenu
 # init:
 # type: input
 # Source: 
-# numofInputs: 0
-# number of channels per inputs: 0
-# numofOutputs: 1
+# numofInputs: 1
 # number of channels per inputs: 1
+# numofOutputs: 0
+# number of channels per outputs: 0
 
 
 class OutputBlock:

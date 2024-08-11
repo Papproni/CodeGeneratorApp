@@ -8,7 +8,7 @@ from tkinter import Canvas, Menu, StringVar, OptionMenu
 # numofInputs: 0
 # number of channels per inputs: 0
 # numofOutputs: 1
-# number of channels per inputs: 1
+# number of channels per outputs: 1
 
 
 class InputBlock:
