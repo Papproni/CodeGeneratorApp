@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import Canvas, Menu
+from tkinter import Canvas, Menu, StringVar, OptionMenu
 
 # BLOCKS
 import input_block
@@ -37,7 +37,7 @@ class CodeGeneratorApp:
         tag = f"block{block_id}"
 
         new_block = input_block.InputBlock(self.canvas,tag)
-        
+
         self.blocks.append(new_block)
         self.bind_events()  # Ensure events are bound after adding blocks
 
@@ -46,7 +46,7 @@ class CodeGeneratorApp:
         tag = f"block{block_id}"
 
         new_block = output_block.OutputBlock(self.canvas,tag)
-      
+
         self.blocks.append(new_block)
         self.bind_events()  # Ensure events are bound after adding blocks
 
@@ -79,12 +79,14 @@ class CodeGeneratorApp:
         items = self.canvas.find_withtag(unique_tag)
         for item in items:
             self.canvas.move(item, dx, dy)
+            
         self.update_arrows()
 
     def on_output_circle_press(self, event):
         print("on_output_circle_press")
         # Start the arrow from the output circle
         self.selected_output_circle = self.canvas.find_withtag("current")[0]
+        print("self.selected_output_circle: ",self.selected_output_circle)
         x1, y1, x2, y2 = self.canvas.coords(self.selected_output_circle)
         self.arrow_line = self.canvas.create_line((x1 + x2) / 2, (y1 + y2) / 2, event.x, event.y, arrow=tk.LAST, tags="arrow")
         self.canvas.bind("<Motion>", self.on_arrow_drag)
@@ -112,6 +114,7 @@ class CodeGeneratorApp:
         print("on_input_circle_hover")
         # Highlight the input circle when hovered over
         current_circle = self.canvas.find_withtag("current")[0]
+        print(self.canvas.coords(current_circle))
         self.canvas.itemconfig(current_circle, outline="red", width=2)
 
     def on_input_circle_leave(self, event):
@@ -120,6 +123,7 @@ class CodeGeneratorApp:
         current_circle = self.canvas.find_withtag("current")[0]
         self.canvas.itemconfig(current_circle, outline="", width=1)
 
+    # TODO: When blcoks are dragged the IO cirlces are NOT updated!!! Circle positions must be updated!!!
     def on_input_circle_press(self, event):
         print("on_input_circle_press")
         # Connect the arrow to the input circle if it exists
@@ -130,15 +134,17 @@ class CodeGeneratorApp:
                 item_tags = self.canvas.gettags(item)
                 print(f"Item under cursor: {item}, tags: {item_tags}")
                 if "input_circle" in item_tags:
-                    print("connected")
+
                     x1, y1, x2, y2 = self.canvas.coords(self.selected_output_circle)
                     x3, y3, x4, y4 = self.canvas.coords(target_input_circle)
-                    self.canvas.coords(self.arrow_line, (x1 + x2) / 2, (y1 + y2) / 2, (x3 + x4) / 2, (y3 + y4) / 2)
-                    self.arrows.append((self.selected_output_circle, target_input_circle, self.arrow_line))
+                    # self.canvas.coords(self.arrow_line, (x1 + x2)/2, (y1 + y2)/2, (x3 + x4) / 2, (y3 + y4) / 2)
+                    self.arrows.append((self.selected_output_circle, item, self.arrow_line))
                     self.arrow_line = None
                     self.selected_output_circle = None
                     self.canvas.unbind("<Motion>")
                     self.canvas.unbind("<ButtonPress-1>")
+                    print("connected")
+                    break
                 else:
                     print("cancel_arrow")
                     self.cancel_arrow(event)
@@ -154,17 +160,28 @@ class CodeGeneratorApp:
 
     def update_arrows(self):
         # Update the arrow positions
+        print("update errors STARTED...")
         for arrow in self.arrows:
-            start_circle = arrow[0]
-            end_circle = arrow[1]
-            line = arrow[2]
+            start_circle    = arrow[0]
+            end_circle      = arrow[1]
+            line            = arrow[2]
+
+            print("start circle: ", start_circle)
+            print("end_circle",     end_circle)
+            print("line:",          line)
+            print(self.canvas.coords(start_circle))
+            print(self.canvas.coords(end_circle))
             x1, y1, x2, y2 = self.canvas.coords(start_circle)
             x3, y3, x4, y4 = self.canvas.coords(end_circle)
+            
             self.canvas.coords(line, (x1 + x2) / 2, (y1 + y2) / 2, (x3 + x4) / 2, (y3 + y4) / 2)
+
+        print("update errors FINISHED")
 
 if __name__ == "__main__":
     root = tk.Tk()
     app = CodeGeneratorApp(root)
-    # app.add_input_block(50, 50)  # Add an initial input block
-    # app.add_output_block(200, 150)  # Add an initial output block
+
     root.mainloop()
+
+
