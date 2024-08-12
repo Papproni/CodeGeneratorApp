@@ -2,8 +2,11 @@ import tkinter as tk
 from tkinter import Canvas, Menu, StringVar, OptionMenu
 
 # BLOCKS
-import input_block
-import output_block
+# import sab_filters
+# import sab_io
+from gui_blocks import sab_filters
+from gui_blocks import sab_io
+
 
 class CodeGeneratorApp:
     def __init__(self, root):
@@ -32,12 +35,16 @@ class CodeGeneratorApp:
         io_menu.add_command(label="Input", command=self.add_input_block)
         io_menu.add_command(label="Output", command=self.add_output_block)
 
+        filter_menu = Menu(menubar, tearoff=0)
+        menubar.add_cascade(label="Filters", menu=filter_menu)
+        filter_menu.add_command(label="Filterbank", command=self.add_filterbank_block)
+
     def add_input_block(self, x=50, y=50):
         block_id = len(self.blocks) + 1
         tag = f"block{block_id}"
 
-        new_block = input_block.InputBlock(self.canvas,tag)
-
+        new_block = sab_io.InputBlock(self.canvas,tag)
+        
         self.blocks.append(new_block)
         self.bind_events()  # Ensure events are bound after adding blocks
 
@@ -45,8 +52,18 @@ class CodeGeneratorApp:
         block_id = len(self.blocks) + 1
         tag = f"block{block_id}"
 
-        new_block = output_block.OutputBlock(self.canvas,tag)
+        new_block = sab_io.OutputBlock(self.canvas,tag)
+        
 
+        self.blocks.append(new_block)
+        self.bind_events()  # Ensure events are bound after adding blocks
+
+    def add_filterbank_block(self, x=200, y=150):
+        block_id = len(self.blocks) + 1
+        tag = f"block{block_id}"
+
+        new_block = sab_filters.FilterBank(self.canvas,tag)
+    
         self.blocks.append(new_block)
         self.bind_events()  # Ensure events are bound after adding blocks
 
