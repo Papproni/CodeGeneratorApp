@@ -7,13 +7,57 @@ from tkinter import Canvas, Menu, StringVar, OptionMenu
 from gui_blocks import sab_filters
 from gui_blocks import sab_io
 
+import cfile
+import slidemenu
+
+# On screen user has 6 options to use
+# maximum 12 options are available
+# each slot can be a "checkbox" or a "potentiometer"
+
+# In gui user must choose a parameter assign it to a one of above
+# USER MUST: Set a name for the parameter
+# IF potentiometer is choosen:
+    # he must choose Min and Max Value
+    # on the menu user must choose a place on the screen
+    # User can chage parameters on screen according to position (IE: on P1 and P7 = POT1)
+    # User can set potentiometer variable to Side, if thats needed, the outside control must be used!
+
+# IF checkbox is choosen 
+    # he must choose Min and Max Value for checked and unchecked box (touch)
+    # on the menu user must choose a place on the screen 
+
+
+#
+# *-------------------*    *-------------------*
+# |  P1  |  P2  |  P3  |    |  P7  |  P8  |  P9  |
+# |--------------------|    |--------------------|
+# |  P4  |  P5  |  P6  |    |  P10 |  P11 | P12  |
+# *-------------------*    *-------------------*
+#         Page 1                    Page 2
+
+class Potmeter:
+    def __init__(self):
+        self.name = "None"
+        self.lim_low = 0
+        self.lim_high = 10
+
+class HardwareControls:
+    def __init__(self):
+        self.pots = Potmeter()
+        self.slots = []
+        self.max_slot_num = 12
+    
+    def assign_control(self,slot_location):
+        self.slots.append
 
 class CodeGeneratorApp:
     def __init__(self, root):
         self.root = root
         self.root.title("DSP code gen for STM AUDIO BOARD V3")
-        self.canvas = Canvas(root, width=800, height=600, bg="white")
+        self.canvas = Canvas(root, width=800, height=800, bg="white")
         self.canvas.pack()
+
+        self.slidemenu = slidemenu.SlideMenu(root)
 
         self.blocks = []
         self.arrows = []
@@ -53,7 +97,6 @@ class CodeGeneratorApp:
         tag = f"block{block_id}"
 
         new_block = sab_io.OutputBlock(self.canvas,tag)
-        
 
         self.blocks.append(new_block)
         self.bind_events()  # Ensure events are bound after adding blocks
@@ -68,6 +111,11 @@ class CodeGeneratorApp:
         self.bind_events()  # Ensure events are bound after adding blocks
 
     def bind_events(self):
+        # Bind events for dragging the canvas
+        self.canvas.bind("<Button-1>", self.on_click)
+        self.canvas.bind("<B1-Motion>", self.on_drag)
+        self.canvas.bind("<ButtonRelease-1>", self.on_release)
+
         # Bind events to blocks and circles
         self.canvas.tag_bind("block", "<ButtonPress-1>", self.on_block_press)
         self.canvas.tag_bind("block", "<B1-Motion>", self.on_block_drag)
@@ -111,7 +159,7 @@ class CodeGeneratorApp:
         self.canvas.bind("<ButtonPress-1>", self.on_canvas_click)
 
     def on_arrow_drag(self, event):
-        print("on_arrow_drag")
+        # print("on_arrow_drag")
         # Update the arrow's endpoint to follow the mouse
         if self.arrow_line:
             x1, y1, x2, y2 = self.canvas.coords(self.selected_output_circle)
@@ -178,7 +226,7 @@ class CodeGeneratorApp:
 
     def update_arrows(self):
         # Update the arrow positions
-        print("update errors STARTED...")
+        print("update arrows STARTED...")
         for arrow in self.arrows:
             start_circle    = arrow[0]
             end_circle      = arrow[1]
@@ -194,11 +242,35 @@ class CodeGeneratorApp:
             
             self.canvas.coords(line, (x1 + x2) / 2, (y1 + y2) / 2, (x3 + x4) / 2, (y3 + y4) / 2)
 
-        print("update errors FINISHED")
+        print("update arrows FINISHED")
+
+    def on_click(self, event):
+        # Record the initial position of the click
+        self.drag_data["x"] = event.x
+        self.drag_data["y"] = event.y
+
+    def on_drag(self, event):
+        # Calculate how much the mouse has moved
+        delta_x = event.x - self.drag_data["x"]
+        delta_y = event.y - self.drag_data["y"]
+
+        # Move the canvas by the delta
+        self.canvas.move(tk.ALL, delta_x, delta_y)
+
+        # Update the recorded position
+        self.drag_data["x"] = event.x
+        self.drag_data["y"] = event.y
+
+    def on_release(self, event):
+        # Reset the drag data
+        self.drag_data = {"x": 0, "y": 0, "item": None, "tags": None}
+
 
 if __name__ == "__main__":
     root = tk.Tk()
     app = CodeGeneratorApp(root)
+
+    
 
     root.mainloop()
 
