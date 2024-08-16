@@ -202,7 +202,7 @@ class CodeGeneratorApp:
 
     # TODO: When blcoks are dragged the IO cirlces are NOT updated!!! Circle positions must be updated!!!
     def on_input_circle_press(self, event):
-        print("on_input_circle_press")
+        print("***** on_input_circle_press: ", self.selected_output_circle)
         # Connect the arrow to the input circle if it exists
         if self.arrow_line:
             target_input_circle = self.canvas.find_withtag("current")[0]
@@ -210,9 +210,13 @@ class CodeGeneratorApp:
             for item in overlapping_items:
                 item_tags = self.canvas.gettags(item)
                 print(f"Item under cursor: {item}, tags: {item_tags}")
+                print("***** on_input_circle_press: ", self.selected_output_circle)
                 if "input_circle" in item_tags:
-
-                    x1, y1, x2, y2 = self.canvas.coords(self.selected_output_circle)
+                    try:
+                        x1, y1, x2, y2 = self.canvas.coords(self.selected_output_circle)
+                    except:
+                        print("EXCEPTION: ", self.selected_output_circle)
+                    
                     x3, y3, x4, y4 = self.canvas.coords(target_input_circle)
                     # self.canvas.coords(self.arrow_line, (x1 + x2)/2, (y1 + y2)/2, (x3 + x4) / 2, (y3 + y4) / 2)
                     self.arrows.append((self.selected_output_circle, item, self.arrow_line))
@@ -223,8 +227,8 @@ class CodeGeneratorApp:
                     print("connected")
                     break
                 else:
-                    print("cancel_arrow")
-                    self.cancel_arrow(event)
+                    print("on_input_circle_press ELSE")
+                    # self.cancel_arrow(event)
 
     def cancel_arrow(self, event):
         print("cancel_arrow")
