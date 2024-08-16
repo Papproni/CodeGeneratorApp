@@ -111,6 +111,9 @@ class CodeGeneratorApp:
         self.bind_events()  # Ensure events are bound after adding blocks
 
     def bind_events(self):
+        # resize window
+        self.canvas.bind("<Configure>", self.on_resize)
+
         # Bind events for dragging the canvas
         self.canvas.bind("<Button-1>", self.on_click)
         self.canvas.bind("<B1-Motion>", self.on_drag)
@@ -128,12 +131,20 @@ class CodeGeneratorApp:
         self.canvas.tag_bind("input_circle", "<B1-Motion>", lambda event: "break")
         self.canvas.tag_bind("output_circle", "<B1-Motion>", lambda event: "break")
 
+    def on_resize(self, event=None):
+        print("Resize")
+        self.canvas.config(width=event.width, height=event.height)  
+        
+
+
     def on_block_press(self, event):
+        print("on_block_press")
         item = self.canvas.find_withtag("current")[0]
         tags = self.canvas.gettags(item)
         self.drag_data = {"x": event.x, "y": event.y, "item": item, "tags": tags}
 
     def on_block_drag(self, event):
+        print("on_block_drag")
         dx = event.x - self.drag_data["x"]
         dy = event.y - self.drag_data["y"]
         self.drag_data["x"] = event.x
@@ -207,8 +218,8 @@ class CodeGeneratorApp:
                     self.arrows.append((self.selected_output_circle, item, self.arrow_line))
                     self.arrow_line = None
                     self.selected_output_circle = None
-                    self.canvas.unbind("<Motion>")
-                    self.canvas.unbind("<ButtonPress-1>")
+                    # self.canvas.unbind("<Motion>")
+                    # self.canvas.unbind("<ButtonPress-1>")
                     print("connected")
                     break
                 else:
@@ -216,13 +227,14 @@ class CodeGeneratorApp:
                     self.cancel_arrow(event)
 
     def cancel_arrow(self, event):
+        print("cancel_arrow")
         # Cancel the arrow drawing
         if self.arrow_line:
             self.canvas.delete(self.arrow_line)
             self.arrow_line = None
             self.selected_output_circle = None
-            self.canvas.unbind("<Motion>")
-            self.canvas.unbind("<ButtonPress-1>")
+            # self.canvas.unbind("<Motion>")
+            # self.canvas.unbind("<ButtonPress-1>")
 
     def update_arrows(self):
         # Update the arrow positions
@@ -245,14 +257,26 @@ class CodeGeneratorApp:
         print("update arrows FINISHED")
 
     def on_click(self, event):
+        print("on_click")
         # Record the initial position of the click
         self.drag_data["x"] = event.x
         self.drag_data["y"] = event.y
 
     def on_drag(self, event):
+        # print("on_drag")
+        delta_x = 0
+        delta_y = 0
         # Calculate how much the mouse has moved
-        delta_x = event.x - self.drag_data["x"]
-        delta_y = event.y - self.drag_data["y"]
+        if (self.drag_data["x"] == 0):
+           pass
+        
+        else:
+            delta_x = event.x - self.drag_data["x"]
+            delta_y = event.y - self.drag_data["y"]  
+
+        # print(" event.x: ",event.x, " event.y: ", event.y)
+        # print("drag X: ",self.drag_data["x"], " drag Y: ", self.drag_data["y"])
+        # print("dx: ",delta_x, " dy: ", delta_y)
 
         # Move the canvas by the delta
         self.canvas.move(tk.ALL, delta_x, delta_y)
@@ -262,6 +286,7 @@ class CodeGeneratorApp:
         self.drag_data["y"] = event.y
 
     def on_release(self, event):
+        print("on_release")
         # Reset the drag data
         self.drag_data = {"x": 0, "y": 0, "item": None, "tags": None}
 
