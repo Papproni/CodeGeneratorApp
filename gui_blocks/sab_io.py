@@ -28,7 +28,7 @@ class InputBlock:
         self.output_channel  = 1
 
         # Define the options for the dropdown menu
-        self.options = ["Loop1 In", "Loop2 In", "Loop3 In", "Loop4 In"]
+        self.options = ["FX In", "Loop1 In", "Loop2 In", "Loop3 In", "Loop4 In"]
          # Variable to hold the selected option
         self.selected_option = StringVar()
         self.selected_option.set(self.options[0])  # Set the default option
@@ -70,7 +70,7 @@ class OutputBlock:
         self.output_channel  = 0
 
         # Define the options for the dropdown menu
-        self.options = ["Loop1 Out", "Loop2 Out", "Loop3 Out", "Loop4 Out"]
+        self.options = ["FX Out", "Loop1 Out", "Loop2 Out", "Loop3 Out", "Loop4 Out"]
 
         # Create Block
         x = 200

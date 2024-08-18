@@ -8,7 +8,7 @@ class SlideMenu(tk.Frame):
 
         # Configure the main window
         self.parent.geometry("600x300")
-        self.parent.bind("3", self.toggle_menu)  # Bind "3" key
+        self.parent.bind("+", self.toggle_menu)  # Bind "3" key
         self.parent.bind("<Configure>", self.on_resize)  # Bind the window resize event to the on_resize function
 
         # Create a Frame for the side menu
