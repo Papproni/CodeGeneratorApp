@@ -1,10 +1,11 @@
 import tkinter as tk
 
 class SlideMenu(tk.Frame):
-    def __init__(self, parent):
+    def __init__(self, parent,code_gen_func):
         super().__init__(parent)
-        self.parent = parent
-        self.menu_visible = False
+        self.parent         = parent
+        self.code_gen_func  = code_gen_func
+        self.menu_visible   = False
 
         # Configure the main window
         self.parent.geometry("600x300")
@@ -19,21 +20,17 @@ class SlideMenu(tk.Frame):
         self.scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
         # Create a canvas to hold the buttons and enable scrolling
+       
         self.canvas = tk.Canvas(self.menu_frame, yscrollcommand=self.scrollbar.set, bg="#333333")
         self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
         # Configure scrollbar to work with the canvas
         self.scrollbar.config(command=self.canvas.yview)
 
+        
         # Create a frame inside the canvas to hold the content
-        self.content_frame = tk.Frame(self.canvas, bg="#333333")
-        self.canvas.create_window((0, 0), window=self.content_frame, anchor="nw")
-
-        # Add close button
-        self.close_button = tk.Button(self.content_frame, text="Close", command=self.toggle_menu, 
-                                      bg="#444444", fg="white", font=("Arial", 10, "bold"))
-        self.close_button.grid(row=0, column=0, columnspan=6, pady=10, padx=10, sticky="e")
-
+      
+        self.add_buttons()
         # Add "slots" in the layout described
         self.add_menu_slots()
 
@@ -41,8 +38,29 @@ class SlideMenu(tk.Frame):
         self.content_frame.update_idletasks()
         self.canvas.config(scrollregion=self.canvas.bbox("all"))
 
+
+        
+
+    
         # Initial placement of the menu (hidden initially)
         self.menu_frame.place(x=self.parent.winfo_width(), y=0, height=self.parent.winfo_height())
+
+        
+    def add_buttons(self):
+        self.content_frame = tk.Frame(self.canvas, bg="#333333")
+        self.canvas.create_window((0, 0), window=self.content_frame, anchor="nw")
+        
+        # Add CLOSE button
+        self.close_button = tk.Button(self.content_frame, text="Close", command=self.toggle_menu, 
+                                      bg="#444444", fg="white", font=("Arial", 10, "bold"))
+        self.close_button.grid(row=0, column=0, columnspan=6, pady=10, padx=10, sticky="e")
+
+        # Add GENERATE button
+        self.generate_btn = tk.Button(self.content_frame, 
+                                      text="GENERATE CODE", command=self.code_gen_func, 
+                                      bg="#044444", fg="white", font=("Arial", 10, "bold"))
+        self.generate_btn.grid(row=0, column=0, columnspan=6, pady=10, padx=100, sticky="e")
+
 
     def add_menu_slots(self):
         # Create a grid with "slots" as described
