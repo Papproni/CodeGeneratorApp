@@ -123,6 +123,8 @@ class CodeGeneratorApp:
         self.canvas.tag_bind("block", "<ButtonPress-1>", self.on_block_press)
         self.canvas.tag_bind("block", "<B1-Motion>", self.on_block_drag)
         self.canvas.tag_bind("output_circle", "<ButtonPress-1>", self.on_output_circle_press)
+        self.canvas.tag_bind("output_circle", "<Enter>", self.on_output_circle_hover)
+        self.canvas.tag_bind("output_circle", "<Leave>", self.on_output_circle_leave)
         self.canvas.tag_bind("input_circle", "<Enter>", self.on_input_circle_hover)
         self.canvas.tag_bind("input_circle", "<Leave>", self.on_input_circle_leave)
         self.canvas.tag_bind("input_circle", "<ButtonPress-1>", self.on_input_circle_press)
@@ -187,6 +189,13 @@ class CodeGeneratorApp:
                 self.on_input_circle_press(event)
                 return
 
+    def on_output_circle_hover(self, event):
+        print("on_output_circle_hover")
+        # Highlight the output circle when hovered over
+        current_circle = self.canvas.find_withtag("current")[0]
+        print(self.canvas.coords(current_circle))
+        self.canvas.itemconfig(current_circle, outline="red", width=2)
+
     def on_input_circle_hover(self, event):
         print("on_input_circle_hover")
         # Highlight the input circle when hovered over
@@ -194,11 +203,18 @@ class CodeGeneratorApp:
         print(self.canvas.coords(current_circle))
         self.canvas.itemconfig(current_circle, outline="red", width=2)
 
+    def on_output_circle_leave(self, event):
+        print("on_output_circle_leave")
+        # Remove highlight from the output circle when not hovered
+        current_circle = self.canvas.find_withtag("current")[0]
+        self.canvas.itemconfig(current_circle, outline="", width=1)
+
     def on_input_circle_leave(self, event):
         print("on_input_circle_leave")
         # Remove highlight from the input circle when not hovered
         current_circle = self.canvas.find_withtag("current")[0]
         self.canvas.itemconfig(current_circle, outline="", width=1)
+    
 
     # TODO: When blcoks are dragged the IO cirlces are NOT updated!!! Circle positions must be updated!!!
     def on_input_circle_press(self, event):
