@@ -203,7 +203,7 @@ class CodeGeneratorApp:
         self.canvas.tag_bind("output_circle", "<B1-Motion>", lambda event: "break")
 
     def on_resize(self, event=None):
-        print("Resize")
+        # print("Resize")
         self.canvas.config(width=event.width, height=event.height)  
     
     def generate_c_code(self):

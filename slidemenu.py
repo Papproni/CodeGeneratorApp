@@ -83,10 +83,10 @@ class SlideMenu(tk.Frame):
             frame.pack_propagate(False)  # Prevent the frame from resizing to fit its contents
 
             # Textbox in the middle for the parameter name (default "None")
-            textbox = tk.Entry(frame, justify="center", font=("Arial", 10))
-            textbox.insert(0, "None")
+            textbox = tk.Button(frame, 
+                                      text="Add", command=self.code_gen_func, 
+                                      bg="#042344", fg="white", font=("Arial", 10, "bold"))
             textbox.pack(expand=True)
-
             # Label at the bottom for the slot name
             label = tk.Label(frame, text=slot_name, bg="#555555", fg="white", font=("Arial", 10, "bold"))
             label.pack(side="bottom")
