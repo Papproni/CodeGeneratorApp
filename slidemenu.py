@@ -115,7 +115,7 @@ class SlideMenu(tk.Frame):
 
         # Label for Page 2
         page2_label = tk.Label(self.content_frame, text="Page 2", bg="#333333", fg="white", font=("Arial", 12, "bold"))
-        page2_label.grid(row=row_offset + 2, column=0, columnspan=3, pady=(20, 10))
+        page2_label.grid(row=row_offset + 2, column=0, columnspan=3, pady=(0, 10))
 
     def menu_item_selected(self, slot):
         # Define what happens when a slot is clicked
