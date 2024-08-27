@@ -241,11 +241,15 @@ class LimitBlock:
         self.input_circle        = self.canvas.create_oval(self.x-self.io_circle_radius,     self.y+15, self.x+10, self.y+35, fill="green",              tags=("input_circle", self.tag))
         self.output_circle       = self.canvas.create_oval(self.x+self.w-self.io_circle_radius,   self.y+15, self.x+self.w+10, self.y+35, fill="yellow",            tags=("output_circle", self.tag))
         
+        
+        self.option_vars = {}
+        
         # OPTIONS:
         #   LimLow:    
         #   LimHigh:    
-        self.add_option_lim_low()
-        self.add_option_lim_high()
+        self.add_option("LOW", "NUM", -20000, 20000)
+        self.add_option("HIGH", "NUM", -20000, 20000)
+        
         # self.add_option("low_lim","NUM",-20000,20000)
         # self.add_option("type","MENU",("FIRST","SECOND","THIRD"))
         self.last_opt_added()
@@ -253,50 +257,54 @@ class LimitBlock:
                                                                 fill="red",tags=("block", self.tag,"background"))
         canvas.tag_lower("background",'all')
 
-    def add_option_lim_low(self):
+    def add_option(self, option_name, option_type, min_value=None, max_value=None, default_value="1"):
         self.inc_opt_counter()
-        self.lim_low_entry = tk.Entry(self.canvas, width=5)
-        self.lim_low_entry.insert(0, "1")  # Default value
-        text = "Low"
-        # Embed the entry widget into the canvas and tag it
-        buffer_entry_text   = self.canvas.create_text(self.x+0.2*self.w, self.y+self.opt_start_y+self.opt_height*self.opt_counter, text=text, font=("Arial", 14), tags=("block", self.tag))
-        self.lim_low_window  = self.canvas.create_window(self.x + 0.7*self.w, self.y + self.opt_start_y+self.opt_height*self.opt_counter, window=self.lim_low_entry, tags=("lim_low_entry", self.tag), anchor="center")
-        
-        self.lim_low_entry.bind("<FocusOut>", self.lim_low_limits_check)
 
-    def add_option_lim_high(self):
-        self.inc_opt_counter()
-        self.lim_high_entry = tk.Entry(self.canvas, width=5)
-        self.lim_high_entry.insert(0, "1")  # Default value
-        text = "High"
-        # Embed the entry widget into the canvas and tag it
-        buffer_entry_text   = self.canvas.create_text(self.x+0.2*self.w, self.y+self.opt_start_y+self.opt_height*self.opt_counter, text=text, font=("Arial", 14), tags=("block", self.tag))
-        self.lim_high_window  = self.canvas.create_window(self.x + 0.7*self.w, self.y + self.opt_start_y+self.opt_height*self.opt_counter, window=self.lim_high_entry, tags=("lim_high_entry", self.tag), anchor="center")
-        
-        self.lim_high_entry.bind("<FocusOut>", self.lim_high_limits_check)
-        
+        # Create a StringVar to hold the value of the option
+        var = tk.StringVar(value=default_value)
+        self.option_vars[option_name] = var
+
+        # Create the entry widget, bind it to the StringVar
+        entry = tk.Entry(self.canvas, width=5, textvariable=var)
+
+        # Display the option name on the canvas
+        text = option_name.capitalize()
+        self.canvas.create_text(
+            self.x + 0.2 * self.w,
+            self.y + self.opt_start_y + self.opt_height * self.opt_counter,
+            text=text,
+            font=("Arial", 14),
+            tags=("block", self.tag)
+        )
+
+        # Create window for the entry widget in the canvas
+        self.canvas.create_window(
+            self.x + 0.7 * self.w,
+            self.y + self.opt_start_y + self.opt_height * self.opt_counter,
+            window=entry,
+            tags=(f"{option_name}_entry", self.tag),
+            anchor="center"
+        )
+
+        # Bind the validation based on the option type
+        if option_type == "NUM":
+            entry.bind("<FocusOut>", lambda event, e=entry: self.validate_numeric_input(e, var, min_value, max_value, default_value))
+
+    def validate_numeric_input(self, entry, var, min_value, max_value, default_value):
+        value = var.get()
+        try:
+            num = int(value)
+            if min_value is not None and num < min_value:
+                raise ValueError("Value is below the minimum limit")
+            if max_value is not None and num > max_value:
+                raise ValueError("Value is above the maximum limit")
+        except ValueError:
+            var.set(default_value)  # Reset to default if invalid
+            entry.delete(0, tk.END)
+            entry.insert(0, default_value)
+    
     def inc_opt_counter(self):
         self.opt_counter = self.opt_counter + 1
     
     def last_opt_added(self):
         self.opt_counter = self.opt_counter + 0.5
-
-    def lim_low_limits_check(self, event):
-        value = self.lim_low_entry.get()
-        try:
-            num = int(value)
-            if num < -30000 or num > 30000:
-                raise ValueError("Out of bounds")
-        except ValueError:
-            self.lim_low_entry.delete(0, tk.END)
-            self.lim_low_entry.insert(0, "1")  # Reset to default if invalid
-    
-    def lim_high_limits_check(self, event):
-        value = self.lim_high_entry.get()
-        try:
-            num = int(value)
-            if num < -30000 or num > 30000:
-                raise ValueError("Out of bounds")
-        except ValueError:
-            self.lim_high_entry.delete(0, tk.END)
-            self.lim_high_entry.insert(0, "1")  # Reset to default if invalid
