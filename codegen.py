@@ -84,7 +84,7 @@ class CodeGeneratorApp:
         menubar.add_cascade(label="Filters", menu=filter_menu)
         filter_menu.add_command(label="Filterbank", command=self.add_filterbank_block)
         filter_menu.add_command(label="Biquad",     command=self.add_biquad_filter_block)
-        filter_menu.add_command(label="Moving Avg", command=self.add_biquad_filter_block)
+        filter_menu.add_command(label="Moving Avg", command=self.add_mavg_filter_block)
 
 
         math_menu = Menu(menubar, tearoff=0)
@@ -95,6 +95,8 @@ class CodeGeneratorApp:
         math_menu.add_command(label="Mul",      command=self.add_Mul_block)
         math_menu.add_command(label="Div",      command=self.add_Div_block)
         math_menu.add_command(label="Sub",      command=self.add_Sub_block)
+        math_menu.add_command(label="Lim",      command=self.add_Lim_block)
+        math_menu.add_command(label="ABS",      command=self.add_ABS_block)
         
         special_menu = Menu(menubar, tearoff=0)
         menubar.add_cascade(label="Special", menu=special_menu)
@@ -103,8 +105,39 @@ class CodeGeneratorApp:
         special_menu.add_command(label="Delay line",    command=self.add_Add_block)
         special_menu.add_command(label="Reverb",        command=self.add_Add_block)
         special_menu.add_command(label="PitchShift",    command=self.add_Add_block)
-
         
+        special_menu = Menu(menubar, tearoff=0)
+        menubar.add_cascade(label="Control", menu=special_menu)
+        
+        special_menu.add_command(label="PID",                       command=self.add_Add_block)
+        special_menu.add_command(label="State Space Control",       command=self.add_Add_block)
+
+    def add_ABS_block(self,x=50, y=50):
+        block_id = len(self.blocks) + 1
+        tag = f"block{block_id}"
+
+        new_block = sab_math.ABSBlock(self.canvas,tag)
+        
+        self.blocks.append(new_block)
+        self.bind_events()  # Ensure events are bound after adding blocks
+    
+    def add_Lim_block(self,x=50, y=50):
+        block_id = len(self.blocks) + 1
+        tag = f"block{block_id}"
+
+        new_block = sab_math.LimitBlock(self.canvas,tag)
+        
+        self.blocks.append(new_block)
+        self.bind_events()  # Ensure events are bound after adding blocks
+    
+    def add_mavg_filter_block(self,x=50, y=50):
+        block_id = len(self.blocks) + 1
+        tag = f"block{block_id}"
+
+        new_block = sab_filters.MovingAverage(self.canvas,tag)
+        
+        self.blocks.append(new_block)
+        self.bind_events()  # Ensure events are bound after adding blocks
 
     def add_Add_block(self, x=50, y=50):
         block_id = len(self.blocks) + 1
