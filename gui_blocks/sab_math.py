@@ -249,7 +249,6 @@ class LimitBlock:
         #   LimHigh:    
         self.add_option("LOW", "NUM", -20000, 20000)
         self.add_option("HIGH", "NUM", -20000, 20000)
-        
         # self.add_option("low_lim","NUM",-20000,20000)
         # self.add_option("type","MENU",("FIRST","SECOND","THIRD"))
         self.last_opt_added()

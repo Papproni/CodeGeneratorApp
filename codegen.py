@@ -250,6 +250,7 @@ class CodeGeneratorApp:
         print("on_block_press")
         item = self.canvas.find_withtag("current")[0]
         tags = self.canvas.gettags(item)
+        
         self.drag_data = {"x": event.x, "y": event.y, "item": item, "tags": tags}
 
     def on_block_drag(self, event):
