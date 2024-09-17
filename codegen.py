@@ -236,8 +236,7 @@ class CodeGeneratorApp:
         self.canvas.tag_bind("output_circle", "<B1-Motion>", lambda event: "break")
 
     def on_resize(self, event=None):
-        # print("Resize")
-        self.canvas.config(width=event.width, height=event.height)  
+        self.canvas.config(width=self.canvas.winfo_screenwidth(), height=self.canvas.winfo_screenheight())  
     
     def generate_c_code(self):
         # Find INPUT blocks

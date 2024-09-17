@@ -133,12 +133,14 @@ class SlideMenu(tk.Frame):
             self.menu_frame.place(x=self.parent.winfo_width() - 400, y=0)
             self.menu_visible = True
     def on_resize(self, event=None):
-        new_height = self.parent.winfo_height()
+        new_height  = self.parent.winfo_height()
+        new_width   = self.parent.winfo_width()
+        
         # Adjust the position of the menu if it's visible
         if self.menu_visible:
-            self.menu_frame.place(x=self.parent.winfo_width() - 400, y=0, height=new_height)
+            self.menu_frame.place(x=new_width - 400, y=0, height=new_height)
         else:
-            self.menu_frame.place(x=self.parent.winfo_width(), y=0)
+            self.menu_frame.place(x=new_width, y=0)
 
 if __name__ == "__main__":
     root = tk.Tk()
