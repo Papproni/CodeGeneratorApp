@@ -8,7 +8,7 @@ from gui_blocks import sab_filters
 from gui_blocks import sab_io
 from gui_blocks import sab_math
 
-import cfile
+# import cfile
 import slidemenu
 
 # On screen user has 6 options to use

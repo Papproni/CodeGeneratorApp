@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import Canvas, Menu, StringVar, OptionMenu
-
+from gui_blocks.gui_elements.option_manager import OptionManager
 
 math_color = "orange"
 
@@ -202,8 +202,8 @@ class ABSBlock:
         self.input_circle        = self.canvas.create_oval(self.x-self.io_circle_radius,   self.y+(self.h/2-self.io_circle_radius), self.x+10, self.y+(self.h/2+self.io_circle_radius), fill="green",              tags=("input_circle", self.tag))
         self.output_circle       = self.canvas.create_oval(self.x+self.w-self.io_circle_radius,   self.y+(self.h/2-self.io_circle_radius), self.x+self.w+10, self.y+(self.h/2+self.io_circle_radius), fill="yellow",            tags=("output_circle", self.tag))
         
-    
-class LimitBlock:
+
+class LimitBlock(OptionManager):
     def __init__(self,canvas,tag):
         self.canvas = canvas
 
@@ -223,7 +223,7 @@ class LimitBlock:
         # Create Block
         self.x = 50
         self.y = 50
-        self.w = 100
+        self.w = 120
         self.io_circle_radius = 10
         
         # Option params
@@ -247,63 +247,18 @@ class LimitBlock:
         # OPTIONS:
         #   LimLow:    
         #   LimHigh:    
-        self.add_option("LOW", "NUM", -20000, 20000)
+        self.add_option("LOW",  "NUM", -20000, 20000)
         self.add_option("HIGH", "NUM", -20000, 20000)
+        self.add_option("TYPE", "OPTIONBOX", default_value="LPF,HPF,NOTCH,BANDPASS")
+        self.add_option("CALC", "OPTIONBOX", default_value="IIR,FIR")
+
         # self.add_option("low_lim","NUM",-20000,20000)
         # self.add_option("type","MENU",("FIRST","SECOND","THIRD"))
         self.last_opt_added()
         self.filterbank_block    = self.canvas.create_rectangle(self.x, self.y, self.x+self.w, self.y+self.opt_start_y+self.opt_height*self.opt_counter, 
                                                                 fill="red",tags=("block", self.tag,"background"))
         canvas.tag_lower("background",'all')
-
-    def add_option(self, option_name, option_type, min_value=None, max_value=None, default_value="1"):
-        self.inc_opt_counter()
-
-        # Create a StringVar to hold the value of the option
-        var = tk.StringVar(value=default_value)
-        self.option_vars[option_name] = var
-
-        # Create the entry widget, bind it to the StringVar
-        entry = tk.Entry(self.canvas, width=5, textvariable=var)
-
-        # Display the option name on the canvas
-        text = option_name.capitalize()
-        self.canvas.create_text(
-            self.x + 0.2 * self.w,
-            self.y + self.opt_start_y + self.opt_height * self.opt_counter,
-            text=text,
-            font=("Arial", 14),
-            tags=("block", self.tag)
-        )
-
-        # Create window for the entry widget in the canvas
-        self.canvas.create_window(
-            self.x + 0.7 * self.w,
-            self.y + self.opt_start_y + self.opt_height * self.opt_counter,
-            window=entry,
-            tags=(f"{option_name}_entry", self.tag),
-            anchor="center"
-        )
-
-        # Bind the validation based on the option type
-        if option_type == "NUM":
-            entry.bind("<FocusOut>", lambda event, e=entry: self.validate_numeric_input(e, var, min_value, max_value, default_value))
-
-    def validate_numeric_input(self, entry, var, min_value, max_value, default_value):
-        value = var.get()
-        try:
-            num = int(value)
-            if min_value is not None and num < min_value:
-                raise ValueError("Value is below the minimum limit")
-            if max_value is not None and num > max_value:
-                raise ValueError("Value is above the maximum limit")
-        except ValueError:
-            var.set(default_value)  # Reset to default if invalid
-            entry.delete(0, tk.END)
-            entry.insert(0, default_value)
     
-    def inc_opt_counter(self):
-        self.opt_counter = self.opt_counter + 1
     
-    def last_opt_added(self):
-        self.opt_counter = self.opt_counter + 0.5
+
+
