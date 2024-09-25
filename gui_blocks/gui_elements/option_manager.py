@@ -1,14 +1,15 @@
 import tkinter as tk
 
 class OptionManager:
+    def __init__(self):
+        self.option_vars = {}
     # add_option examples:
     #   Numeric parameter:
     #       self.add_option("LOW",  "NUM", -20000, 20000)
     #   Chooseable:
     #       self.add_option("TYPE", "OPTIONBOX", default_value="LPF,HPF,NOTCH,BANDPASS")
-    def add_option(self, option_name, option_type, min_value=None, max_value=None, default_value="1", bindable=None):
+    def add_option(self, option_name, option_type, min_value=None, max_value=None, default_value="1", bindable=None, visible_on_block = None):
         self.inc_opt_counter()
-
         # Handle option types: NUM (numeric entry) and OPTIONBOX (dropdown menu)
         if option_type == "NUM":
             # Create a StringVar to hold the value of the option
@@ -39,7 +40,6 @@ class OptionManager:
 
             # Bind the validation based on the option type
             entry.bind("<FocusOut>", lambda event, e=entry: self.validate_numeric_input(e, var, min_value, max_value, default_value))
-
         elif option_type == "OPTIONBOX":
             # Split the comma-separated list into individual options
             options = default_value.split(",")
@@ -72,7 +72,7 @@ class OptionManager:
     def validate_numeric_input(self, entry, var, min_value, max_value, default_value):
         value = var.get()
         try:
-            num = int(value)
+            num = float(value)  # Use float instead of int to handle floating-point numbers
             if min_value is not None and num < min_value:
                 raise ValueError("Value is below the minimum limit")
             if max_value is not None and num > max_value:

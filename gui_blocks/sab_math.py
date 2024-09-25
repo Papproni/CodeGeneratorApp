@@ -205,6 +205,9 @@ class ABSBlock:
 
 class LimitBlock(OptionManager):
     def __init__(self,canvas,tag):
+        
+        super().__init__()
+        
         self.canvas = canvas
 
         # default values
@@ -242,7 +245,7 @@ class LimitBlock(OptionManager):
         self.output_circle       = self.canvas.create_oval(self.x+self.w-self.io_circle_radius,   self.y+15, self.x+self.w+10, self.y+35, fill="yellow",            tags=("output_circle", self.tag))
         
         
-        self.option_vars = {}
+        # 
         
         # OPTIONS:
         #   LimLow:    
@@ -251,6 +254,8 @@ class LimitBlock(OptionManager):
         self.add_option("HIGH", "NUM", -20000, 20000)
         self.add_option("TYPE", "OPTIONBOX", default_value="LPF,HPF,NOTCH,BANDPASS")
         self.add_option("CALC", "OPTIONBOX", default_value="IIR,FIR")
+        
+        # self.option_vars
 
         # self.add_option("low_lim","NUM",-20000,20000)
         # self.add_option("type","MENU",("FIRST","SECOND","THIRD"))

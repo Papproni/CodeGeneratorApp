@@ -55,6 +55,7 @@ class InputBlock:
 
 class OutputBlock:
     def __init__(self,canvas,tag):
+        super().__init__()
         # default values
         self.type            = "OUTPUT_BLOCK"
         # must be changed 
