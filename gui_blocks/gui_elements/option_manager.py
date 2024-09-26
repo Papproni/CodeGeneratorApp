@@ -14,61 +14,76 @@ class OptionManager:
         if option_type == "NUM":
             # Create a StringVar to hold the value of the option
             var = tk.StringVar(value=default_value)
-            self.option_vars[option_name] = var
+            self.option_vars[option_name] = {
+                "var": var,
+                "min_value": min_value,
+                "max_value": max_value,
+                "bindable": bindable,
+                "default_value": default_value
+            }
 
             # Create the entry widget, bind it to the StringVar
             entry = tk.Entry(self.canvas, width=5, textvariable=var)
 
             # Display the option name on the canvas
             text = option_name.capitalize()
-            self.canvas.create_text(
-                self.x + 0.2 * self.w,
-                self.y + self.opt_start_y + self.opt_height * self.opt_counter,
-                text=text,
-                font=("Arial", 14),
-                tags=("block", self.tag)
-            )
-
-            # Create window for the entry widget in the canvas
-            self.canvas.create_window(
-                self.x + 0.7 * self.w,
-                self.y + self.opt_start_y + self.opt_height * self.opt_counter,
-                window=entry,
-                tags=(f"{option_name}_entry", self.tag),
-                anchor="center"
-            )
+            
+            self.create_option_widget(option_name, entry, "entry")
 
             # Bind the validation based on the option type
             entry.bind("<FocusOut>", lambda event, e=entry: self.validate_numeric_input(e, var, min_value, max_value, default_value))
+            
         elif option_type == "OPTIONBOX":
             # Split the comma-separated list into individual options
             options = default_value.split(",")
             # Create a StringVar to hold the selected option
             var = tk.StringVar(value=options[0])
-            self.option_vars[option_name] = var
+            self.option_vars[option_name] = {
+                "var": var,
+                "min_value": min_value,
+                "max_value": max_value,
+                "bindable": bindable,
+                "default_value": default_value
+            }
 
             # Create the OptionMenu (dropdown) widget
             option_menu = tk.OptionMenu(self.canvas, var, *options)
 
             # Display the option name on the canvas
             text = option_name.capitalize()
-            self.canvas.create_text(
-                self.x + 0.2 * self.w,
-                self.y + self.opt_start_y + self.opt_height * self.opt_counter,
-                text=text,
-                font=("Arial", 14),
-                tags=("block", self.tag)
-            )
+            
+            self.create_option_widget(option_name, option_menu, "optionmenu")
 
-            # Create window for the OptionMenu widget in the canvas
-            self.canvas.create_window(
-                self.x + 0.7 * self.w,
-                self.y + self.opt_start_y + self.opt_height * self.opt_counter,
-                window=option_menu,
-                tags=(f"{option_name}_optionmenu", self.tag),
-                anchor="center"
-            )
+        elif option_type == "TICKBOX":
+            # Create a BooleanVar to hold the state of the tickbox (True/False)
+            var = tk.BooleanVar(value=bool(int(default_value)))  # Convert default_value to boolean
+            self.option_vars[option_name] = {"var": var,
+                                             "bindable": bindable}
 
+            checkbutton = tk.Checkbutton(self.canvas, variable=var)
+            text = option_name.capitalize()
+            
+            self.create_option_widget(option_name, checkbutton, "tickbox")
+
+    def create_option_widget(self, option_name, widget, widget_type="entry"):
+        # Create the text label for the option
+        text = option_name.capitalize()
+        self.canvas.create_text(
+            self.x + 0.2 * self.w,
+            self.y + self.opt_start_y + self.opt_height * self.opt_counter,
+            text=text,
+            font=("Arial", 14),
+            tags=("block", self.tag)
+        )
+
+        # Create window for the widget (entry, optionmenu, etc.) in the canvas
+        self.canvas.create_window(
+            self.x + 0.7 * self.w,
+            self.y + self.opt_start_y + self.opt_height * self.opt_counter,
+            window=widget,
+            tags=(f"{option_name}_{widget_type}", self.tag),
+            anchor="center"
+        )
     def validate_numeric_input(self, entry, var, min_value, max_value, default_value):
         value = var.get()
         try:

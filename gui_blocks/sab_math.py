@@ -252,9 +252,6 @@ class LimitBlock(OptionManager):
         #   LimHigh:    
         self.add_option("LOW",  "NUM", -20000, 20000)
         self.add_option("HIGH", "NUM", -20000, 20000)
-        self.add_option("TYPE", "OPTIONBOX", default_value="LPF,HPF,NOTCH,BANDPASS")
-        self.add_option("CALC", "OPTIONBOX", default_value="IIR,FIR")
-        
         # self.option_vars
 
         # self.add_option("low_lim","NUM",-20000,20000)

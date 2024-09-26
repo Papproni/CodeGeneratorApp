@@ -55,9 +55,10 @@ class FilterBank(OptionManager):
         #   freq_start:     lowest frequency bin
         #   Q:              Filter characteristics       
         self.add_option("Bins","NUM",1,100,default_value=44)
-        self.add_option("Freq","NUM",1,22000,default_value=40)
+        self.add_option("Freq","NUM",1,22000,default_value=40,bindable="NOT_BINDED")
         self.add_option("Q","NUM",0.0,2.0,default_value=0.707)
         self.add_option("Step","OPTIONBOX",default_value="LIN,LOG")
+        self.add_option("MOD","TICKBOX",default_value=1)
         
         self.last_opt_added()
         self.filterbank_block    = self.canvas.create_rectangle(self.x, self.y, self.x+self.w, self.y+self.opt_start_y+self.opt_height*self.opt_counter, fill="red",         tags=("block", self.tag,"background"))
@@ -157,7 +158,7 @@ class MovingAverage(OptionManager):
         # Create Block
         self.x = 50
         self.y = 50
-        self.w = 125
+        self.w = 150
         self.io_circle_radius = 10
         
         # Option params
