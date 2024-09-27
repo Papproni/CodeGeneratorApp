@@ -55,7 +55,6 @@ class FilterBank(OptionManager):
         #   freq_start:     lowest frequency bin
         #   Q:              Filter characteristics       
         self.add_option("Bins","NUM",1,100,default_value=44)
-        self.add_option("Freq","NUM",1,22000,default_value=40,bindable="NOT_BINDED")
         self.add_option("Q","NUM",0.0,2.0,default_value=0.707)
         self.add_option("Step","OPTIONBOX",default_value="LIN,LOG")
         self.add_option("MOD","TICKBOX",default_value=1)

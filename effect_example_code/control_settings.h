@@ -29,7 +29,8 @@ typedef enum pot_charachteristics_en {
 typedef enum control_source_en {
     SRC_POT,
     SRC_EXT_POT,
-    SRC_BTN
+    SRC_BTN,
+    SCR_HW_BTN2_TAP_TEMPO
 }control_source_ten;
 
 typedef struct {
@@ -80,15 +81,20 @@ void config_control(controls_tst* self, char* name, float32_t min, float32_t max
     // 
     self->control_source_en[slot] = src;
     self->charachteristics_en[slot] = characteristics;
+
+    
 }
 
 void test(){
     controls_tst ctrl;
 
     // SLOT1
-    config_control(&ctrl,"VOL",0,1.6,SRC_POT,CHAR_REV_LOG,SLOT1);
+    config_control(&ctrl,"VOL",0,1.6,SRC_POT,CHAR_REV_LOG,  SLOT1);
     config_control(&ctrl,"MIX",0,0.999,SRC_POT,CHAR_REV_LOG,SLOT2);
-    config_control(&ctrl,"TIME",1,96000,SRC_POT,CHAR_LIN,SLOT3);
-    config_control(&ctrl,"VOL",0,0.999,SRC_POT,CHAR_LIN,SLOT4);
-    config_control(&ctrl,"MOD",0,1,SRC_BTN,CHAR_LIN,SLOT5);    
+    config_control(&ctrl,"TIME",1,96000,SRC_POT,CHAR_LIN,   SLOT3);
+    config_control(&ctrl,"VOL",0,0.999,SRC_POT,CHAR_LIN,    SLOT4);
+    config_control(&ctrl,"MOD",0,1,SRC_BTN,CHAR_LIN,        SLOT5); 
+
+    // Delay time can also be used from SRC_HW_BTN1_TAP_TEMPO 
+
 }
