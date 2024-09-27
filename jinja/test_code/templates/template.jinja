@@ -1,0 +1,27 @@
+/*THIS FILE IS GENERATED! DO NOT MODIFY!
+Generated on: {{ date }} */
+
+#ifndef SAB_{{ name|upper }}_H
+#define SAB_{{ name|upper }}_H
+
+#include "stdint.h"
+#define float32_t float
+
+// Effect: {{ name }}
+typedef struct {
+    {%- set type_suffix_map = {
+        'float': '_f32',
+        'float32_t': '_f32',
+        'double': '_f64',
+        'int': '_i32',
+        'uint16_t': '_u16',
+        'uint8_t': '_u8',
+        'uint32_t': '_u32'
+    } %}
+    {%- set max_length = variables | map(attribute='type') | map('length') | max %}
+    {%- for variable in variables %}
+        {{ variable.type }}{{ ' ' * (max_length - variable.type | length + 1) }}{{ variable.name }}{{ type_suffix_map[variable.type] }};
+    {%- endfor %}
+} SAB_{{ name }}_tst;
+
+#endif

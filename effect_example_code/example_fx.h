@@ -22,3 +22,5 @@ typedef struct {
 
 void init_TEMPLATE(void* effect);
 void process_TEMPLATE(void* effect);
+
+

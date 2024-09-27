@@ -11,7 +11,7 @@ REM Navigate to the directory containing the Python script
 cd /d "%~dp0"
 
 REM Run the Python script
-py codegen.py
+py ../codegen.py
 
 REM Pause the command prompt so it doesn't close immediately
 pause

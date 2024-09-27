@@ -8,17 +8,7 @@ typedef enum effect_state_en {
     FX_BYPASS
 }effect_state_ten;
 
-typedef enum control_char_en {
-    LIN,
-    LOG,
-    REV_LOG
-}effect_state_ten;
 
-typedef enum control_source_en {
-    POT,
-    EXT_POT,
-    ON_OFF
-}control_source_en;
 
 
 typedef enum  {
@@ -78,6 +68,7 @@ typedef union {
     Struct12Elements structData;  // Access via struct elements
     uint32_t arrayData[12];       // Access via array
 }controls_tun;
+
 
 
 
