@@ -24,4 +24,13 @@ typedef struct {
     {%- endfor %}
 } SAB_{{ name }}_tst;
 
+
+// Process Function for SAB_{{ name }}_tst
+int SAB_{{ name }}_init( SAB_{{ name }}_tst* self, float input_f32, float output_f32);
+
+// Process Function for SAB_{{ name }}_tst
+int SAB_{{ name }}_process( SAB_{{ name }}_tst* self, float input_f32, float output_f32);
+
+
+
 #endif

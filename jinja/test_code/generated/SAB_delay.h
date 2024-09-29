@@ -1,5 +1,5 @@
 /*THIS FILE IS GENERATED! DO NOT MODIFY!
-Generated on: 2024.09.27. */
+Generated on: 2024.09.29. */
 
 #ifndef SAB_DELAY_H
 #define SAB_DELAY_H
@@ -13,5 +13,14 @@ typedef struct {
         float32_t time_f32;
         float32_t feedback_f32;
 } SAB_delay_tst;
+
+
+// Process Function for SAB_delay_tst
+int SAB_delay_init( SAB_delay_tst* self, float input_f32, float output_f32);
+
+// Process Function for SAB_delay_tst
+int SAB_delay_process( SAB_delay_tst* self, float input_f32, float output_f32);
+
+
 
 #endif

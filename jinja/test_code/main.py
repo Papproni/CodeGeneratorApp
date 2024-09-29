@@ -13,6 +13,7 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
+generated_libs_counter = 0
 # 1. SET DATA
 # List of effects with multiple variables
 effects = [
@@ -33,6 +34,19 @@ effects = [
         ]
     },
     {
+        "name": "distortion",
+        "variables": [
+            {"name": "gain", "type": "float32_t"},
+            {"name": "tone", "type": "float32_t"},
+            {"name": "presence", "type": "float32_t"},
+            {"name": "sag", "type": "float32_t"},
+            {"name": "bass", "type": "float32_t"},
+            {"name": "mid", "type": "float32_t"},
+            {"name": "treble", "type": "float32_t"},
+            {"name": "volume", "type": "float32_t"}
+        ]
+    },
+    {
         "name": "octave",
         "variables": [
             {"name": "octave1_up_vol", "type": "float32_t"},
@@ -44,6 +58,8 @@ effects = [
     }
 ]
 
+
+
 # 2. SET OUTPUT PARAMETERS
 # Ensure the 'generated' directory exists
 output_dir = os.path.join(os.path.dirname(__file__), "generated")
@@ -54,15 +70,16 @@ current_date = datetime.now().strftime("%Y.%m.%d.")
 # Load the template from the 'templates' directory
 template_dir = os.path.join(os.path.dirname(__file__), "templates")
 env = Environment(loader=FileSystemLoader(template_dir))
-template = env.get_template("template.jinja")
+template = env.get_template("effect_lib_template.jinja")
 
 # 4. GENERATE FILES FROM TEMPLATE
 # Generate files for each effect
 
 # Fancy start with borders and color
+print("")
 print(f"{bcolors.OKGREEN}{bcolors.BOLD}" + "╔" + "═" * 48 + "╗")
-print(f"║{bcolors.OKCYAN}{bcolors.BOLD}        Welcome to the Code Generation Tool        {bcolors.OKGREEN}║")
-print(f"║{bcolors.OKBLUE}       Generating Header Files for Effects       {bcolors.OKGREEN}║")
+print(f"║{bcolors.OKCYAN}{bcolors.BOLD}     STM Audio Board V3 Code Generator GUI      {bcolors.OKGREEN}║")
+print(f"║{bcolors.OKBLUE}      Generating Header Files for Effects       {bcolors.OKGREEN}║")
 print(f"{bcolors.OKGREEN}{bcolors.BOLD}" + "╚" + "═" * 48 + "╝" + f"{bcolors.ENDC}")
 
 
@@ -77,3 +94,37 @@ for effect in effects:
     with open(filename, mode="w", encoding="utf-8") as message:
         message.write(content)
         print(f"SAB_{effect['name'].lower()}.h".ljust(20)+bcolors.OKGREEN + "DONE!" + bcolors.ENDC)
+        generated_libs_counter = generated_libs_counter + 1
+
+# EFFECT MANAGER TEMPLATE GENERATION!
+print("Generating manager lib")
+
+# MANAGER DATA
+manager_data = [
+    {
+        "lib_name": "fx_manager",
+        "effects": [
+        ]
+    }   
+]
+
+for effect in effects:
+    # Extract the name and add it to the manager_data effects list
+    manager_data[0]["effects"].append({"name": effect["name"]})
+
+
+# add_effects_to_manager(effects,manager_data)
+template = env.get_template("effect_manager_template.jinja")
+
+filename = os.path.join(output_dir, f"SAB_fx_manager.h")
+content = template.render(manager_data = manager_data, date=current_date)
+
+with open(filename, mode="w", encoding="utf-8") as message:
+    message.write(content)
+    print(f"SAB_fx_manager.h".ljust(20)+bcolors.OKGREEN + "DONE!" + bcolors.ENDC)
+    generated_libs_counter = generated_libs_counter + 1
+
+print("")
+print(f"{bcolors.BOLD}{bcolors.OKGREEN}Code generation finished:{bcolors.ENDC}")
+print(f"{bcolors.OKCYAN} {generated_libs_counter} files are generated{bcolors.ENDC}")
+
