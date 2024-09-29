@@ -1,30 +1,28 @@
 /*THIS FILE IS GENERATED! DO NOT MODIFY!
 Generated on: {{ date }} */
 
-#ifndef SAB_{{ lib_name|upper }}_H
-#define SAB_{{ lib_name|upper }}_H
+#ifndef SAB_{{ name|upper }}_H
+#define SAB_{{ name|upper }}_H
 
 
 #include "stdint.h"
 
 // Generated effect libs
-{%- for effect in manager_data[0].effects %}
+{%- for effect in effects %}
 #include "SAB_{{ effect.name }}.h"
 {%- endfor %}
 
-#define float32_t float
 
-
-// Manager structure: {{ name }}
+// Manager structure: {{ lib_name }}
 typedef struct {
-} SAB_{{ name }}_tst;
+} SAB_{{ lib_name }}_tst;
 
 
-// Process Function for SAB_{{ name }}_tst
-int SAB_{{ name }}_init( SAB_{{ name }}_tst* self, float input_f32, float output_f32);
+// Process Function for SAB_{{ lib_name }}_tst
+int SAB_{{ lib_name }}_init( SAB_{{ lib_name }}_tst* self, float input_f32, float output_f32);
 
-// Process Function for SAB_{{ name }}_tst
-int SAB_{{ name }}_process( SAB_{{ name }}_tst* self, float input_f32, float output_f32);
+// Process Function for SAB_{{ lib_name }}_tst
+int SAB_{{ lib_name }}_process( SAB_{{ lib_name }}_tst* self, float input_f32, float output_f32);
 
 
 

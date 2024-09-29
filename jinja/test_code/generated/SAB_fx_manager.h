@@ -13,19 +13,17 @@ Generated on: 2024.09.29. */
 #include "SAB_distortion.h"
 #include "SAB_octave.h"
 
-#define float32_t float
 
-
-// Manager structure: 
+// Manager structure: fx_manager
 typedef struct {
-} SAB__tst;
+} SAB_fx_manager_tst;
 
 
-// Process Function for SAB__tst
-int SAB__init( SAB__tst* self, float input_f32, float output_f32);
+// Process Function for SAB_fx_manager_tst
+int SAB_fx_manager_init( SAB_fx_manager_tst* self, float input_f32, float output_f32);
 
-// Process Function for SAB__tst
-int SAB__process( SAB__tst* self, float input_f32, float output_f32);
+// Process Function for SAB_fx_manager_tst
+int SAB_fx_manager_process( SAB_fx_manager_tst* self, float input_f32, float output_f32);
 
 
 

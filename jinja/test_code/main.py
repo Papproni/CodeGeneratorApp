@@ -117,7 +117,8 @@ for effect in effects:
 template = env.get_template("effect_manager_template.jinja")
 
 filename = os.path.join(output_dir, f"SAB_fx_manager.h")
-content = template.render(manager_data = manager_data, date=current_date)
+# lib_name = manager_data[0].get("name"),
+content = template.render(manager_data[0], date=current_date)
 
 with open(filename, mode="w", encoding="utf-8") as message:
     message.write(content)
