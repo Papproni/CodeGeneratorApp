@@ -14,6 +14,7 @@ class bcolors:
     UNDERLINE = '\033[4m'
 
 generated_libs_counter = 0
+total_length = 35
 # 1. SET DATA
 # List of effects with multiple variables
 effects = [
@@ -76,12 +77,14 @@ template = env.get_template("effect_lib_template.jinja")
 # Generate files for each effect
 
 # Fancy start with borders and color
-print("")
-print(f"{bcolors.OKGREEN}{bcolors.BOLD}" + "╔" + "═" * 48 + "╗")
+
+print(f"\n\r{bcolors.OKGREEN}{bcolors.BOLD}" + "╔" + "═" * 48 + "╗")
 print(f"║{bcolors.OKCYAN}{bcolors.BOLD}     STM Audio Board V3 Code Generator GUI      {bcolors.OKGREEN}║")
 print(f"║{bcolors.OKBLUE}      Generating Header Files for Effects       {bcolors.OKGREEN}║")
 print(f"{bcolors.OKGREEN}{bcolors.BOLD}" + "╚" + "═" * 48 + "╝" + f"{bcolors.ENDC}")
 
+# EFFECT MANAGER TEMPLATE GENERATION!
+print("\n\rGenerating individual effects libs:")
 
 for effect in effects:
     # File name to be created in the 'generated' directory
@@ -93,11 +96,14 @@ for effect in effects:
     # Write rendered content to the generated file
     with open(filename, mode="w", encoding="utf-8") as message:
         message.write(content)
-        print(f"SAB_{effect['name'].lower()}.h".ljust(20)+bcolors.OKGREEN + "DONE!" + bcolors.ENDC)
         generated_libs_counter = generated_libs_counter + 1
+        file_name = f"SAB_{effect['name'].lower()}.h"
+        status =  "DONE!"
+        dots = '.' * (total_length - len(file_name) - len(status))
+        print(f"File {generated_libs_counter}: {file_name}{dots}{bcolors.OKGREEN}{status}{bcolors.ENDC}")
 
 # EFFECT MANAGER TEMPLATE GENERATION!
-print("Generating manager lib")
+print("\n\rGenerating manager lib:")
 
 # MANAGER DATA
 manager_data = [
@@ -121,11 +127,20 @@ filename = os.path.join(output_dir, f"SAB_fx_manager.h")
 content = template.render(manager_data[0], date=current_date)
 
 with open(filename, mode="w", encoding="utf-8") as message:
+    # message.write(content)
+    # generated_libs_counter = generated_libs_counter + 1
+    # print(f"File {generated_libs_counter}: SAB_fx_manager.h".ljust(35)+bcolors.OKGREEN + "DONE!" + bcolors.ENDC)
+    
     message.write(content)
-    print(f"SAB_fx_manager.h".ljust(20)+bcolors.OKGREEN + "DONE!" + bcolors.ENDC)
     generated_libs_counter = generated_libs_counter + 1
+    file_name = f"SAB_{manager_data[0]['lib_name'].lower()}.h"
+    status =  "DONE!"
+    dots = '.' * (total_length - len(file_name) - len(status))
+    print(f"File {generated_libs_counter}: {file_name}{dots}{bcolors.OKGREEN}{status}{bcolors.ENDC}")
+
 
 print("")
 print(f"{bcolors.BOLD}{bcolors.OKGREEN}Code generation finished:{bcolors.ENDC}")
-print(f"{bcolors.OKCYAN} {generated_libs_counter} files are generated{bcolors.ENDC}")
+print(f"{bcolors.OKGREEN} {generated_libs_counter} files are generated!{bcolors.ENDC}")
+print(f"{bcolors.OKGREEN}Output dir: \n\r{output_dir}{bcolors.ENDC}")
 
