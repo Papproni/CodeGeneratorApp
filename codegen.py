@@ -250,7 +250,16 @@ class CodeGeneratorApp:
         print("on_block_press")
         item = self.canvas.find_withtag("current")[0]
         tags = self.canvas.gettags(item)
-        
+        settings = [
+            ("Cutoff Frequency",    "NUM", 1000),  # in Hz
+            ("Resonance",           "NUM", 0.7),          # Q factor
+            ("Filter Type",         "BTN", "Low-pass"), # Filter type: Low-pass or High-pass
+            ("Drive",               "NUM", 1.0),              # Amount of distortion
+            ("Mix",                 "NUM", 50),                 # Dry/Wet mix (0 to 100%)
+            ("Bypass",              "BTN", "OFF")            # Bypass the filter: ON or OFF
+        ]
+        self.slidemenu.block_settings_load(settings)
+
         self.drag_data = {"x": event.x, "y": event.y, "item": item, "tags": tags}
 
     def on_block_drag(self, event):

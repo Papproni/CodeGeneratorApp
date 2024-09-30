@@ -1,8 +1,8 @@
 /*THIS FILE IS GENERATED! DO NOT MODIFY!
-Generated on: 2024.09.29. */
+Generated on: 2024.09.30. */
 
-#ifndef SAB__H
-#define SAB__H
+#ifndef SAB_FX_MANAGER_H
+#define SAB_FX_MANAGER_H
 
 
 #include "stdint.h"

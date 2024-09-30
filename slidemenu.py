@@ -35,23 +35,15 @@ class SlideMenu(tk.Frame):
         self.add_menu_slots()
 
         settings = [
-                    ("Cutoff Frequency", "NUM", 1000),  # in Hz
-                    ("Resonance", "NUM", 0.7),          # Q factor
-                    ("Filter Type", "BTN", "Low-pass"), # Filter type: Low-pass or High-pass
-                    ("Drive", "NUM", 1.0),              # Amount of distortion
-                    ("Mix", "NUM", 50),                 # Dry/Wet mix (0 to 100%)
-                    ("Bypass", "BTN", "OFF")            # Bypass the filter: ON or OFF
-                ]
-        self.block_settings_load(settings)
+            ("Cutoff Frequency",    "NUM", 1000),  # in Hz
+            ("Resonance",           "NUM", 0.7)          # Q factor        # Bypass the filter: ON or OFF
+        ]
         
+        # self.block_settings_load(settings)
         
         # Ensure the content frame is correctly sized
         self.content_frame.update_idletasks()
         self.canvas.config(scrollregion=self.canvas.bbox("all"))
-
-
-        
-
     
         # Initial placement of the menu (hidden initially)
         self.menu_frame.place(x=self.parent.winfo_width(), y=0, height=self.parent.winfo_height())
@@ -73,7 +65,6 @@ class SlideMenu(tk.Frame):
         self.generate_btn.grid(row=0, column=0, columnspan=6, pady=10, padx=100, sticky="e")
 
     def block_settings_load(self, settings):
-    # Calculate the starting row for settings after the slots have been added
         # Calculate the starting row for settings after the slots have been added
         current_row = len(self.content_frame.grid_slaves())  # Get the next available row after all slots are added
 
@@ -106,6 +97,10 @@ class SlideMenu(tk.Frame):
                 # Create a Button with the initial value (e.g., "ON" or "OFF")
                 button = tk.Button(frame, text=value, width=10, bg="#555555", fg="white", font=("Arial", 10, "bold"))
                 button.pack(side=tk.RIGHT, padx=10)
+
+        # Update the canvas scroll region after adding the settings
+        self.content_frame.update_idletasks()  # Ensure all widgets are rendered
+        self.canvas.config(scrollregion=self.canvas.bbox("all"))  # Update the scroll region
 
 
 
