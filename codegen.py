@@ -245,6 +245,12 @@ class CodeGeneratorApp:
         print("generate_c_code")
         pass
 
+    
+    def get_options_by_tag(self,tag_to_find):
+        for block in self.blocks:
+            if block.tag == tag_to_find:
+                return block.option_vars
+        return None
 
     def on_block_press(self, event):
         print("on_block_press")
@@ -258,8 +264,9 @@ class CodeGeneratorApp:
             ("Mix",                 "NUM", 50),                 # Dry/Wet mix (0 to 100%)
             ("Bypass",              "BTN", "OFF")            # Bypass the filter: ON or OFF
         ]
+    
         self.slidemenu.block_settings_load(settings)
-
+        print(self.get_options_by_tag(tags[1]))
         self.drag_data = {"x": event.x, "y": event.y, "item": item, "tags": tags}
 
     def on_block_drag(self, event):
