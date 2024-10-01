@@ -26,6 +26,13 @@ typedef enum pot_charachteristics_en {
     CHAR_REV_LOG
 }pot_charachteristics_ten;
 
+#define NUM_OF_SRC_SLOTS 2
+
+typedef enum control_source_active {
+    SRC_PRIME,
+    SRC_SECOND
+}control_source_ten;
+
 typedef enum control_source_en {
     SRC_POT,
     SRC_EXT_POT,
@@ -64,8 +71,7 @@ typedef struct {
     float32_t min_f32[NUM_OF_CONTROL_SLOTS];
     float32_t max_f32[NUM_OF_CONTROL_SLOTS];
     pot_charachteristics_ten charachteristics_en[NUM_OF_CONTROL_SLOTS];
-    control_source_ten control_source_en[NUM_OF_CONTROL_SLOTS];
-    control_source_ten control_source_en[NUM_OF_CONTROL_SLOTS];
+    control_source_ten control_source_en[NUM_OF_CONTROL_SLOTS][NUM_OF_SRC_SLOTS];
     
     control_values_tun values;
 
@@ -79,7 +85,7 @@ void config_control(controls_tst* self, char* name, float32_t min, float32_t max
     self->min_f32[slot] = min;
     self->max_f32[slot] = max;
     // 
-    self->control_source_en[slot] = src;
+    self->control_source_en[slot][SRC_PRIME] = src;
     self->charachteristics_en[slot] = characteristics;
 
     
@@ -89,11 +95,11 @@ void test(){
     controls_tst ctrl;
 
     // SLOT1
-    config_control(&ctrl,"VOL",0,1.6,SRC_POT,CHAR_REV_LOG,  SLOT1);
-    config_control(&ctrl,"MIX",0,0.999,SRC_POT,CHAR_REV_LOG,SLOT2);
-    config_control(&ctrl,"TIME",1,96000,SRC_POT,CHAR_LIN,   SLOT3);
-    config_control(&ctrl,"VOL",0,0.999,SRC_POT,CHAR_LIN,    SLOT4);
-    config_control(&ctrl,"MOD",0,1,SRC_BTN,CHAR_LIN,        SLOT5); 
+    config_control(&ctrl,"VOL", 0,1.6,      SRC_POT,    CHAR_REV_LOG,   SLOT1);
+    config_control(&ctrl,"MIX", 0,0.999,    SRC_POT,    CHAR_REV_LOG,   SLOT2);
+    config_control(&ctrl,"TIME",1,96000,    SRC_POT,    CHAR_LIN,       SLOT3);
+    config_control(&ctrl,"VOL", 0,0.999,    SRC_POT,    CHAR_LIN,       SLOT4);
+    config_control(&ctrl,"MOD", 0,1,        SRC_BTN,    CHAR_LIN,       SLOT5); 
 
     // Delay time can also be used from SRC_HW_BTN1_TAP_TEMPO 
 
