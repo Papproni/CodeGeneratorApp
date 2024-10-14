@@ -24,6 +24,48 @@ int SAB_{{ lib_name }}_init( SAB_{{ lib_name }}_tst* self, float input_f32, floa
 // Process Function for SAB_{{ lib_name }}_tst
 int SAB_{{ lib_name }}_process( SAB_{{ lib_name }}_tst* self, float input_f32, float output_f32);
 
+// Enum representing different effect types
+typedef enum {
+    {%- for effect in effects %}
+    {{ effect.name | upper }},
+    {%- endfor %}
+} EffectType;
 
+// Struct for a guitar effect with function pointers
+typedef struct {
+    EffectType type;
+    Effectstate_ten state;
+    void (*init)(void*);           // Function pointer to initialize the effect
+    void (*copy_from_flash)(void*); // Function pointer to copy data from flash
+    void (*process)(void*);         // Function pointer to process the effect
+} GuitarEffect;
+
+typedef enum {
+    FX_ACTIVE,
+    FX_BYPASSED
+} Effectstate_ten;
+
+void init_effect_chain(GuitarEffect** chain, EffectType* fx_chain, int chain_length) {
+    for (int i = 0; i < chain_length; ++i) {
+        switch (fx_chain[i]) {
+        {%- for effect in effects %}
+        case {{ effect.name | upper }}:
+            chain[i] = (GuitarEffect*)malloc(sizeof({{ effect.name}}effect));
+            chain[i]->type = {{ effect.name | upper}};
+            chain[i]->init = init_{{ effect.name }};
+            chain[i]->copy_from_flash = copy_{{ effect.name }}_from_flash;
+            chain[i]->process = process_{{ effect.name }};
+            break;
+        {%- endfor %}
+        default:
+            printf("Unknown effect type!\n");
+            break;
+        }
+        // Initialize the effect
+        chain[i]->init(chain[i]);
+        // Copy data from flash (simulated)
+        chain[i]->copy_from_flash(chain[i]);
+    }
+}
 
 #endif

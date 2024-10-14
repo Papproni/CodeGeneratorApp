@@ -252,6 +252,23 @@ class CodeGeneratorApp:
                 return block.option_vars
         return None
 
+    def iterate_stringvars(self, data):
+        for key, value in data.items():
+            print(f"Processing key: {key}")
+            
+            if isinstance(value, dict):  # Check if the value is a dictionary
+                stringvar = value.get('var')  # Access the 'var' key for StringVar
+                if isinstance(stringvar, tk.StringVar):  # Check if it's a StringVar
+                    print(f"  StringVar found for '{key}':")
+                    print(f"    Current Value: {stringvar.get()}")
+
+                    # Now print the other parameters in the dictionary
+                    print(f"    min_value: {value.get('min_value', 'N/A')}")
+                    print(f"    max_value: {value.get('max_value', 'N/A')}")
+                    print(f"    default_value: {value.get('default_value', 'N/A')}")
+                else:
+                    print(f"  No StringVar found for '{key}', moving on...")
+
     def on_block_press(self, event):
         print("on_block_press")
         item = self.canvas.find_withtag("current")[0]
@@ -265,8 +282,13 @@ class CodeGeneratorApp:
             ("Bypass",              "BTN", "OFF")            # Bypass the filter: ON or OFF
         ]
     
-        self.slidemenu.block_settings_load(settings)
+        self.slidemenu.block_settings_load(settings)  
         print(self.get_options_by_tag(tags[1]))
+        print(len(self.get_options_by_tag(tags[1])))
+        self.iterate_stringvars(self.get_options_by_tag(tags[1]))
+        for name in self.get_options_by_tag(tags[1]):
+            print(name)
+        
         self.drag_data = {"x": event.x, "y": event.y, "item": item, "tags": tags}
 
     def on_block_drag(self, event):
@@ -417,10 +439,6 @@ class CodeGeneratorApp:
         else:
             delta_x = event.x - self.drag_data["x"]
             delta_y = event.y - self.drag_data["y"]  
-
-        # print(" event.x: ",event.x, " event.y: ", event.y)
-        # print("drag X: ",self.drag_data["x"], " drag Y: ", self.drag_data["y"])
-        # print("dx: ",delta_x, " dy: ", delta_y)
 
         # Move the canvas by the delta
         self.canvas.move(tk.ALL, delta_x, delta_y)

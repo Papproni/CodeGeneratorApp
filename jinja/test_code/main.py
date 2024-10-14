@@ -56,6 +56,72 @@ effects = [
             {"name": "octave2_down_vol", "type": "float32_t"},
             {"name": "normal_vol", "type": "float32_t"}
         ]
+    },
+    {
+        "name": "flanger",
+        "variables": [
+            {"name": "rate", "type": "float32_t"},
+            {"name": "depth", "type": "float32_t"},
+            {"name": "manual", "type": "float32_t"},
+            {"name": "res", "type": "float32_t"}
+        ]
+    },
+    {
+        "name": "chorus",
+        "variables": [
+            {"name": "level", "type": "float32_t"},
+            {"name": "rate", "type": "float32_t"},
+            {"name": "filter", "type": "float32_t"},
+            {"name": "depth", "type": "float32_t"}
+        ]
+    },
+    {
+        "name": "boost",
+        "variables": [
+            {"name": "boost", "type": "float32_t"}
+        ]
+    },
+    {
+        "name": "pitchshift",
+        "variables": [
+            {"name": "pitch", "type": "float32_t"},
+            {"name": "mix", "type": "float32_t"},
+            {"name": "vol", "type": "float32_t"}
+        ]
+    },
+    {
+        "name": "fuzz",
+        "variables": [
+            {"name": "sustain", "type": "float32_t"},
+            {"name": "tone", "type": "float32_t"},
+            {"name": "vol", "type": "float32_t"}
+        ]
+    },
+    {
+        "name": "tremolo",
+        "variables": [
+            {"name": "mix", "type": "float32_t"},
+            {"name": "rate", "type": "float32_t"},
+            {"name": "depth", "type": "float32_t"}
+        ]
+    },
+    {
+        "name": "equalizer",
+        "variables": [
+            {"name": "vol", "type": "float32_t"},
+            {"name": "gain", "type": "float32_t"},
+            {"name": "20hz", "type": "float32_t"},
+            {"name": "40hz", "type": "float32_t"},
+            {"name": "80hz", "type": "float32_t"},
+            {"name": "160hz", "type": "float32_t"},
+            {"name": "315hz", "type": "float32_t"},
+            {"name": "630hz", "type": "float32_t"},
+            {"name": "1.25khz", "type": "float32_t"},
+            {"name": "2.5khz", "type": "float32_t"},
+            {"name": "5khz", "type": "float32_t"},
+            {"name": "10khz", "type": "float32_t"},
+            {"name": "20khz", "type": "float32_t"}
+        ]
     }
 ]
 
