@@ -65,21 +65,25 @@ class SlideMenu(tk.Frame):
         self.generate_btn.grid(row=0, column=0, columnspan=6, pady=10, padx=100, sticky="e")
 
     def block_settings_load(self, settings):
+        # If a settings frame already exists, destroy it to avoid stacking
+        if hasattr(self, 'settings_frame') and self.settings_frame.winfo_exists():
+            self.settings_frame.destroy()
+
         # Calculate the starting row for settings after the slots have been added
         current_row = len(self.content_frame.grid_slaves())  # Get the next available row after all slots are added
 
         # Create a frame for the settings section with a grey background
-        settings_frame = tk.Frame(self.content_frame, bg="#4f4f4f")  # Dark grey background
-        settings_frame.grid(row=current_row, column=0, columnspan=3, padx=10, pady=10, sticky="nsew")
+        self.settings_frame = tk.Frame(self.content_frame, bg="#4f4f4f")  # Dark grey background
+        self.settings_frame.grid(row=current_row, column=0, columnspan=3, padx=10, pady=10, sticky="nsew")
 
         # Add a title for the settings
-        title_label = tk.Label(settings_frame, text="Settings", bg="#4f4f4f", fg="white", font=("Arial", 14, "bold"))
+        title_label = tk.Label(self.settings_frame, text="Settings", bg="#4f4f4f", fg="white", font=("Arial", 14, "bold"))
         title_label.pack(pady=10)  # Add some padding for the title
 
         # Now add each setting inside the settings frame
         for i, (name, setting_type, value) in enumerate(settings):
             # Create a sub-frame to hold each setting item
-            frame = tk.Frame(settings_frame, width=200, height=50, bg="#333333", relief="ridge", bd=2)
+            frame = tk.Frame(self.settings_frame, width=200, height=50, bg="#333333", relief="ridge", bd=2)
             frame.pack(fill="x", padx=10, pady=5)
             frame.pack_propagate(False)  # Prevent the frame from resizing to fit contents
 
@@ -98,9 +102,9 @@ class SlideMenu(tk.Frame):
                 button = tk.Button(frame, text=value, width=10, bg="#555555", fg="white", font=("Arial", 10, "bold"))
                 button.pack(side=tk.RIGHT, padx=10)
 
-        # Update the canvas scroll region after adding the settings
-        self.content_frame.update_idletasks()  # Ensure all widgets are rendered
-        self.canvas.config(scrollregion=self.canvas.bbox("all"))  # Update the scroll region
+            # Update the canvas scroll region after adding the settings
+            self.content_frame.update_idletasks()  # Ensure all widgets are rendered
+            self.canvas.config(scrollregion=self.canvas.bbox("all"))  # Update the scroll region
 
 
 
