@@ -63,9 +63,6 @@ void process_effect_chain(effect_chain_tst* fx_chain_ptr,effect_chain_tst* fx_ch
         // Alloc new presets memory
         alloc_memory(fx_chain_ptr)
     }
-
-
-    
 };
 
 uint32_t input_u32[4];

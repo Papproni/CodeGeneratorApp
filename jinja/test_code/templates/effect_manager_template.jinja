@@ -6,6 +6,7 @@ Generated on: {{ date }} */
 
 
 #include "stdint.h"
+#include "sab_intercom.h"
 
 // Generated effect libs
 {%- for effect in effects %}
@@ -33,28 +34,19 @@ typedef enum {
 
 // Struct for a guitar effect with function pointers
 typedef struct {
-    EffectType type;
-    Effectstate_ten state;
     void (*init)(void*);           // Function pointer to initialize the effect
-    void (*copy_from_flash)(void*); // Function pointer to copy data from flash
-    void (*process)(void*);         // Function pointer to process the effect
+    int (*process)(void*);         // Function pointer to process the effect
+    void (*delete)(void*);
 } GuitarEffect;
-
-typedef enum {
-    FX_ACTIVE,
-    FX_BYPASSED
-} Effectstate_ten;
 
 void init_effect_chain(GuitarEffect** chain, EffectType* fx_chain, int chain_length) {
     for (int i = 0; i < chain_length; ++i) {
         switch (fx_chain[i]) {
         {%- for effect in effects %}
         case {{ effect.name | upper }}:
-            chain[i] = (GuitarEffect*)malloc(sizeof({{ effect.name}}effect));
-            chain[i]->type = {{ effect.name | upper}};
-            chain[i]->init = init_{{ effect.name }};
-            chain[i]->copy_from_flash = copy_{{ effect.name }}_from_flash;
-            chain[i]->process = process_{{ effect.name }};
+            chain[i] = (GuitarEffect*)malloc(sizeof(SAB_{{ effect.name}}_tst));
+            chain[i]->init = SAB_{{ effect.name }}_init;
+            chain[i]->process = SAB_{{ effect.name }}_process;
             break;
         {%- endfor %}
         default:
@@ -65,6 +57,20 @@ void init_effect_chain(GuitarEffect** chain, EffectType* fx_chain, int chain_len
         chain[i]->init(chain[i]);
         // Copy data from flash (simulated)
         chain[i]->copy_from_flash(chain[i]);
+    }
+}
+
+// Function to process all effects in the chain
+void process_effect_chain(GuitarEffect** chain, int chain_length) {
+    for (int i = 0; i < chain_length; ++i) {
+        chain[i]->process(chain[i]);
+    }
+}
+
+// Cleanup the effects in the chain
+void cleanup_effect_chain(GuitarEffect** chain, int chain_length) {
+    for (int i = 0; i < chain_length; ++i) {
+        free(chain[i]);  // Free the allocated memory for each effect
     }
 }
 
