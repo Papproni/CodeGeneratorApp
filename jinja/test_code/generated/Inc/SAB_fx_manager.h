@@ -1,5 +1,5 @@
 /*THIS FILE IS GENERATED! DO NOT MODIFY!
-Generated on: 2024.11.10. */
+Generated on: 2024.11.11. */
 
 #ifndef SAB_FX_MANAGER_H
 #define SAB_FX_MANAGER_H

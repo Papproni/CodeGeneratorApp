@@ -129,15 +129,20 @@ effects = [
 
 # 2. SET OUTPUT PARAMETERS
 # Ensure the 'generated' directory exists
-output_dir = os.path.join(os.path.dirname(__file__), "generated")
-os.makedirs(output_dir, exist_ok=True)
+output_dir_inc = os.path.join(os.path.dirname(__file__), "generated/Inc")
+os.makedirs(output_dir_inc, exist_ok=True)
+
+output_dir_src = os.path.join(os.path.dirname(__file__), "generated/Src")
+os.makedirs(output_dir_src, exist_ok=True)
+
 current_date = datetime.now().strftime("%Y.%m.%d.")
 
 # 3. SET TEMPLATES
 # Load the template from the 'templates' directory
 template_dir = os.path.join(os.path.dirname(__file__), "templates")
 env = Environment(loader=FileSystemLoader(template_dir))
-template = env.get_template("effect_lib_template.jinja")
+template_inc = env.get_template("effect_inc_template.jinja")
+template_src = env.get_template("effect_src_template.jinja")
 
 # 4. GENERATE FILES FROM TEMPLATE
 # Generate files for each effect
@@ -154,16 +159,30 @@ print("\n\rGenerating individual effects libs:")
 
 for effect in effects:
     # File name to be created in the 'generated' directory
-    filename = os.path.join(output_dir, f"SAB_{effect['name'].lower()}.h")
+    filename_inc = os.path.join(output_dir_inc, f"SAB_{effect['name'].lower()}.h")
 
     # Render template with effect data
-    content = template.render(effect, date=current_date)
+    content = template_inc.render(effect, date=current_date)
 
     # Write rendered content to the generated file
-    with open(filename, mode="w", encoding="utf-8") as message:
+    with open(filename_inc, mode="w", encoding="utf-8") as message:
         message.write(content)
         generated_libs_counter = generated_libs_counter + 1
         file_name = f"SAB_{effect['name'].lower()}.h"
+        status =  "DONE!"
+        dots = '.' * (total_length - len(file_name) - len(status))
+        print(f"File {generated_libs_counter}: {file_name}{dots}{bcolors.OKGREEN}{status}{bcolors.ENDC}")
+    # File name to be created in the 'generated' directory
+    filename_src = os.path.join(output_dir_src, f"SAB_{effect['name'].lower()}.h")
+
+    # Render template with effect data
+    content = template_src.render(effect, date=current_date)
+
+    # Write rendered content to the generated file
+    with open(filename_src, mode="w", encoding="utf-8") as message:
+        message.write(content)
+        generated_libs_counter = generated_libs_counter + 1
+        file_name = f"SAB_{effect['name'].lower()}.c"
         status =  "DONE!"
         dots = '.' * (total_length - len(file_name) - len(status))
         print(f"File {generated_libs_counter}: {file_name}{dots}{bcolors.OKGREEN}{status}{bcolors.ENDC}")
@@ -186,11 +205,11 @@ for effect in effects:
 
 
 # add_effects_to_manager(effects,manager_data)
-template = env.get_template("effect_manager_template.jinja")
+template_manager = env.get_template("effect_manager_template.jinja")
 
-filename = os.path.join(output_dir, f"SAB_fx_manager.h")
+filename = os.path.join(output_dir_inc, f"SAB_fx_manager.h")
 # lib_name = manager_data[0].get("name"),
-content = template.render(manager_data[0], date=current_date)
+content = template_manager.render(manager_data[0], date=current_date)
 
 with open(filename, mode="w", encoding="utf-8") as message:
     # message.write(content)
@@ -208,5 +227,5 @@ with open(filename, mode="w", encoding="utf-8") as message:
 print("")
 print(f"{bcolors.BOLD}{bcolors.OKGREEN}Code generation finished:{bcolors.ENDC}")
 print(f"{bcolors.OKGREEN} {generated_libs_counter} files are generated!{bcolors.ENDC}")
-print(f"{bcolors.OKGREEN}Output dir: \n\r{output_dir}{bcolors.ENDC}")
+print(f"{bcolors.OKGREEN}Output dir: \n\r{output_dir_inc}{bcolors.ENDC}")
 
