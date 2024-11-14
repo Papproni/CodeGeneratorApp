@@ -72,6 +72,12 @@ class CodeGeneratorApp:
 
         self.setting_counter = 0
 
+                # Create the right-click context menu
+        self.context_menu = Menu(self.root, tearoff=0)
+        self.context_menu.add_command(label="Delete Block", command=self.delete_block)
+        self.context_menu.add_command(label="Delete Arrow", command=self.delete_arrow)
+
+
 
     def create_menu(self):
         menubar = Menu(self.root)
@@ -238,6 +244,12 @@ class CodeGeneratorApp:
         self.canvas.tag_bind("input_circle", "<B1-Motion>", lambda event: "break")
         self.canvas.tag_bind("output_circle", "<B1-Motion>", lambda event: "break")
 
+        # Bind right-click to each block and arrow
+        self.canvas.tag_bind("block", "<Button-3>", self.select_block)
+        self.canvas.tag_bind("arrow", "<Button-3>", self.select_arrow)
+         # Bind right-click to open the context menu
+        self.canvas.bind("<Button-3>", self.show_context_menu)
+
     def on_resize(self, event=None):
         self.canvas.config(width=self.canvas.winfo_screenwidth(), height=self.canvas.winfo_screenheight())  
     
@@ -248,7 +260,31 @@ class CodeGeneratorApp:
         print("generate_c_code")
         pass
 
-    
+    def select_block(self, event):
+        # Identify the selected block for deletion
+        self.selected_block = self.canvas.find_withtag("current")[0]
+        print("select_block")
+
+    def select_arrow(self, event):
+        # Identify the selected arrow for deletion
+        self.selected_arrow = self.canvas.find_withtag("current")[0]
+        print("select_arrow")
+
+    def delete_block(self):
+        if self.selected_block:
+            # Remove the selected block and associated items
+            self.canvas.delete(self.selected_block)
+            self.selected_block = None
+
+    def delete_arrow(self):
+        if self.selected_arrow:
+            # Remove the selected arrow
+            self.canvas.delete(self.selected_arrow)
+            self.selected_arrow = None
+
+    def show_context_menu(self, event):
+        self.context_menu.post(event.x_root, event.y_root)
+
     def get_options_by_tag(self,tag_to_find):
         for block in self.blocks:
             if block.tag == tag_to_find:
@@ -286,13 +322,19 @@ class CodeGeneratorApp:
             ("Mix",                 "NUM", self.setting_counter),                 # Dry/Wet mix (0 to 100%)
             ("Bypass",              "BTN", "OFF")            # Bypass the filter: ON or OFF
         ]
-    
-        self.slidemenu.block_settings_load(settings)  
-        print(self.get_options_by_tag(tags[1]))
-        print(len(self.get_options_by_tag(tags[1])))
-        self.iterate_stringvars(self.get_options_by_tag(tags[1]))
-        for name in self.get_options_by_tag(tags[1]):
-            print(name)
+
+        self.slidemenu.block_settings_load(settings)
+        try:
+            print(self.get_options_by_tag(tags[1]))
+            print(len(self.get_options_by_tag(tags[1])))
+            self.iterate_stringvars(self.get_options_by_tag(tags[1]))
+            for name in self.get_options_by_tag(tags[1]):
+                print(name)
+        except:
+            pass
+        
+        
+        
         
         self.drag_data = {"x": event.x, "y": event.y, "item": item, "tags": tags}
 
