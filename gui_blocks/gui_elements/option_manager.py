@@ -19,9 +19,11 @@ class OptionManager:
                 "min_value": min_value,
                 "max_value": max_value,
                 "bindable": bindable,
-                "default_value": default_value
+                "default_value": default_value,
+                "type":         option_type
             }
-
+            if(False == visible_on_block):
+                return
             # Create the entry widget, bind it to the StringVar
             entry = tk.Entry(self.canvas, width=5, textvariable=var)
 
@@ -43,8 +45,12 @@ class OptionManager:
                 "min_value": min_value,
                 "max_value": max_value,
                 "bindable": bindable,
-                "default_value": default_value
+                "default_value": default_value,
+                "type":         option_type
             }
+
+            if(False == visible_on_block):
+                return
 
             # Create the OptionMenu (dropdown) widget
             option_menu = tk.OptionMenu(self.canvas, var, *options)
@@ -60,6 +66,8 @@ class OptionManager:
             self.option_vars[option_name] = {"var": var,
                                              "bindable": bindable}
 
+            if(False == visible_on_block):
+                return
             checkbutton = tk.Checkbutton(self.canvas, variable=var)
             text = option_name.capitalize()
             

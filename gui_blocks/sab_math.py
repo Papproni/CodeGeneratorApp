@@ -4,8 +4,9 @@ from gui_blocks.gui_elements.option_manager import OptionManager
 
 math_color = "orange"
 
-class AddBlock:
+class AddBlock(OptionManager):
     def __init__(self,canvas,tag):
+        super().__init__()
         self.canvas = canvas
 
         # default values
@@ -43,8 +44,14 @@ class AddBlock:
         self.input_circle1       = self.canvas.create_oval(self.x-self.io_circle_radius,     self.y+5, self.x+10, self.y+25, fill="green",              tags=("input_circle", self.tag))
         self.input_circle2       = self.canvas.create_oval(self.x-self.io_circle_radius,     self.y+30, self.x+10, self.y+50, fill="green",              tags=("input_circle", self.tag))
         self.output_circle       = self.canvas.create_oval(self.x+self.w-self.io_circle_radius,   self.y+(self.h/2-self.io_circle_radius), self.x+self.w+10, self.y+(self.h/2+self.io_circle_radius), fill="yellow",            tags=("output_circle", self.tag))
-class SubBlock:
+
+        # OPTIONS: 
+        self.add_option("INPUT NUM",  "NUM", 2, 128, visible_on_block=False)
+        self.last_opt_added()
+        canvas.tag_lower("text_background",'all')
+class SubBlock(OptionManager):
     def __init__(self,canvas,tag):
+        super().__init__()
         self.canvas = canvas
 
         # default values
@@ -82,9 +89,15 @@ class SubBlock:
         self.input_circle1       = self.canvas.create_oval(self.x-self.io_circle_radius,     self.y+5, self.x+10, self.y+25, fill="green",              tags=("input_circle", self.tag))
         self.input_circle2       = self.canvas.create_oval(self.x-self.io_circle_radius,     self.y+30, self.x+10, self.y+50, fill="green",              tags=("input_circle", self.tag))
         self.output_circle       = self.canvas.create_oval(self.x+self.w-self.io_circle_radius,   self.y+(self.h/2-self.io_circle_radius), self.x+self.w+10, self.y+(self.h/2+self.io_circle_radius), fill="yellow",            tags=("output_circle", self.tag))
+
+                # OPTIONS: 
+        self.add_option("INPUT NUM",  "NUM", 2, 128, visible_on_block=False)
+        self.last_opt_added()
+        canvas.tag_lower("text_background",'all')
         
-class DivBlock:
+class DivBlock(OptionManager):
     def __init__(self,canvas,tag):
+        super().__init__()
         self.canvas = canvas
 
         # default values
@@ -122,9 +135,14 @@ class DivBlock:
         self.input_circle1       = self.canvas.create_oval(self.x-self.io_circle_radius,     self.y+5, self.x+10, self.y+25, fill="green",              tags=("input_circle", self.tag))
         self.input_circle2       = self.canvas.create_oval(self.x-self.io_circle_radius,     self.y+30, self.x+10, self.y+50, fill="green",              tags=("input_circle", self.tag))
         self.output_circle       = self.canvas.create_oval(self.x+self.w-self.io_circle_radius,   self.y+(self.h/2-self.io_circle_radius), self.x+self.w+10, self.y+(self.h/2+self.io_circle_radius), fill="yellow",            tags=("output_circle", self.tag))
-        
-class MulBlock:
+        # OPTIONS: 
+        self.add_option("INPUT NUM",  "NUM", 2, 128, visible_on_block=False)
+        self.last_opt_added()
+        canvas.tag_lower("text_background",'all')
+
+class MulBlock(OptionManager):
     def __init__(self,canvas,tag):
+        super().__init__()
         self.canvas = canvas
 
         # default values
@@ -162,9 +180,13 @@ class MulBlock:
         self.input_circle1       = self.canvas.create_oval(self.x-self.io_circle_radius,     self.y+5, self.x+10, self.y+25, fill="green",              tags=("input_circle", self.tag))
         self.input_circle2       = self.canvas.create_oval(self.x-self.io_circle_radius,     self.y+30, self.x+10, self.y+50, fill="green",              tags=("input_circle", self.tag))
         self.output_circle       = self.canvas.create_oval(self.x+self.w-self.io_circle_radius,   self.y+(self.h/2-self.io_circle_radius), self.x+self.w+10, self.y+(self.h/2+self.io_circle_radius), fill="yellow",            tags=("output_circle", self.tag))
-
-class ABSBlock:
+        # OPTIONS: 
+        self.add_option("INPUT NUM",  "NUM", 2, 128, visible_on_block=False)
+        self.last_opt_added()
+        canvas.tag_lower("text_background",'all')
+class ABSBlock(OptionManager):
     def __init__(self,canvas,tag):
+        super().__init__()
         self.canvas = canvas
 
         # default values
@@ -250,8 +272,8 @@ class LimitBlock(OptionManager):
         # OPTIONS:
         #   LimLow:    
         #   LimHigh:    
-        self.add_option("LOW",  "NUM", -20000, 20000)
-        self.add_option("HIGH", "NUM", -20000, 20000)
+        self.add_option("LOW",  "NUM", -20000, 20000,bindable=True)
+        self.add_option("HIGH", "NUM", -20000, 20000,bindable=True)
         # self.option_vars
 
         # self.add_option("low_lim","NUM",-20000,20000)

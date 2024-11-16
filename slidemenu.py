@@ -38,7 +38,6 @@ class SlideMenu(tk.Frame):
             ("Cutoff Frequency",    "NUM", 1000),  # in Hz
             ("Resonance",           "NUM", 0.7)          # Q factor        # Bypass the filter: ON or OFF
         ]
-        
         # self.block_settings_load(settings)
         
         # Ensure the content frame is correctly sized
@@ -81,30 +80,38 @@ class SlideMenu(tk.Frame):
         title_label.pack(pady=10)  # Add some padding for the title
 
         # Now add each setting inside the settings frame
-        for i, (name, setting_type, value) in enumerate(settings):
+        for  key, data in settings.items():
             # Create a sub-frame to hold each setting item
             frame = tk.Frame(self.settings_frame, width=200, height=50, bg="#333333", relief="ridge", bd=2)
             frame.pack(fill="x", padx=10, pady=5)
             frame.pack_propagate(False)  # Prevent the frame from resizing to fit contents
 
+            setting_type    = data['type']
+            setting_name    = key
+            current_value   = data.get('var').get()
+
             # Create label for the setting name
-            label = tk.Label(frame, text=name, bg="#333333", fg="white", font=("Arial", 10, "bold"))
+            label = tk.Label(frame, text=setting_name, bg="#333333", fg="white", font=("Arial", 10, "bold"))
             label.pack(side=tk.LEFT, padx=10)
 
             if setting_type == "NUM":
                 # Create an Entry widget for numeric input
                 entry = tk.Entry(frame, width=10)
-                entry.insert(0, str(value))  # Insert the default value into the entry box
+                entry.insert(0, str(current_value))  # Insert the default value into the entry box
                 entry.pack(side=tk.RIGHT, padx=10)
 
-            elif setting_type == "BTN":
+            elif setting_type == "OPTIONBOX":
                 # Create a Button with the initial value (e.g., "ON" or "OFF")
-                button = tk.Button(frame, text=value, width=10, bg="#555555", fg="white", font=("Arial", 10, "bold"))
+                button = tk.Button(frame, text=current_value, width=10, bg="#555555", fg="white", font=("Arial", 10, "bold"))
                 button.pack(side=tk.RIGHT, padx=10)
+            elif setting_type == "TICKBOX":
+                # Create a Button with the initial value (e.g., "ON" or "OFF")
+                checkbutton = tk.Checkbutton(frame, variable=current_value)
+                checkbutton.pack(side=tk.RIGHT, padx=10)
 
             # Update the canvas scroll region after adding the settings
-            self.content_frame.update_idletasks()  # Ensure all widgets are rendered
-            self.canvas.config(scrollregion=self.canvas.bbox("all"))  # Update the scroll region
+        self.content_frame.update_idletasks()  # Ensure all widgets are rendered
+        self.canvas.config(scrollregion=self.canvas.bbox("all"))  # Update the scroll region
 
 
 
