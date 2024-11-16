@@ -80,33 +80,43 @@ class SlideMenu(tk.Frame):
         title_label.pack(pady=10)  # Add some padding for the title
 
         # Now add each setting inside the settings frame
-        for  key, data in settings.items():
+        for  item in settings.items():
             # Create a sub-frame to hold each setting item
             frame = tk.Frame(self.settings_frame, width=200, height=50, bg="#333333", relief="ridge", bd=2)
             frame.pack(fill="x", padx=10, pady=5)
             frame.pack_propagate(False)  # Prevent the frame from resizing to fit contents
+            key, data = item
 
+            settings_stringvar = data['var']
             setting_type    = data['type']
             setting_name    = key
             current_value   = data.get('var').get()
-
+            min_value       = data['min_value']
+            max_value       = data['max_value']
             # Create label for the setting name
             label = tk.Label(frame, text=setting_name, bg="#333333", fg="white", font=("Arial", 10, "bold"))
             label.pack(side=tk.LEFT, padx=10)
 
+
             if setting_type == "NUM":
                 # Create an Entry widget for numeric input
-                entry = tk.Entry(frame, width=10)
-                entry.insert(0, str(current_value))  # Insert the default value into the entry box
+                # entry = tk.Entry(frame, width=10)
+                # entry.insert(0, str(current_value))  # Insert the default value into the entry box
+                # 
+                entry = tk.Entry(frame, width=10, textvariable=settings_stringvar)
+                # Bind the validation based on the option type
                 entry.pack(side=tk.RIGHT, padx=10)
 
             elif setting_type == "OPTIONBOX":
                 # Create a Button with the initial value (e.g., "ON" or "OFF")
-                button = tk.Button(frame, text=current_value, width=10, bg="#555555", fg="white", font=("Arial", 10, "bold"))
-                button.pack(side=tk.RIGHT, padx=10)
+                # button = tk.Button(frame, text=settings_stringvar, width=10, bg="#555555", fg="white", font=("Arial", 10, "bold"))
+                # button.pack(side=tk.RIGHT, padx=10)
+                options = data['default_value'].split(",")
+                option_menu = tk.OptionMenu(frame, settings_stringvar,  *options)
+                option_menu.pack(side=tk.RIGHT, padx=10)
             elif setting_type == "TICKBOX":
                 # Create a Button with the initial value (e.g., "ON" or "OFF")
-                checkbutton = tk.Checkbutton(frame, variable=current_value)
+                checkbutton = tk.Checkbutton(frame, variable=settings_stringvar)
                 checkbutton.pack(side=tk.RIGHT, padx=10)
 
             # Update the canvas scroll region after adding the settings
@@ -114,6 +124,16 @@ class SlideMenu(tk.Frame):
         self.canvas.config(scrollregion=self.canvas.bbox("all"))  # Update the scroll region
 
 
+    def validate_numeric_input(self, entry, var, min_value, max_value):
+        value = var.get()
+        try:
+            num = float(value)  # Use float instead of int to handle floating-point numbers
+            if min_value is not None and num < min_value:
+                raise ValueError("Value is below the minimum limit")
+            if max_value is not None and num > max_value:
+                raise ValueError("Value is above the maximum limit")
+        except ValueError:
+            entry.delete(0, tk.END)
 
     def add_menu_slots(self):
         # Create a grid with "slots" as described

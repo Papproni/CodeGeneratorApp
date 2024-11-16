@@ -54,8 +54,10 @@ class HardwareControls:
 class CodeGeneratorApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("DSP code gen for STM AUDIO BOARD V3")
+        self.root.title("Code Generator for SAB_V3")
         self.root.wm_attributes("-topmost", True)
+        root.geometry("1000x1000")
+
         self.canvas = Canvas(root, width=800, height=800, bg="white")
         self.canvas.pack()
 
