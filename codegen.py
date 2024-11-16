@@ -276,8 +276,17 @@ class CodeGeneratorApp:
 
     def delete_block(self):
         if self.selected_block:
+            # Delete assigned parameters!
+            # Delete arrows!
+            for arrow in self.arrows[:]:
+                if arrow[3] == self.selected_block or arrow[4] == self.selected_block:
+                    self.canvas.delete(arrow[2])
+                    self.arrows.remove(arrow)
+                    
+
+            # Delete blocks!
             items = self.canvas.find_withtag(self.selected_block)
-            for item in items:
+            for item in items[:]:
                 self.canvas.delete(item)
             # Remove the selected block and associated items
             self.selected_block = None
@@ -367,7 +376,7 @@ class CodeGeneratorApp:
         self.selected_output_circle = self.canvas.find_withtag("current")[0]
         print("self.selected_output_circle: ",self.selected_output_circle)
         x1, y1, x2, y2 = self.canvas.coords(self.selected_output_circle)
-        self.arrow_line = self.canvas.create_line((x1 + x2) / 2, (y1 + y2) / 2, event.x, event.y, arrow=tk.LAST, tags="arrow")
+        self.arrow_line = self.canvas.create_line((x1 + x2) / 2, (y1 + y2) / 2, event.x, event.y, width = 2, arrow=tk.LAST, tags="arrow")
         self.canvas.bind("<Motion>", self.on_arrow_drag)
         self.canvas.bind("<ButtonPress-1>", self.on_canvas_click)
 
@@ -385,7 +394,11 @@ class CodeGeneratorApp:
         for item in overlapping_items:
             item_tags = self.canvas.gettags(item)
             print(f"Item under cursor: {item}, tags: {item_tags}")
+            if "output_circle" in item_tags:
+                self.selected_output_circle_block = item_tags[1]
+                return
             if "input_circle" in item_tags:
+                self.selected_input_circle_block = item_tags[1]
                 self.on_input_circle_press(event)
                 return
 
@@ -425,6 +438,7 @@ class CodeGeneratorApp:
             overlapping_items = self.canvas.find_overlapping(event.x, event.y, event.x, event.y)
             for item in overlapping_items:
                 item_tags = self.canvas.gettags(item)
+                
                 print(f"Item under cursor: {item}, tags: {item_tags}")
                 print("***** on_input_circle_press: ", self.selected_output_circle)
                 if "input_circle" in item_tags:
@@ -435,7 +449,7 @@ class CodeGeneratorApp:
                     
                     x3, y3, x4, y4 = self.canvas.coords(target_input_circle)
                     # self.canvas.coords(self.arrow_line, (x1 + x2)/2, (y1 + y2)/2, (x3 + x4) / 2, (y3 + y4) / 2)
-                    self.arrows.append((self.selected_output_circle, item, self.arrow_line))
+                    self.arrows.append((self.selected_output_circle, item, self.arrow_line, self.selected_input_circle_block, self.selected_output_circle_block))
                     self.arrow_line = None
                     self.selected_output_circle = None
                     # self.canvas.unbind("<Motion>")
