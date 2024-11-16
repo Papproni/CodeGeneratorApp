@@ -55,6 +55,7 @@ class CodeGeneratorApp:
     def __init__(self, root):
         self.root = root
         self.root.title("DSP code gen for STM AUDIO BOARD V3")
+        self.root.wm_attributes("-topmost", True)
         self.canvas = Canvas(root, width=800, height=800, bg="white")
         self.canvas.pack()
 
@@ -262,8 +263,11 @@ class CodeGeneratorApp:
 
     def select_block(self, event):
         # Identify the selected block for deletion
-        self.selected_block = self.canvas.find_withtag("current")[0]
-        print("select_block")
+
+        item = self.canvas.find_withtag("current")[0]
+        tags = self.canvas.gettags(item)
+        self.selected_block = tags[1]  # Assuming the second tag is the unique block identifier
+        print("select_block: ", self.selected_block)
 
     def select_arrow(self, event):
         # Identify the selected arrow for deletion
@@ -272,9 +276,12 @@ class CodeGeneratorApp:
 
     def delete_block(self):
         if self.selected_block:
+            items = self.canvas.find_withtag(self.selected_block)
+            for item in items:
+                self.canvas.delete(item)
             # Remove the selected block and associated items
-            self.canvas.delete(self.selected_block)
             self.selected_block = None
+
 
     def delete_arrow(self):
         if self.selected_arrow:
