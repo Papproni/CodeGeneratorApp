@@ -288,6 +288,10 @@ class CodeGeneratorApp:
             items = self.canvas.find_withtag(self.selected_block)
             for item in items[:]:
                 self.canvas.delete(item)
+            
+            for block in self.blocks[:]:
+                if(block.tag == self.selected_block):
+                    self.blocks.remove(block)
             # Remove the selected block and associated items
             self.selected_block = None
 
