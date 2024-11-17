@@ -8,8 +8,9 @@ from gui_blocks import sab_filters
 from gui_blocks import sab_io
 from gui_blocks import sab_math
 
-# import cfile
 import slidemenu
+
+import networkx as nx
 
 # On screen user has 6 options to use
 # maximum 12 options are available
@@ -250,10 +251,52 @@ class CodeGeneratorApp:
         self.canvas.config(width=self.canvas.winfo_screenwidth(), height=self.canvas.winfo_screenheight())  
     
     def generate_c_code(self):
+
+
+        # Create a directed graph
+        graph = nx.DiGraph()
+        for arrow in self.arrows:
+            graph.add_edge(arrow[4],arrow[3])
+
+
         # Find INPUT blocks
         # Find tag ID of their output_circles in arrows
         # Check which ID does the arrow connect to etc
-        print("generate_c_code")
+        self.generation_sequence = None
+        self.generation_sequence = {}
+        # Make a block order
+        # the order starts with INPUT block
+        # Insert list
+        # Find the connections that this block is connected to (1 or multiple) put them in a list
+        path_num = 0
+        
+        # FInd input blocks
+        for block in self.blocks:
+            if(block.type == "INPUT_BLOCK"):
+                start_node = block.tag
+                self.generation_sequence[path_num] = []
+                self.generation_sequence[path_num].append({"tag":block.tag,"type":block.type})
+                path_num = path_num + 1
+            if(block.type == "OUTPUT_BLOCK"):
+                end_node  = block.tag
+
+        path = nx.shortest_path(graph, source=start_node, target=end_node)
+        # for the first Input block in generation sequence, find the first connection
+
+        # local_arrow = self.arrows
+        # level = 0
+        # for seq in self.generation_sequence.items():
+        #     for arrow in local_arrow:
+        #         if( arrow[4] == seq[1][level]["tag"]):
+        #             next_block_tag = arrow[4]
+        #             type = self.canvas.find_withtag(arrow[3]).type
+        #             seq.append({"tag":next_block_tag,"type":type})
+        #             # arrow is used up
+        #             local_arrow.remove(arrow)
+        #             level = level + 1
+
+
+        print(path)
         pass
 
     def select_block(self, event):
@@ -295,6 +338,9 @@ class CodeGeneratorApp:
         if self.selected_arrow:
             # Remove the selected arrow
             self.canvas.delete(self.selected_arrow)
+            for arrow in self.arrows:
+                if(arrow[2] == self.selected_arrow):
+                    self.arrows.remove(arrow)
             self.selected_arrow = None
 
     def show_context_menu(self, event):
@@ -499,7 +545,7 @@ class CodeGeneratorApp:
             delta_x = event.x - self.drag_data["x"]
             delta_y = event.y - self.drag_data["y"]  
 
-        # Move the canvas by the delta
+        # Move the canvas by the deltamax_value
         self.canvas.move(tk.ALL, delta_x, delta_y)
 
         # Update the recorded position

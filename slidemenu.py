@@ -90,10 +90,6 @@ class SlideMenu(tk.Frame):
             settings_stringvar = data['var']
             setting_type    = data['type']
             setting_name    = key
-            current_value   = data.get('var').get()
-            min_value       = data['min_value']
-            max_value       = data['max_value']
-            default_value   = data['default_value']
             # Create label for the setting name
             label = tk.Label(frame, text=setting_name, bg="#333333", fg="white", font=("Arial", 10, "bold"))
             label.pack(side=tk.LEFT, padx=10)
@@ -103,8 +99,6 @@ class SlideMenu(tk.Frame):
                 entry = tk.Entry(frame, width=10, textvariable=settings_stringvar)
                 # Bind the validation based on the option type
                 entry.pack(side=tk.RIGHT, padx=10)
-                # entry.bind("<FocusOut>", lambda event, e=entry: self.validate_numeric_input(e, settings_stringvar, min_value, max_value, default_value))
-                # entry.bind("<FocusOut>", lambda event, e=entry, var=settings_stringvar, min_val=min_value, max_val=max_value, default_val=default_value: self.validate_numeric_input(e, var, min_val, max_val, default_val))
 
             elif setting_type == "OPTIONBOX":
                 # Create a Button with the initial value (e.g., "ON" or "OFF")

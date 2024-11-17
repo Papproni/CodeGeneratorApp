@@ -4,11 +4,7 @@ class OptionManager:
     def __init__(self):
         self.option_vars = {}
 
-    def on_variable_change(self, name, index, operation):
-        """
-        Callback function triggered when the StringVar value changes.
-        """
-        print("on_variable_change")
+    
     # add_option examples:
     #   Numeric parameter:
     #       self.add_option("LOW",  "NUM", -20000, 20000)
@@ -28,7 +24,7 @@ class OptionManager:
                 "default_value": default_value,
                 "type":         option_type
             }
-            var.trace_add("write", self.on_variable_change(var))
+            var.trace_add("write", lambda *args, name=option_name: self.on_variable_change(name))
             if(False == visible_on_block):
                 return
             # Create the entry widget, bind it to the StringVar
@@ -99,18 +95,28 @@ class OptionManager:
             tags=(f"{option_name}_{widget_type}", self.tag),
             anchor="center"
         )
-    def validate_numeric_input(self, entry, var, min_value, max_value, default_value):
-        value = var.get()
+
+    def on_variable_change(self, name):
+        data = self.option_vars[name]
+        self.validate_numeric_input(data)
+        print("on_variable_change")
+
+    def validate_numeric_input(self, data):
+
+        value   = data.get('var').get()
+        min_value       = data['min_value']
+        max_value       = data['max_value']
+        default_value   = data['default_value']
         try:
             num = float(value)  # Use float instead of int to handle floating-point numbers
             if min_value is not None and num < min_value:
+                data.get('var').set(min_value)
                 raise ValueError("Value is below the minimum limit")
             if max_value is not None and num > max_value:
+                data.get('var').set(max_value)
                 raise ValueError("Value is above the maximum limit")
         except ValueError:
-            var.set(default_value)  # Reset to default if invalid
-            entry.delete(0, tk.END)
-            entry.insert(0, default_value)
+            data.set(default_value)  # Reset to default if invalid
 
     def inc_opt_counter(self):
         self.opt_counter = self.opt_counter + 1
