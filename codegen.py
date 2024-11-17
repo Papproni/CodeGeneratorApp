@@ -103,7 +103,7 @@ class CodeGeneratorApp:
         math_menu = Menu(menubar, tearoff=0)
         menubar.add_cascade(label="Math", menu=math_menu)
         
-        math_menu.add_command(label="Const",    command=self.add_Add_block)
+        math_menu.add_command(label="Const",    command=self.add_Const_block)
         math_menu.add_command(label="Add",      command=self.add_Add_block)
         math_menu.add_command(label="Mul",      command=self.add_Mul_block)
         math_menu.add_command(label="Div",      command=self.add_Div_block)
@@ -149,6 +149,14 @@ class CodeGeneratorApp:
         tag = self.get_unique_block_tag()
 
         new_block = sab_filters.MovingAverage(self.canvas,tag)
+        
+        self.blocks.append(new_block)
+        self.bind_events()  # Ensure events are bound after adding blocks
+
+    def add_Const_block(self, x=50, y=50):
+        tag = self.get_unique_block_tag()
+
+        new_block = sab_math.ConstBlock(self.canvas,tag)
         
         self.blocks.append(new_block)
         self.bind_events()  # Ensure events are bound after adding blocks
@@ -281,6 +289,7 @@ class CodeGeneratorApp:
                 end_node  = block.tag
 
         path = nx.shortest_path(graph, source=start_node, target=end_node)
+        print(nx.all_simple_paths(graph,source=start_node, target=end_node ))
         # for the first Input block in generation sequence, find the first connection
 
         # local_arrow = self.arrows

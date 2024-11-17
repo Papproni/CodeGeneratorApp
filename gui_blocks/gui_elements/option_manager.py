@@ -11,7 +11,7 @@ class OptionManager:
     #   Chooseable:
     #       self.add_option("TYPE", "OPTIONBOX", default_value="LPF,HPF,NOTCH,BANDPASS")
     def add_option(self, option_name, option_type, min_value=None, max_value=None, default_value="1", bindable=None, visible_on_block = None):
-        self.inc_opt_counter()
+        
         # Handle option types: NUM (numeric entry) and OPTIONBOX (dropdown menu)
         if option_type == "NUM":
             # Create a StringVar to hold the value of the option
@@ -27,6 +27,7 @@ class OptionManager:
             var.trace_add("write", lambda *args, name=option_name: self.on_variable_change(name))
             if(False == visible_on_block):
                 return
+            self.inc_opt_counter()
             # Create the entry widget, bind it to the StringVar
             entry = tk.Entry(self.canvas, width=5, textvariable=var)
 
@@ -35,8 +36,6 @@ class OptionManager:
             
             self.create_option_widget(option_name, entry, "entry")
 
-            # Bind the validation based on the option type
-            entry.bind("<FocusOut>", lambda event, e=entry: self.validate_numeric_input(e, var, min_value, max_value, default_value))
             
         elif option_type == "OPTIONBOX":
             # Split the comma-separated list into individual options
@@ -54,6 +53,7 @@ class OptionManager:
 
             if(False == visible_on_block):
                 return
+            self.inc_opt_counter()
 
             # Create the OptionMenu (dropdown) widget
             option_menu = tk.OptionMenu(self.canvas, var, *options)
@@ -71,6 +71,7 @@ class OptionManager:
 
             if(False == visible_on_block):
                 return
+            self.inc_opt_counter()
             checkbutton = tk.Checkbutton(self.canvas, variable=var)
             text = option_name.capitalize()
             

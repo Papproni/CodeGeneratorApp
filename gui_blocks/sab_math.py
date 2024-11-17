@@ -46,7 +46,7 @@ class AddBlock(OptionManager):
         self.output_circle       = self.canvas.create_oval(self.x+self.w-self.io_circle_radius,   self.y+(self.h/2-self.io_circle_radius), self.x+self.w+10, self.y+(self.h/2+self.io_circle_radius), fill="yellow",            tags=("output_circle", self.tag))
 
         # OPTIONS: 
-        self.add_option("INPUT NUM",  "NUM", 2, 128, visible_on_block=False)
+        self.add_option("INPUT NUM",  "NUM", 2, 128,default_value=2, visible_on_block=False)
         self.last_opt_added()
         canvas.tag_lower("text_background",'all')
 class SubBlock(OptionManager):
@@ -91,7 +91,7 @@ class SubBlock(OptionManager):
         self.output_circle       = self.canvas.create_oval(self.x+self.w-self.io_circle_radius,   self.y+(self.h/2-self.io_circle_radius), self.x+self.w+10, self.y+(self.h/2+self.io_circle_radius), fill="yellow",            tags=("output_circle", self.tag))
 
                 # OPTIONS: 
-        self.add_option("INPUT NUM",  "NUM", 2, 128, visible_on_block=False)
+        self.add_option("INPUT NUM",  "NUM", 2, 128,default_value=2, visible_on_block=False)
         self.last_opt_added()
         canvas.tag_lower("text_background",'all')
         
@@ -136,7 +136,7 @@ class DivBlock(OptionManager):
         self.input_circle2       = self.canvas.create_oval(self.x-self.io_circle_radius,     self.y+30, self.x+10, self.y+50, fill="green",              tags=("input_circle", self.tag))
         self.output_circle       = self.canvas.create_oval(self.x+self.w-self.io_circle_radius,   self.y+(self.h/2-self.io_circle_radius), self.x+self.w+10, self.y+(self.h/2+self.io_circle_radius), fill="yellow",            tags=("output_circle", self.tag))
         # OPTIONS: 
-        self.add_option("INPUT NUM",  "NUM", 2, 128, visible_on_block=False)
+        self.add_option("INPUT NUM",  "NUM", 2, 128,default_value=2, visible_on_block=False)
         self.last_opt_added()
         canvas.tag_lower("text_background",'all')
 
@@ -181,7 +181,7 @@ class MulBlock(OptionManager):
         self.input_circle2       = self.canvas.create_oval(self.x-self.io_circle_radius,     self.y+30, self.x+10, self.y+50, fill="green",              tags=("input_circle", self.tag))
         self.output_circle       = self.canvas.create_oval(self.x+self.w-self.io_circle_radius,   self.y+(self.h/2-self.io_circle_radius), self.x+self.w+10, self.y+(self.h/2+self.io_circle_radius), fill="yellow",            tags=("output_circle", self.tag))
         # OPTIONS: 
-        self.add_option("INPUT NUM",  "NUM", 2, 128, visible_on_block=False)
+        self.add_option("INPUT NUM",  "NUM", 2, 128,default_value=2, visible_on_block=False)
         self.last_opt_added()
         canvas.tag_lower("text_background",'all')
 class ABSBlock(OptionManager):
@@ -285,4 +285,47 @@ class LimitBlock(OptionManager):
     
     
 
+class ConstBlock(OptionManager):
+    def __init__(self,canvas,tag):
+        super().__init__()
+        self.canvas = canvas
 
+        # default values
+        self.type            = "CONST_BLOCK"
+        # must be changed 
+        self.tag             = tag
+        
+        # NO INPUT DEFINED
+        self.input_num       = 0
+        self.input_channel   = 0
+
+        # ONE OUTPUT DEFINED
+        self.output_num      = 1
+        self.output_channel  = 1
+
+        # Create Block
+        self.x = 50
+        self.y = 50
+        self.w = 125
+        self.io_circle_radius = 10
+        
+        # Option params
+        self.opt_start_y    = 20
+        self.opt_height     = 50 # pixel
+        self.opt_counter    = 0
+        self.opt_text_start = 20 # 20%
+        self.opt_box_start  = 70 # 70%
+        
+        self.title_text_bg  = self.canvas.create_rectangle(self.x,  self.y, self.x+self.w, self.y+40, fill="grey",         tags=("block", self.tag,"text_background"))
+        self.title_text     = self.canvas.create_text(     self.x+self.w/2,    self.y+20, text="Const", font=("Arial", 14), tags=("block", self.tag) )
+        # OPTIONS: 
+        self.add_option("VALUE",  "NUM", -32768, 32768,default_value=1)
+        self.add_option("Type","OPTIONBOX",default_value="INT,FLOAT", visible_on_block=False)
+        self.last_opt_added()
+
+        self.output_circle       = self.canvas.create_oval(self.x+self.w-self.io_circle_radius,   self.y+15, self.x+self.w+10, self.y+35, fill="yellow",            tags=("output_circle", self.tag))
+
+        self.filterbank_block    = self.canvas.create_rectangle(self.x, self.y, self.x+self.w, self.y+self.opt_start_y+self.opt_height*self.opt_counter, 
+                                                                fill="red",tags=("block", self.tag,"background"))
+        canvas.tag_lower("background",'all')
+        
