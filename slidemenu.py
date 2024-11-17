@@ -7,6 +7,9 @@ class SlideMenu(tk.Frame):
         self.code_gen_func  = code_gen_func
         self.menu_visible   = True # SET THIS FALSE IN FINAL
 
+        self.current_parameter_clicked  = None
+        self.setting_choosen            = None
+        self.parameter_choosing_state   = tk.BooleanVar(value=False)
         # Configure the main window
         self.parent.bind("+", self.toggle_menu)  # Bind "3" key
         self.parent.bind("<Configure>", self.on_resize)  # Bind the window resize event to the on_resize function
@@ -58,6 +61,8 @@ class SlideMenu(tk.Frame):
         self.generate_btn.grid(row=0, column=0, columnspan=6, pady=10, padx=100, sticky="e")
 
     def block_settings_load(self, settings):
+        
+        self.parameter_choosing_state.set(False)
         # If a settings frame already exists, destroy it to avoid stacking
         if hasattr(self, 'settings_frame') and self.settings_frame.winfo_exists():
             self.settings_frame.destroy()
@@ -73,17 +78,22 @@ class SlideMenu(tk.Frame):
         title_label = tk.Label(self.settings_frame, text="Settings", bg="#4f4f4f", fg="white", font=("Arial", 14, "bold"))
         title_label.pack(pady=10)  # Add some padding for the title
 
+        self.settings = settings
         # Now add each setting inside the settings frame
         for  item in settings.items():
             # Create a sub-frame to hold each setting item
-            frame = tk.Frame(self.settings_frame, width=200, height=50, bg="#333333", relief="ridge", bd=2)
-            frame.pack(fill="x", padx=10, pady=5)
-            frame.pack_propagate(False)  # Prevent the frame from resizing to fit contents
+          
             key, data = item
+
 
             settings_stringvar = data['var']
             setting_type    = data['type']
             setting_name    = key
+            name = key.lower()
+            frame = tk.Frame(self.settings_frame, name = name, width=200, height=50, bg="#333333", relief="ridge", bd=2)
+
+            frame.pack(fill="x", padx=10, pady=5)
+            frame.pack_propagate(False)  # Prevent the frame from resizing to fit contents
             # Create label for the setting name
             label = tk.Label(frame, text=setting_name, bg="#333333", fg="white", font=("Arial", 10, "bold"))
             label.pack(side=tk.LEFT, padx=10)
@@ -114,6 +124,15 @@ class SlideMenu(tk.Frame):
     def control_parameter_callback(self, parameter_clicked):
         print("control_parameter_add")
         print(parameter_clicked.get('pos'))
+        self.current_parameter_clicked = parameter_clicked.get('pos')
+        self.parameter_choosing_state.set(True)
+        for item in self.settings.items():
+            key, data = item
+            if( data["bindable"] != False ):
+                name = key.lower()
+                self.settings_frame.children[name].config(bg = "#333666" )
+                pass
+
 
     def add_menu_slots(self):
         self.fx_parameters = {}
