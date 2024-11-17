@@ -4,7 +4,7 @@ class OptionManager:
     def __init__(self):
         self.option_vars = {}
 
-    def on_variable_change(*args):
+    def on_variable_change(self, name, index, operation):
         """
         Callback function triggered when the StringVar value changes.
         """
@@ -28,7 +28,7 @@ class OptionManager:
                 "default_value": default_value,
                 "type":         option_type
             }
-            var.trace_add("write", self.on_variable_change)
+            var.trace_add("write", self.on_variable_change(var))
             if(False == visible_on_block):
                 return
             # Create the entry widget, bind it to the StringVar
