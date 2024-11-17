@@ -5,10 +5,9 @@ class SlideMenu(tk.Frame):
         super().__init__(parent)
         self.parent         = parent
         self.code_gen_func  = code_gen_func
-        self.menu_visible   = False
+        self.menu_visible   = True # SET THIS FALSE IN FINAL
 
         # Configure the main window
-        self.parent.geometry("600x300")
         self.parent.bind("+", self.toggle_menu)  # Bind "3" key
         self.parent.bind("<Configure>", self.on_resize)  # Bind the window resize event to the on_resize function
 
@@ -34,11 +33,6 @@ class SlideMenu(tk.Frame):
         # Add "slots" in the layout described
         self.add_menu_slots()
 
-        settings = [
-            ("Cutoff Frequency",    "NUM", 1000),  # in Hz
-            ("Resonance",           "NUM", 0.7)          # Q factor        # Bypass the filter: ON or OFF
-        ]
-        # self.block_settings_load(settings)
         
         # Ensure the content frame is correctly sized
         self.content_frame.update_idletasks()
@@ -117,21 +111,20 @@ class SlideMenu(tk.Frame):
         self.canvas.config(scrollregion=self.canvas.bbox("all"))  # Update the scroll region
 
 
-    def validate_numeric_input(self, entry, var, min_value, max_value, default_value):
-        value = var.get()
-        try:
-            num = float(value)  # Use float instead of int to handle floating-point numbers
-            if min_value is not None and num < min_value:
-                raise ValueError("Value is below the minimum limit")
-            if max_value is not None and num > max_value:
-                raise ValueError("Value is above the maximum limit")
-        except ValueError:
-            var.set(default_value)  # Reset to default if invalid
-            entry.delete(0, tk.END)
-            entry.insert(0, default_value)
-
+    def control_parameter_callback(self, parameter_clicked):
+        print("control_parameter_add")
+        print(parameter_clicked.get('pos'))
 
     def add_menu_slots(self):
+        self.fx_parameters = {}
+        for i in range(12):
+            var = tk.StringVar(value="Add")
+            self.fx_parameters[f'Param_{i+1}'] = {
+                "var": var,
+                "default_value": "add",
+                "param_name": None,
+                "pos": f'POS_{i+1}'
+            }
         # Create a grid with "slots" as described
 
         # Page 1 slots
@@ -147,13 +140,14 @@ class SlideMenu(tk.Frame):
         ]
 
         # Function to create a slot (square)
-        def create_slot(parent, slot_name):
+        def create_slot(parent, slot_name,parameter):
             frame = tk.Frame(parent, width=70, height=70, bg="#555555", relief="ridge", bd=2)
             frame.pack_propagate(False)  # Prevent the frame from resizing to fit its contents
 
+            
             # Textbox in the middle for the parameter name (default "None")
             textbox = tk.Button(frame, 
-                                      text="Add", command=self.code_gen_func, 
+                                      text=parameter.get('var').get(), command=lambda: self.control_parameter_callback(parameter), 
                                       bg="#042344", fg="white", font=("Arial", 10, "bold"))
             textbox.pack(expand=True)
             # Label at the bottom for the slot name
@@ -167,9 +161,10 @@ class SlideMenu(tk.Frame):
         for row in range(2):
             for col in range(3):
                 slot_text = slots_page1[row][col]
-                slot_frame = create_slot(self.content_frame, slot_text)
+                num =1+(row)*3+col
+                slot_frame = create_slot(self.content_frame, slot_text, self.fx_parameters[f'Param_{num}'])
                 slot_frame.grid(row=row + row_offset, column=col, padx=15, pady=15)
-
+                
         # Label for Page 1
         page1_label = tk.Label(self.content_frame, text="Page 1", bg="#333333", fg="white", font=("Arial", 12, "bold"))
         page1_label.grid(row=row_offset + 2, column=0, columnspan=3, pady=(20, 10))
@@ -179,7 +174,8 @@ class SlideMenu(tk.Frame):
         for row in range(2):
             for col in range(3):
                 slot_text = slots_page2[row][col]
-                slot_frame = create_slot(self.content_frame, slot_text)
+                num =7+(row)*3+col
+                slot_frame = create_slot(self.content_frame, slot_text,self.fx_parameters[f'Param_{num}'])
                 slot_frame.grid(row=row + row_offset, column=col, padx=15, pady=15)
 
         # Label for Page 2
