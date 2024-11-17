@@ -59,6 +59,25 @@ class SlideMenu(tk.Frame):
                                       text="GENERATE CODE", command=self.code_gen_func, 
                                       bg="#044444", fg="white", font=("Arial", 10, "bold"))
         self.generate_btn.grid(row=0, column=0, columnspan=6, pady=10, padx=100, sticky="e")
+    
+    def on_hover(self, event):
+        if(self.parameter_choosing_state.get() == True):
+            event.widget.config(bg="yellow")  # Change background to yellow on hover
+
+    def on_leave(self, event):
+        if(self.parameter_choosing_state.get() == True):
+            event.widget.config(bg="lightblue")  # Revert to original background color
+        else:
+            event.widget.config(bg="#333333")
+    def on_left_click(self,event,setting_data):
+        if( self.parameter_choosing_state.get() == True):
+            self.fx_parameters[self.current_parameter_clicked]['assigned_block_setting'] = setting_data
+            key, data = setting_data
+            self.fx_parameters[self.current_parameter_clicked]['var'].set(key)
+            setting_data[1]['binded_src'] = self.current_parameter_clicked
+            self.parameter_choosing_state.set(False)
+
+
 
     def block_settings_load(self, settings):
         
@@ -85,13 +104,14 @@ class SlideMenu(tk.Frame):
           
             key, data = item
 
-
             settings_stringvar = data['var']
             setting_type    = data['type']
             setting_name    = key
             name = key.lower()
             frame = tk.Frame(self.settings_frame, name = name, width=200, height=50, bg="#333333", relief="ridge", bd=2)
-
+            # Bind hover events
+           
+            
             frame.pack(fill="x", padx=10, pady=5)
             frame.pack_propagate(False)  # Prevent the frame from resizing to fit contents
             # Create label for the setting name
@@ -100,6 +120,10 @@ class SlideMenu(tk.Frame):
 
 
             if setting_type == "NUM":
+                if(data['bindable'] != False):
+                    frame.bind("<Enter>", self.on_hover)  # Mouse enters the frame
+                    frame.bind("<Leave>", self.on_leave)  # Mouse leaves the frame
+                    frame.bind("<Button-1>", lambda event, current_item=item: self.on_left_click(event, current_item))
                 entry = tk.Entry(frame, width=10, textvariable=settings_stringvar)
                 # Bind the validation based on the option type
                 entry.pack(side=tk.RIGHT, padx=10)
@@ -123,15 +147,20 @@ class SlideMenu(tk.Frame):
 
     def control_parameter_callback(self, parameter_clicked):
         print("control_parameter_add")
-        print(parameter_clicked.get('pos'))
-        self.current_parameter_clicked = parameter_clicked.get('pos')
+        print(parameter_clicked.get('param_name'))
+        self.current_parameter_clicked = parameter_clicked.get('param_name')
         self.parameter_choosing_state.set(True)
         for item in self.settings.items():
             key, data = item
             if( data["bindable"] != False ):
                 name = key.lower()
-                self.settings_frame.children[name].config(bg = "#333666" )
+                self.settings_frame.children[name].config(bg = "lightblue" )
                 pass
+    
+    def free_control_parameter(self,parameter):
+        self.fx_parameters[parameter]['assigned_block_setting'] = None
+        default = self.fx_parameters[self.current_parameter_clicked]['default_value']
+        self.fx_parameters[self.current_parameter_clicked]['var'].set(default)
 
 
     def add_menu_slots(self):
@@ -141,8 +170,9 @@ class SlideMenu(tk.Frame):
             self.fx_parameters[f'Param_{i+1}'] = {
                 "var": var,
                 "default_value": "add",
-                "param_name": None,
-                "pos": f'POS_{i+1}'
+                "param_name": f'Param_{i+1}',
+                "assigned_block_tag": None,
+                "assigned_block_setting": None
             }
         # Create a grid with "slots" as described
 
@@ -166,7 +196,7 @@ class SlideMenu(tk.Frame):
             
             # Textbox in the middle for the parameter name (default "None")
             textbox = tk.Button(frame, 
-                                      text=parameter.get('var').get(), command=lambda: self.control_parameter_callback(parameter), 
+                                      textvariable=parameter['var'], command=lambda: self.control_parameter_callback(parameter), 
                                       bg="#042344", fg="white", font=("Arial", 10, "bold"))
             textbox.pack(expand=True)
             # Label at the bottom for the slot name

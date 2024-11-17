@@ -22,7 +22,8 @@ class OptionManager:
                 "max_value": max_value,
                 "bindable": bindable,
                 "default_value": default_value,
-                "type":         option_type
+                "type":         option_type,
+                "binded_src": None
             }
             var.trace_add("write", lambda *args, name=option_name: self.on_variable_change(name))
             if(False == visible_on_block):

@@ -290,19 +290,7 @@ class CodeGeneratorApp:
 
         path = nx.shortest_path(graph, source=start_node, target=end_node)
         print(nx.all_simple_paths(graph,source=start_node, target=end_node ))
-        # for the first Input block in generation sequence, find the first connection
 
-        # local_arrow = self.arrows
-        # level = 0
-        # for seq in self.generation_sequence.items():
-        #     for arrow in local_arrow:
-        #         if( arrow[4] == seq[1][level]["tag"]):
-        #             next_block_tag = arrow[4]
-        #             type = self.canvas.find_withtag(arrow[3]).type
-        #             seq.append({"tag":next_block_tag,"type":type})
-        #             # arrow is used up
-        #             local_arrow.remove(arrow)
-        #             level = level + 1
 
 
         print(path)
@@ -324,6 +312,18 @@ class CodeGeneratorApp:
     def delete_block(self):
         if self.selected_block:
             # Delete assigned parameters!
+            for block in self.blocks:
+                if block.tag ==self.selected_block:
+                    for opt in block.option_vars:
+                        try:
+                            binded_param = block.option_vars[opt]['binded_src']
+                            if(binded_param != None):
+                                self.slidemenu.free_control_parameter(binded_param)
+                        except:
+                            pass
+                        
+            
+            
             # Delete arrows!
             for arrow in self.arrows[:]:
                 if arrow[3] == self.selected_block or arrow[4] == self.selected_block:
