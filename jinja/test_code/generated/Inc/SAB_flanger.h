@@ -16,6 +16,7 @@ typedef struct {
      
     fx_data_tst			intercom_fx_data;
 	sab_fx_param_tun 	intercom_parameters_aun[NUM_OF_MAX_PARAMS];
+    
         float32_t rate_f32;
         float32_t depth_f32;
         float32_t manual_f32;

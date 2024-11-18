@@ -320,7 +320,7 @@ class ConstBlock(OptionManager):
         self.title_text     = self.canvas.create_text(     self.x+self.w/2,    self.y+20, text="Const", font=("Arial", 14), tags=("block", self.tag) )
         # OPTIONS: 
         self.add_option("VALUE",  "NUM", -32768, 32768,default_value=1)
-        self.add_option("Type","OPTIONBOX",default_value="INT,FLOAT", visible_on_block=False)
+        self.add_option("Type","OPTIONBOX",default_value="INT,FLOAT", visible_on_block=False, bindable=False)
         self.last_opt_added()
 
         self.output_circle       = self.canvas.create_oval(self.x+self.w-self.io_circle_radius,   self.y+15, self.x+self.w+10, self.y+35, fill="yellow",            tags=("output_circle", self.tag))
