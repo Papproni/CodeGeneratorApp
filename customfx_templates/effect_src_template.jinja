@@ -8,12 +8,18 @@ Generated on: {{ date }} */
 
 // Process Function for SAB_{{ name }}_tst
 void SAB_{{ name }}_init( SAB_{{ name }}_tst* self, float input_f32, float output_f32){
-    // TODO
+    // Generated outputs from other Jinja templates
+    {% for init_output in generated_init_outputs %}
+    {{ init_output }}
+    {% endfor %}
 };
 
 // Process Function for SAB_{{ name }}_tst
 int SAB_{{ name }}_process( SAB_{{ name }}_tst* self, float input_f32, float output_f32){
-    // TODO
+    // Generated outputs from other Jinja templates
+    {% for process_output in generated_process_outputs %}
+    {{ process_output }}
+    {% endfor %}
 };
 
 

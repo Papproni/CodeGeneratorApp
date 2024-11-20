@@ -17,19 +17,11 @@ typedef struct {
     fx_data_tst			intercom_fx_data;
 	sab_fx_param_tun 	intercom_parameters_aun[NUM_OF_MAX_PARAMS];
 
-    {%- set type_suffix_map = {
-        'float': '_f32',
-        'float32_t': '_f32',
-        'double': '_f64',
-        'int': '_i32',
-        'uint16_t': '_u16',
-        'uint8_t': '_u8',
-        'uint32_t': '_u32'
-    } %}
-    {%- set max_length = variables | map(attribute='type') | map('length') | max %}
-    {%- for variable in variables %}
-        {{ variable.type }}{{ ' ' * (max_length - variable.type | length + 1) }}{{ variable.name }}{{ type_suffix_map[variable.type] }};
-    {%- endfor %}
+    // Generated outputs from other Jinja templates
+    {% for output in generated_outputs %}
+    {{ output }}
+    {% endfor %}
+
 } SAB_{{ name }}_tst;
 
 
