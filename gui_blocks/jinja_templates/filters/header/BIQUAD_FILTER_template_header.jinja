@@ -1,4 +1,4 @@
-// Biquad filter header
-arm_biquad_cascade_df2T_instance_f32 highpass_iir_50hz_octave_1_up_st;
-float32_t lowpass_15k_coeff[5];
-float32_t lowpass_15k_state[4];
+// Biquad filter header for {blocktype}_{{ blockID }}
+arm_biquad_cascade_df2T_instance_f32 {blocktype}_{{ blockID }};
+float32_t {blocktype}_{{ blockID }}_coeff[5];
+float32_t {blocktype}_{{ blockID }}_state[4];
