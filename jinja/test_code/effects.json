@@ -103,5 +103,12 @@
             {"name": "10khz", "type": "float32_t"},
             {"name": "20khz", "type": "float32_t"}
         ]
+    },
+    {
+        "name": "CUSTOM",
+        "variables": [
+            {"name": "vol", "type": "float32_t"}
+        ]
     }
+
 ]

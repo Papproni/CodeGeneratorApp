@@ -258,6 +258,7 @@ class CodeGeneratorApp:
     def on_resize(self, event=None):
         self.canvas.config(width=self.canvas.winfo_screenwidth(), height=self.canvas.winfo_screenheight())  
     
+    # Code generation
     def generate_c_code(self):
 
 
