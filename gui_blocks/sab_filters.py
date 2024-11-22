@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import Canvas, Menu, StringVar, OptionMenu
 from gui_blocks.gui_elements.option_manager import OptionManager
+import numpy as np
 # FILTERBANK BLOCK------------------------------------------------------
 # init:
 # type: Filter
@@ -61,6 +62,8 @@ class FilterBank(OptionManager):
         self.last_opt_added()
         self.filterbank_block    = self.canvas.create_rectangle(self.x, self.y, self.x+self.w, self.y+self.opt_start_y+self.opt_height*self.opt_counter, fill="red",         tags=("block", self.tag,"background"))
         canvas.tag_lower("background",'all')
+    
+    
     
 #   ------------------------------------------------------
 
@@ -125,6 +128,53 @@ class BiquadFilter(OptionManager):
         self.filterbank_block    = self.canvas.create_rectangle(self.x, self.y, self.x+self.w, self.y+self.opt_start_y+self.opt_height*self.opt_counter, 
                                                                 fill="red",tags=("block", self.tag,"background"))
         canvas.tag_lower("background",'all')
+
+    def fill_template_data(self,template_data):
+        sample_rate = 48000
+        
+        Type    = self.option_vars['Type'].get('var').get()
+        Freq    = float(self.option_vars['Freq'].get('var').get())
+        Q       = float(self.option_vars['Q'].get('var').get())
+
+        omega = 2 * np.pi * Freq / sample_rate
+        cos_omega = np.cos(omega)
+        alpha = np.sin(omega) / (2 * Q)
+        
+        b1 = b2 = a0 = a1 = a2 = 0
+    
+        if Type == 'LPF':
+            a0 = (1 + alpha)
+            b1 = (1 - cos_omega)
+            b2 = (1 - cos_omega)
+            a1 = -2 * cos_omega / a0
+            a2 = (1 - alpha) / a0
+        
+        elif Type == 'HPF':
+            a0 = (1 + alpha)
+            b1 = -(1 + cos_omega)
+            b2 = (1 + cos_omega)
+            a1 = -2 * cos_omega / a0
+            a2 = (1 - alpha) / a0
+        
+        elif Type == 'NOTCH':
+            a0 = (1 + alpha)
+            b1 = -2 * cos_omega
+            b2 = 1
+            a1 = -2 * cos_omega / a0
+            a2 = (1 - alpha) / a0
+        
+        elif Type == 'BANDPASS':
+            a0 = (1 + alpha)
+            b1 = 0
+            b2 = -Q * alpha
+            a1 = -2 * cos_omega / a0
+            a2 = (1 - alpha) / a0
+        
+        template_data["b0"] = a0
+        template_data["b1"] = a1
+        template_data["b2"] = a2
+        template_data["a1"] = b1
+        template_data["a2"] = b2
 #   ------------------------------------------------------
 
 # BIQUAD BLOCK------------------------------------------------------

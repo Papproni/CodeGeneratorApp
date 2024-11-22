@@ -19,11 +19,13 @@ class bcolors:
 
 class SAB_fx_builder():
     def __init__(self):
-        self.template_fx_src = os.path.join(os.path.dirname(__file__),"/customfx_templates/effect_src_template.jinja")
-        self.template_fx_inc = os.path.join(os.path.dirname(__file__),"/customfx_templates/effect_inc_template.jinja")
+        self.template_fx_src = os.path.join(os.path.dirname(__file__),"customfx_templates/effect_src_template.jinja")
+        self.template_fx_inc = os.path.join(os.path.dirname(__file__),"customfx_templates/effect_inc_template.jinja")
         self.block_template_path = os.path.join(os.path.dirname(__file__),"gui_blocks")
         self.templates_header, self.templates_init, self.templates_process = self.collect_template_files(self.block_template_path)
-        self.output_dir = os.path.join(os.path.dirname(__file__),"/generated")
+        self.output_dir = os.path.join(os.path.dirname(__file__),"generated")
+
+        self.myvar= os.path.dirname(__file__)
         
 
     def collect_template_files(self,base_path):
@@ -78,6 +80,9 @@ class SAB_fx_builder():
         os.makedirs(inc_dir)
         os.makedirs(src_dir)
 
+        rendered_inits = []
+        rendered_headers = []
+        rendered_processes = []
         # Step 2: Iterate through the signal path and generate code for each block
         for tag in paths[0]:
             # Ensure block_name exists in collected templates
@@ -102,39 +107,65 @@ class SAB_fx_builder():
 
                 # Render and save header file
                 header_output_path = os.path.join(inc_dir, f"{block_name}_header.h")
-                self.render_and_save_template(header_template, block_to_render, header_output_path)
+                rendered_headers.append(self.render_and_save_template(header_template, block_to_render))
 
                 # Render and save init file
-                init_output_path = os.path.join(src_dir, f"{block_name}_init.c")
-                self.render_and_save_template(init_template, block_to_render, init_output_path)
+                rendered_inits.append(self.render_and_save_template(init_template, block_to_render))
 
                 # Render and save process file
-                process_output_path = os.path.join(src_dir, f"{block_name}_process.c")
-                self.render_and_save_template(process_template, block_to_render, process_output_path)
+                rendered_processes.append(self.render_and_save_template(process_template, block_to_render))
 
         # Step 3: Generate the top-level FX source file
-        fx_src_output_path = os.path.join(src_dir, "fx_source.c")
-        self.render_and_save_template(self.template_fx_src, params, fx_src_output_path)
+        fx_inc_output_path = os.path.join(inc_dir, "custom_fx.h")
+        name = "custom_fx"
+        # Load and render the template
+        env = Environment(loader=FileSystemLoader(os.path.dirname(self.template_fx_inc)))
+        template = env.get_template(os.path.basename(self.template_fx_inc))
+        rendered_content = template.render(name =name, generated_outputs = rendered_headers)
+        # Save the rendered content
+        with open(fx_inc_output_path, "w") as f:
+            f.write(rendered_content)
+
+        fx_src_output_path = os.path.join(src_dir, "custom_fx.c")
+        # Load and render the template
+        env = Environment(loader=FileSystemLoader(os.path.dirname(self.template_fx_src)))
+        template = env.get_template(os.path.basename(self.template_fx_src))
+        rendered_content = template.render(name =name, generated_init_outputs = rendered_inits, generated_process_outputs = rendered_processes)
+        # Save the rendered content
+        with open(fx_src_output_path, "w") as f:
+            f.write(rendered_content)
 
         print("Code generation complete.")
 
-    def render_and_save_template(self, template_path, block, output_path):
+    def render_and_save_template(self, template_path, block):
         """
         Render a Jinja template and save the output to a file.
 
         Parameters:
         - template_path (str): Path to the Jinja template file.
         - params (dict): Data to populate the template.
-        - output_path (str): Path to save the rendered output.
         """
         # Load and render the template
         env = Environment(loader=FileSystemLoader(os.path.dirname(template_path)))
         template = env.get_template(os.path.basename(template_path))
-        rendered_content = template.render(block.option_vars)
 
-        # Save the rendered content
-        with open(output_path, "w") as f:
-            f.write(rendered_content)
+        template_data = {}
+        try:
+            block.fill_template_data(template_data)
+        except:
+            print("NO fill_template_data found while generating: {block.tag} | {block.type}")
+
+        template_data['blockID'] = block.tag
+        template_data['blocktype'] = block.type
+        template_data['instance_name'] = f'{block.type}_{block.tag}'
+        for key, data in block.option_vars.items():
+            opt_name = key  # Extract the name of the option
+            opt_value = data['var'].get()  # Extract the value of the option
+            template_data[opt_name] = opt_value  # Add the key-value pair to the template
+
+        rendered_content = template.render(template_data)
+
+        return rendered_content
     
     def gen_code(self,paths,blocks,controls):
         pass

@@ -1,4 +1,5 @@
 // Biquad filter header for {{blocktype}}_{{ blockID }}
-arm_biquad_cascade_df2T_instance_f32 {{blocktype}}_{{ blockID }};
-float32_t {{blocktype}}_{{ blockID }}_coeff[5];
-float32_t {{blocktype}}_{{ blockID }}_state[4];
+arm_biquad_cascade_df2T_instance_f32 {{instance_name}};
+float32_t {{instance_name}}_coeffs_af32[5];
+float32_t {{instance_name}}_states_af32[4];
+
