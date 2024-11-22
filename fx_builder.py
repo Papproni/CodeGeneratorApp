@@ -4,6 +4,8 @@ import shutil
 from jinja2 import Environment, FileSystemLoader
 from datetime import datetime
 
+import tkinter as tk
+
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -15,7 +17,7 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
-class SAB_fx_builder:
+class SAB_fx_builder():
     def __init__(self):
         self.template_fx_src = os.path.join(os.path.dirname(__file__),"/customfx_templates/effect_src_template.jinja")
         self.template_fx_inc = os.path.join(os.path.dirname(__file__),"/customfx_templates/effect_inc_template.jinja")
@@ -59,7 +61,7 @@ class SAB_fx_builder:
                             current_templates[key] = file_identifier
         return templates_header, templates_init, templates_process
     
-    def generate_code(self, signal_path, params):
+    def generate_code(self, paths,blocks,controls):
         """
         Generate code for each item in the signal path, using templates and parameters.
 
@@ -77,32 +79,38 @@ class SAB_fx_builder:
         os.makedirs(src_dir)
 
         # Step 2: Iterate through the signal path and generate code for each block
-        for block_name, block_details in signal_path.items():
+        for tag in paths[0]:
             # Ensure block_name exists in collected templates
-            block_key = block_name.lower()
-            if block_key not in self.templates_header:
-                raise FileNotFoundError(f"Missing header template for block '{block_name}'.")
-            if block_key not in self.templates_init:
-                raise FileNotFoundError(f"Missing init template for block '{block_name}'.")
-            if block_key not in self.templates_process:
-                raise FileNotFoundError(f"Missing process template for block '{block_name}'.")
+            for block in blocks:
+                if(block.tag == tag):
+                    block_name = block.type
+                    block_to_render = block
+            if(block_name != 'INPUT_BLOCK' and block_name != 'OUTPUT_BLOCK'):
+                
+                block_key = block_name.lower()
+                if block_key not in self.templates_header:
+                    raise FileNotFoundError(f"Missing header template for block '{block_name}'.")
+                if block_key not in self.templates_init:
+                    raise FileNotFoundError(f"Missing init template for block '{block_name}'.")
+                if block_key not in self.templates_process:
+                    raise FileNotFoundError(f"Missing process template for block '{block_name}'.")
 
-            # Generate files using templates
-            header_template = self.templates_header[block_key]
-            init_template = self.templates_init[block_key]
-            process_template = self.templates_process[block_key]
+                # Generate files using templates
+                header_template = self.templates_header[block_key]
+                init_template = self.templates_init[block_key]
+                process_template = self.templates_process[block_key]
 
-            # Render and save header file
-            header_output_path = os.path.join(inc_dir, f"{block_name}_header.h")
-            self.render_and_save_template(header_template, params, header_output_path)
+                # Render and save header file
+                header_output_path = os.path.join(inc_dir, f"{block_name}_header.h")
+                self.render_and_save_template(header_template, block_to_render, header_output_path)
 
-            # Render and save init file
-            init_output_path = os.path.join(src_dir, f"{block_name}_init.c")
-            self.render_and_save_template(init_template, params, init_output_path)
+                # Render and save init file
+                init_output_path = os.path.join(src_dir, f"{block_name}_init.c")
+                self.render_and_save_template(init_template, block_to_render, init_output_path)
 
-            # Render and save process file
-            process_output_path = os.path.join(src_dir, f"{block_name}_process.c")
-            self.render_and_save_template(process_template, params, process_output_path)
+                # Render and save process file
+                process_output_path = os.path.join(src_dir, f"{block_name}_process.c")
+                self.render_and_save_template(process_template, block_to_render, process_output_path)
 
         # Step 3: Generate the top-level FX source file
         fx_src_output_path = os.path.join(src_dir, "fx_source.c")
@@ -110,7 +118,7 @@ class SAB_fx_builder:
 
         print("Code generation complete.")
 
-    def render_and_save_template(self, template_path, params, output_path):
+    def render_and_save_template(self, template_path, block, output_path):
         """
         Render a Jinja template and save the output to a file.
 
@@ -122,15 +130,28 @@ class SAB_fx_builder:
         # Load and render the template
         env = Environment(loader=FileSystemLoader(os.path.dirname(template_path)))
         template = env.get_template(os.path.basename(template_path))
-        rendered_content = template.render(params)
+        rendered_content = template.render(block.option_vars)
 
         # Save the rendered content
         with open(output_path, "w") as f:
             f.write(rendered_content)
+    
+    def gen_code(self,paths,blocks,controls):
+        pass
 
 
-
-
+def add_option(params, option_name, option_type, min_value=None, max_value=None, default_value="1", bindable=None, visible_on_block = None):
+    var = tk.StringVar(value=default_value)
+    params = [option_name] = {
+        "var": var,
+        "min_value": min_value,
+        "max_value": max_value,
+        "bindable": bindable,
+        "default_value": default_value,
+        "type":         option_type,
+        "binded_src": None
+    }
+    
 if __name__ == "__main__":
     builder = SAB_fx_builder()
     # Example usage
@@ -140,6 +161,12 @@ if __name__ == "__main__":
 
     blocktype = "BiquadFilter"
     blockID = 1
+    signal_path = ['BIQUAD_FILTER']
+    
+    params = {}
+    
+
+    
     builder.generate_code(signal_path, params)
     print(templates_header)
     print(templates_init)

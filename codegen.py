@@ -8,6 +8,8 @@ from gui_blocks import sab_filters
 from gui_blocks import sab_io
 from gui_blocks import sab_math
 
+import fx_builder
+
 import slidemenu
 
 import networkx as nx
@@ -291,9 +293,11 @@ class CodeGeneratorApp:
 
         path = nx.shortest_path(graph, source=start_node, target=end_node)
         print(list(nx.all_simple_paths(graph,source=start_node, target=end_node )))
-
-
-
+        paths = list(nx.all_simple_paths(graph,source=start_node, target=end_node ))
+        builder = fx_builder.SAB_fx_builder()
+        
+        builder.generate_code(paths,self.blocks,self.slidemenu.fx_parameters)
+        
         print(path)
         pass
 
