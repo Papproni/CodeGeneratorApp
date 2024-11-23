@@ -1,2 +1,2 @@
 // Biquad filter process function
-arm_biquad_cascade_df2T_f32(&self->{{instance_name}}, &in_f32, &out_f32, 1);
+arm_biquad_cascade_df2T_f32(&self->{{instance_name}}, &in_f32, &self->{{instance_name}}_output_f32, 1);

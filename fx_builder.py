@@ -5,6 +5,8 @@ from jinja2 import Environment, FileSystemLoader
 from datetime import datetime
 
 import tkinter as tk
+import networkx as nx
+
 
 class bcolors:
     HEADER = '\033[95m'
@@ -63,7 +65,27 @@ class SAB_fx_builder():
                             current_templates[key] = file_identifier
         return templates_header, templates_init, templates_process
     
-    def generate_code(self, paths,blocks,controls):
+    def build_pert_graph(self, arrows):
+        """
+        Build a PERT graph (DAG) from the given paths.
+        """
+        G = nx.DiGraph()
+        for arrow in arrows:
+            G.add_edge(arrow[4],arrow[3])
+        return G
+
+    def execute_blocks_with_predecessors(self, graph):
+        """
+        Execute blocks in topological order using NetworkX built-ins.
+        """
+        for block in nx.topological_sort(graph):
+            # Use built-in predecessors method
+            predecessors = list(graph.predecessors(block))
+            if predecessors:
+                print(f"Execute {block}, \tpre: {', '.join(predecessors)}")
+            else:
+                print(f"Execute {block}, pre: None")
+    def generate_code(self, arrows,blocks,controls):
         """
         Generate code for each item in the signal path, using templates and parameters.
 
@@ -83,6 +105,21 @@ class SAB_fx_builder():
         rendered_inits = []
         rendered_headers = []
         rendered_processes = []
+
+
+        pert_graph = self.build_pert_graph(arrows)
+        # Execute the blocks and print the predecessors
+        
+        # self.execute_blocks_with_predecessors(pert_graph)
+        block_map = {block.tag: block for block in blocks}
+        for tag in nx.topological_sort(pert_graph):
+            # Use built-in predecessors method
+            predecessors = list(pert_graph.predecessors(tag))
+            if predecessors:
+                print(f"Execute {tag}, \tpre: {', '.join(predecessors)}")
+            else:
+                print(f"Execute {tag}, pre: None")
+
         # Step 2: Iterate through the signal path and generate code for each block
         for tag in paths[0]:
             # Ensure block_name exists in collected templates

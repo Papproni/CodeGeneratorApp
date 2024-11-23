@@ -10,3 +10,4 @@ self->{{instance_name}}_coeffs_af32[2]={{b2}};
 self->{{instance_name}}_coeffs_af32[3]={{a1}};
 self->{{instance_name}}_coeffs_af32[4]={{a2}};
 arm_biquad_cascade_df2T_init_f32(&self->{{instance_name}}, 1, &self->{{instance_name}}_coeffs_af32, &self->{{instance_name}}_states_af32);
+self->{{instance_name}}_output_f32  = 0;
