@@ -1,2 +1,12 @@
 // Biquad filter process function
-arm_biquad_cascade_df2T_f32(&self->{{instance_name}}, &in_f32, &self->{{instance_name}}_output_f32, 1);
+
+{%- for pre_instance in pre_instances -%}
+{%- if loop.index == 1 -%}
+{%- if pre_instance is not none -%}
+self->{{ instance_name }}_output_f32 = self->{{ pre_instance }}_output_f32 + self->{{ pre_instance }}_output_f32;
+arm_biquad_cascade_df2T_f32(&self->{{instance_name}}, &self->{{ pre_instance }}_output_f32, &self->{{instance_name}}_output_f32, 1);
+{%- else -%}
+arm_biquad_cascade_df2T_f32(&self->{{instance_name}}, &input_f32, &self->{{instance_name}}_output_f32, 1);
+{%- endif -%}
+{%- endif -%}
+{%- endfor -%}

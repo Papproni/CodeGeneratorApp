@@ -85,7 +85,8 @@ class SAB_fx_builder():
                 print(f"Execute {block}, \tpre: {', '.join(predecessors)}")
             else:
                 print(f"Execute {block}, pre: None")
-    def generate_code(self, arrows,blocks,controls):
+    
+    def generate_code(self, arrows, blocks, controls):
         """
         Generate code for each item in the signal path, using templates and parameters.
 
@@ -119,38 +120,40 @@ class SAB_fx_builder():
                 print(f"Execute {tag}, \tpre: {', '.join(predecessors)}")
             else:
                 print(f"Execute {tag}, pre: None")
-
-        # Step 2: Iterate through the signal path and generate code for each block
-        for tag in paths[0]:
-            # Ensure block_name exists in collected templates
+            pre_to_render = []
             for block in blocks:
+                for pre in predecessors:
+                    if block.tag == pre:
+                        pre_to_render.append(f'{block.type}_{block.tag}')
                 if(block.tag == tag):
                     block_name = block.type
                     block_to_render = block
-            if(block_name != 'INPUT_BLOCK' and block_name != 'OUTPUT_BLOCK'):
                 
-                block_key = block_name.lower()
-                if block_key not in self.templates_header:
-                    raise FileNotFoundError(f"Missing header template for block '{block_name}'.")
-                if block_key not in self.templates_init:
-                    raise FileNotFoundError(f"Missing init template for block '{block_name}'.")
-                if block_key not in self.templates_process:
-                    raise FileNotFoundError(f"Missing process template for block '{block_name}'.")
+            block_key = block_name.lower()
+            if block_key not in self.templates_header:
+                raise FileNotFoundError(f"Missing header template for block '{block_name}'.")
+            if block_key not in self.templates_init:
+                raise FileNotFoundError(f"Missing init template for block '{block_name}'.")
+            if block_key not in self.templates_process:
+                raise FileNotFoundError(f"Missing process template for block '{block_name}'.")
 
-                # Generate files using templates
-                header_template = self.templates_header[block_key]
-                init_template = self.templates_init[block_key]
-                process_template = self.templates_process[block_key]
+            # Generate files using templates
+            header_template = self.templates_header[block_key]
+            init_template = self.templates_init[block_key]
+            process_template = self.templates_process[block_key]
 
-                # Render and save header file
-                header_output_path = os.path.join(inc_dir, f"{block_name}_header.h")
-                rendered_headers.append(self.render_and_save_template(header_template, block_to_render))
+            # Render and save header file
+            header_output_path = os.path.join(inc_dir, f"{block_name}_header.h")
+            rendered_headers.append(self.render_and_save_template(header_template, block_to_render, pre_to_render))
 
-                # Render and save init file
-                rendered_inits.append(self.render_and_save_template(init_template, block_to_render))
+            # Render and save init file
+            rendered_inits.append(self.render_and_save_template(init_template, block_to_render,pre_to_render))
 
-                # Render and save process file
-                rendered_processes.append(self.render_and_save_template(process_template, block_to_render))
+            # Render and save process file
+            rendered_processes.append(self.render_and_save_template(process_template, block_to_render, pre_to_render))
+
+        # Step 2: Iterate through the signal path and generate code for each block
+            
 
         # Step 3: Generate the top-level FX source file
         fx_inc_output_path = os.path.join(inc_dir, "custom_fx.h")
@@ -174,7 +177,7 @@ class SAB_fx_builder():
 
         print("Code generation complete.")
 
-    def render_and_save_template(self, template_path, block):
+    def render_and_save_template(self, template_path, block, pre_instances):
         """
         Render a Jinja template and save the output to a file.
 
@@ -195,12 +198,15 @@ class SAB_fx_builder():
         template_data['blockID'] = block.tag
         template_data['blocktype'] = block.type
         template_data['instance_name'] = f'{block.type}_{block.tag}'
-        for key, data in block.option_vars.items():
-            opt_name = key  # Extract the name of the option
-            opt_value = data['var'].get()  # Extract the value of the option
-            template_data[opt_name] = opt_value  # Add the key-value pair to the template
-
-        rendered_content = template.render(template_data)
+        try:
+            for key, data in block.option_vars.items():
+                opt_name = key  # Extract the name of the option
+                opt_value = data['var'].get()  # Extract the value of the option
+                template_data[opt_name] = opt_value  # Add the key-value pair to the template
+        except:
+            pass
+        
+        rendered_content = template.render(template_data, pre_instances = pre_instances)
 
         return rendered_content
     

@@ -1,0 +1,4 @@
+{%- for pre_instance in pre_instances -%}
+self->{{ instance_name }}_input_f32 = self->{{ pre_instance }}_output_f32;
+output_f32 = self->{{ instance_name }}_input_f32;
+{%- endfor -%}
