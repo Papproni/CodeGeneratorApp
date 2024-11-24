@@ -17,6 +17,10 @@ typedef struct {
     fx_data_tst			intercom_fx_data;
 	sab_fx_param_tun 	intercom_parameters_aun[NUM_OF_MAX_PARAMS];
 
+    {% for control in control_params %}
+    float32_t param_{{ loop.index0 +1}}_value;
+    {%- endfor %}
+
     // Generated outputs from other Jinja templates
     {% for output in generated_outputs %}
     {{  output  }}

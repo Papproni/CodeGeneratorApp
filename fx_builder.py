@@ -174,7 +174,7 @@ class SAB_fx_builder():
         # Load and render the template
         env = Environment(loader=FileSystemLoader(os.path.dirname(self.template_fx_inc)))
         template = env.get_template(os.path.basename(self.template_fx_inc))
-        rendered_content = template.render(name =name, generated_outputs = rendered_headers)
+        rendered_content = template.render(name =name, generated_outputs = rendered_headers,control_params = controls_for_jinja)
         # Save the rendered content
         with open(fx_inc_output_path, "w") as f:
             f.write(rendered_content)
@@ -214,10 +214,16 @@ class SAB_fx_builder():
         template_data['blockID'] = block.tag
         template_data['blocktype'] = block.type
         template_data['instance_name'] = f'{block.type}_{block.tag}'
+        template_data['bind'] = None
         try:
             for key, data in block.option_vars.items():
                 opt_name = key  # Extract the name of the option
                 opt_value = data['var'].get()  # Extract the value of the option
+                try:
+                    if(data['binded_src'] != None):
+                        template_data['bind'] = True
+                except:
+                    pass
                 template_data[opt_name] = opt_value  # Add the key-value pair to the template
         except:
             pass
