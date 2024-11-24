@@ -95,7 +95,7 @@ class SlideMenu(tk.Frame):
         title_label = tk.Label(self.settings_frame, text="Settings", bg="#4f4f4f", fg="white", font=("Arial", 14, "bold"))
         title_label.pack(pady=10)  # Add some padding for the title
 
-        def render_params(name, svar):
+        def render_param(name, svar):
             frame = tk.Frame(self.settings_frame, width=200, height=50, bg="#333333", relief="ridge", bd=2)
             frame.pack(fill="x", padx=10, pady=5)
             frame.pack_propagate(False)  # Prevent the frame from resizing to fit contents
@@ -104,9 +104,11 @@ class SlideMenu(tk.Frame):
             entry = tk.Entry(frame, width=10, textvariable=svar)
             # Bind the validation based on the option type
             entry.pack(side=tk.RIGHT, padx=10)
-
-        render_params('min_value',settings['min_value'])
-        render_params('max_value',settings['max_value'])
+        for setting in settings['settings']:
+            svar = settings['settings'][setting]
+            render_param(setting,svar)
+        # render_params('min_value',settings['min_value'])
+        # render_params('max_value',settings['max_value'])
 
 
     def block_settings_load(self, settings):
@@ -217,14 +219,18 @@ class SlideMenu(tk.Frame):
             var = tk.StringVar(value="Add")
             min_value = tk.StringVar(value=0)
             max_value = tk.StringVar(value=1)
+            display_name = tk.StringVar(value="Default")
             self.fx_parameters[f'param_{i+1}'] = {
                 "var": var,
                 "default_value": "add",
                 "param_name": f'param_{i+1}',
                 "assigned_block_tag": None,
                 "assigned_block_setting": None,
-                "min_value": min_value,
-                "max_value": max_value,
+                "settings": {
+                    "min_value": min_value,
+                    "max_value": max_value,
+                    "display_name": display_name,
+                },
                 "type": "CONTROL_PARAMETER"
             }
         # Create a grid with "slots" as described
@@ -242,7 +248,7 @@ class SlideMenu(tk.Frame):
 
 
             # Textbox in the middle for the parameter name (default "None")
-            textbox = tk.Button(frame, name = slot_name,
+            textbox = tk.Button(frame, width=20, height=20, name = slot_name,
                                       textvariable=parameter['var'], command=lambda: self.control_parameter_callback(parameter), 
                                       bg="#042344", fg="white", font=("Arial", 10, "bold"))
             textbox.bind("<Button-3>", self.control_param_clicked)
