@@ -103,6 +103,19 @@ class SAB_fx_builder():
         os.makedirs(inc_dir)
         os.makedirs(src_dir)
 
+
+        # Create controls
+        controls_for_jinja = []
+        
+        for control in controls:
+            control_list = {}
+            for setting_name in controls[control]['settings']:
+                setting_value = controls[control]['settings'][setting_name].get()
+                control_list[setting_name] = setting_value
+            
+            controls_for_jinja.append(control_list)
+        
+
         rendered_inits = []
         rendered_headers = []
         rendered_processes = []
@@ -170,7 +183,10 @@ class SAB_fx_builder():
         # Load and render the template
         env = Environment(loader=FileSystemLoader(os.path.dirname(self.template_fx_src)))
         template = env.get_template(os.path.basename(self.template_fx_src))
-        rendered_content = template.render(name =name, generated_init_outputs = rendered_inits, generated_process_outputs = rendered_processes)
+        rendered_content = template.render(name =name,
+                                           generated_init_outputs = rendered_inits,
+                                             generated_process_outputs = rendered_processes,
+                                            control_params = controls_for_jinja)
         # Save the rendered content
         with open(fx_src_output_path, "w") as f:
             f.write(rendered_content)
@@ -205,7 +221,7 @@ class SAB_fx_builder():
                 template_data[opt_name] = opt_value  # Add the key-value pair to the template
         except:
             pass
-        
+
         rendered_content = template.render(template_data, pre_instances = pre_instances)
 
         return rendered_content

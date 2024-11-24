@@ -74,7 +74,9 @@ class SlideMenu(tk.Frame):
             self.fx_parameters[self.current_parameter_clicked]['assigned_block_setting'] = setting_data
             key, data = setting_data
             self.fx_parameters[self.current_parameter_clicked]['var'].set(key)
+            self.fx_parameters[self.current_parameter_clicked]['settings']['display_name'].set(key)
             setting_data[1]['binded_src'] = self.current_parameter_clicked
+            setting_data[1]['var'].set(self.current_parameter_clicked)
             self.parameter_choosing_state.set(False)
 
     def control_param_settings_load(self, settings):
@@ -211,6 +213,8 @@ class SlideMenu(tk.Frame):
         self.fx_parameters[parameter]['assigned_block_setting'] = None
         default = self.fx_parameters[self.current_parameter_clicked]['default_value']
         self.fx_parameters[self.current_parameter_clicked]['var'].set(default)
+        self.fx_parameters[self.current_parameter_clicked]['settings']['display_name'].set(default)
+
 
 
     def add_menu_slots(self):
@@ -219,10 +223,10 @@ class SlideMenu(tk.Frame):
             var = tk.StringVar(value="Add")
             min_value = tk.StringVar(value=0)
             max_value = tk.StringVar(value=1)
-            display_name = tk.StringVar(value="Default")
+            display_name = tk.StringVar(value="None")
             self.fx_parameters[f'param_{i+1}'] = {
                 "var": var,
-                "default_value": "add",
+                "default_value": None,
                 "param_name": f'param_{i+1}',
                 "assigned_block_tag": None,
                 "assigned_block_setting": None,
@@ -249,7 +253,7 @@ class SlideMenu(tk.Frame):
 
             # Textbox in the middle for the parameter name (default "None")
             textbox = tk.Button(frame, width=20, height=20, name = slot_name,
-                                      textvariable=parameter['var'], command=lambda: self.control_parameter_callback(parameter), 
+                                      textvariable=parameter['settings']["display_name"], command=lambda: self.control_parameter_callback(parameter), 
                                       bg="#042344", fg="white", font=("Arial", 10, "bold"))
             textbox.bind("<Button-3>", self.control_param_clicked)
             textbox.pack(expand=True)

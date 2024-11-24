@@ -7,7 +7,19 @@ Generated on: {{ date }} */
 #include "SAB_{{name}}.h"
 
 // Process Function for SAB_{{ name }}_tst
-void SAB_{{ name }}_init( SAB_{{ name }}_tst* self, float input_f32, float output_f32){
+void SAB_{{ name }}_init( SAB_{{ name }}_tst* self){
+
+    strcpy(self->intercom_fx_data.name, "{{ name | upper}}");
+	self->intercom_fx_data.color[0] = 255; 	// R
+	self->intercom_fx_data.color[1] = 0;	// G
+	self->intercom_fx_data.color[2] = 0;	// B
+	self->intercom_fx_data.fx_state_en = FX_STATE_OFF;
+
+	// PARAMS:
+    {% for control in control_params %}
+    add_parameter(&self->intercom_parameters_aun[{{ loop.index0 }}],"{{control.display_name}}",PARAM_TYPE_POT,69);
+    {%- endfor %}
+
     // Generated outputs from other Jinja templates
     {% for init_output in generated_init_outputs -%}
     {{ init_output }}

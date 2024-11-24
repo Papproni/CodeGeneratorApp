@@ -30,7 +30,7 @@ class OptionManager:
                 return
             self.inc_opt_counter()
             # Create the entry widget, bind it to the StringVar
-            entry = tk.Entry(self.canvas, width=5, textvariable=var)
+            entry = tk.Entry(self.canvas, width=7, textvariable=var)
 
             # Display the option name on the canvas
             text = option_name.capitalize()
@@ -100,7 +100,12 @@ class OptionManager:
 
     def on_variable_change(self, name):
         data = self.option_vars[name]
-        self.validate_numeric_input(data)
+        bind_src = data['binded_src']
+        if(bind_src != None):
+            data.get('var').set(bind_src)
+        else:
+            self.validate_numeric_input(data)
+
         print("on_variable_change")
 
     def validate_numeric_input(self, data):

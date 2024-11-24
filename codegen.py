@@ -82,6 +82,7 @@ class CodeGeneratorApp:
         self.context_menu = Menu(self.root, tearoff=0)
         self.context_menu.add_command(label="Delete Block", command=self.delete_block)
         self.context_menu.add_command(label="Delete Arrow", command=self.delete_arrow)
+        self.context_menu.add_command(label="Reset Controls", command=self.reset_controls)
 
 
 
@@ -292,7 +293,7 @@ class CodeGeneratorApp:
             # Delete assigned parameters!
             for block in self.blocks:
                 if block.tag ==self.selected_block:
-           
+                    try:
                         for opt in block.option_vars:
                             try:
                                 binded_param = block.option_vars[opt]['binded_src']
@@ -300,7 +301,8 @@ class CodeGeneratorApp:
                                     self.slidemenu.free_control_parameter(binded_param)
                             except:
                                 pass
-                    
+                    except:
+                        pass
                         
             
             
@@ -322,6 +324,23 @@ class CodeGeneratorApp:
             # Remove the selected block and associated items
             self.selected_block = None
 
+
+    def reset_controls(self):
+        # Delete assigned parameters!
+        for block in self.blocks:
+            if block.tag ==self.selected_block:
+                try:
+                    for opt in block.option_vars:
+                        try:
+                            binded_param = block.option_vars[opt]['binded_src']
+                            if(binded_param != None):
+                                self.slidemenu.free_control_parameter(binded_param)
+                                block.option_vars[opt]['binded_src'] = None
+                                block.option_vars[opt]['var'].set(block.option_vars[opt]['default_value'])
+                        except:
+                            pass
+                except:
+                    pass
 
     def delete_arrow(self):
         if self.selected_arrow:
