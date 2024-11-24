@@ -123,6 +123,7 @@ class BiquadFilter(OptionManager):
         self.add_option("Type","OPTIONBOX",default_value="LPF,HPF,BANDPASS,NOTCH",bindable=False)
         self.add_option("Freq","NUM",10,20000,default_value=440)
         self.add_option("Q","NUM",0.1,100,default_value=0.707)
+        self.add_option("Gain","NUM",0,10,default_value=1)
         
         self.last_opt_added()
         self.filterbank_block    = self.canvas.create_rectangle(self.x, self.y, self.x+self.w, self.y+self.opt_start_y+self.opt_height*self.opt_counter, 

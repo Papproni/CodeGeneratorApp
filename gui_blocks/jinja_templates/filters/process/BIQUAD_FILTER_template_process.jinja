@@ -12,10 +12,15 @@
     {%- set Q_c = 'self->'+Q + '_value' -%}
 {%- endif -%}
 
+{%- if 'param_' not in Gain -%}
+    {% set Gain_c = Gain -%}
+{%- else -%}
+    {%- set Gain_c = 'self->'+Gain + '_value' -%}
+{%- endif -%}
 
 {% if bind is not none %}
 calculate_biquad_coeffs(self->{{ instance_name }}_coeffs_af32,{{Type}}, {{Freq_c}}, {{Q_c}}, 48000)
-{% endif %}
+{%- endif %}
 {%- for pre_instance in pre_instances -%}
 {%- if loop.index == 1 -%}
 {% if pre_instance is not none %}
@@ -24,4 +29,5 @@ arm_biquad_cascade_df2T_f32(&self->{{instance_name}}, &self->{{ pre_instance }}_
 arm_biquad_cascade_df2T_f32(&self->{{instance_name}}, &input_f32, &self->{{instance_name}}_output_f32, 1);
 {%- endif -%}
 {%- endif -%}
-{%- endfor -%}
+{%- endfor %}
+self->{{instance_name}}_output_f32 *= {{Gain_c}};
