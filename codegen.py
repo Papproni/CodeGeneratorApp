@@ -269,31 +269,6 @@ class CodeGeneratorApp:
         for arrow in self.arrows:
             graph.add_edge(arrow[4],arrow[3])
 
-
-        # Find INPUT blocks
-        # Find tag ID of their output_circles in arrows
-        # Check which ID does the arrow connect to etc
-        # self.generation_sequence = None
-        # self.generation_sequence = {}
-        # Make a block order
-        # the order starts with INPUT block
-        # Insert list
-        # Find the connections that this block is connected to (1 or multiple) put them in a list
-        # path_num = 0
-        
-        # # FInd input blocks
-        # for block in self.blocks:
-        #     if(block.type == "INPUT_BLOCK"):
-        #         start_node = block.tag
-        #         self.generation_sequence[path_num] = []
-        #         self.generation_sequence[path_num].append({"tag":block.tag,"type":block.type})
-        #         path_num = path_num + 1
-        #     if(block.type == "OUTPUT_BLOCK"):
-        #         end_node  = block.tag
-
-        # path = nx.shortest_path(graph, source=start_node, target=end_node)
-        # print(list(nx.all_simple_paths(graph,source=start_node, target=end_node )))
-        # paths = list(nx.all_simple_paths(graph,source=start_node, target=end_node ))
         builder = fx_builder.SAB_fx_builder()
         
         builder.generate_code(self.arrows,self.blocks,self.slidemenu.fx_parameters)

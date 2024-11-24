@@ -77,6 +77,36 @@ class SlideMenu(tk.Frame):
             setting_data[1]['binded_src'] = self.current_parameter_clicked
             self.parameter_choosing_state.set(False)
 
+    def control_param_settings_load(self, settings):
+        
+        self.parameter_choosing_state.set(False)
+        # If a settings frame already exists, destroy it to avoid stacking
+        if hasattr(self, 'settings_frame') and self.settings_frame.winfo_exists():
+            self.settings_frame.destroy()
+
+        # Calculate the starting row for settings after the slots have been added
+        current_row = len(self.content_frame.grid_slaves())  # Get the next available row after all slots are added
+
+        # Create a frame for the settings section with a grey background
+        self.settings_frame = tk.Frame(self.content_frame, bg="#4f4f4f")  # Dark grey background
+        self.settings_frame.grid(row=current_row, column=0, columnspan=3, padx=10, pady=10, sticky="nsew")
+
+        # Add a title for the settings
+        title_label = tk.Label(self.settings_frame, text="Settings", bg="#4f4f4f", fg="white", font=("Arial", 14, "bold"))
+        title_label.pack(pady=10)  # Add some padding for the title
+
+        def render_params(name, svar):
+            frame = tk.Frame(self.settings_frame, width=200, height=50, bg="#333333", relief="ridge", bd=2)
+            frame.pack(fill="x", padx=10, pady=5)
+            frame.pack_propagate(False)  # Prevent the frame from resizing to fit contents
+            label = tk.Label(frame, text=name, bg="#333333", fg="white", font=("Arial", 10, "bold"))
+            label.pack(side=tk.LEFT, padx=10)
+            entry = tk.Entry(frame, width=10, textvariable=svar)
+            # Bind the validation based on the option type
+            entry.pack(side=tk.RIGHT, padx=10)
+
+        render_params('min_value',settings['min_value'])
+        render_params('max_value',settings['max_value'])
 
 
     def block_settings_load(self, settings):
@@ -103,7 +133,7 @@ class SlideMenu(tk.Frame):
             # Create a sub-frame to hold each setting item
           
             key, data = item
-
+            
             settings_stringvar = data['var']
             setting_type    = data['type']
             setting_name    = key
@@ -139,11 +169,29 @@ class SlideMenu(tk.Frame):
                 # Create a Button with the initial value (e.g., "ON" or "OFF")
                 checkbutton = tk.Checkbutton(frame, variable=settings_stringvar)
                 checkbutton.pack(side=tk.RIGHT, padx=10)
+            elif setting_type == "CONTROL_PARAMETER":
+                pass
 
             # Update the canvas scroll region after adding the settings
         self.content_frame.update_idletasks()  # Ensure all widgets are rendered
         self.canvas.config(scrollregion=self.canvas.bbox("all"))  # Update the scroll region
 
+    def control_param_clicked(self,event):
+        print("control_param_clicked")
+
+        clicked_widget = event.widget
+
+        # Retrieve the name of the widget
+        button_name = clicked_widget.winfo_name()
+
+        print(f"Right-clicked on button: {button_name}")
+
+        # Perform actions based on the button name
+        # Example: Access parameters if stored in a dictionary
+        if button_name in self.fx_parameters:
+            params = self.fx_parameters[button_name]
+            print(f"Parameters for {button_name}: {params}")
+            self.control_param_settings_load(params)
 
     def control_parameter_callback(self, parameter_clicked):
         print("control_parameter_add")
@@ -167,37 +215,37 @@ class SlideMenu(tk.Frame):
         self.fx_parameters = {}
         for i in range(12):
             var = tk.StringVar(value="Add")
-            self.fx_parameters[f'Param_{i+1}'] = {
+            min_value = tk.StringVar(value=0)
+            max_value = tk.StringVar(value=1)
+            self.fx_parameters[f'param_{i+1}'] = {
                 "var": var,
                 "default_value": "add",
-                "param_name": f'Param_{i+1}',
+                "param_name": f'param_{i+1}',
                 "assigned_block_tag": None,
-                "assigned_block_setting": None
+                "assigned_block_setting": None,
+                "min_value": min_value,
+                "max_value": max_value,
+                "type": "CONTROL_PARAMETER"
             }
         # Create a grid with "slots" as described
 
-        # Page 1 slots
-        slots_page1 = [
-            ("P1", "P2", "P3"),
-            ("P4", "P5", "P6")
-        ]
 
-        # Page 2 slots
-        slots_page2 = [
-            ("P7", "P8", "P9"),
-            ("P10", "P11", "P12")
-        ]
 
         # Function to create a slot (square)
         def create_slot(parent, slot_name,parameter):
-            frame = tk.Frame(parent, width=70, height=70, bg="#555555", relief="ridge", bd=2)
+            frame = tk.Frame(parent,  width=70, height=70, bg="#000555", relief="ridge", bd=2) #tags=("control_parameter",slot_name)
             frame.pack_propagate(False)  # Prevent the frame from resizing to fit its contents
 
-            
+            # self.canvas.create_window(70, 70,tags=("control_parameter", slot_name))
+            # self.canvas.bind("<ButtonPress-1>", self.control_param_clicked)
+
+
+
             # Textbox in the middle for the parameter name (default "None")
-            textbox = tk.Button(frame, 
+            textbox = tk.Button(frame, name = slot_name,
                                       textvariable=parameter['var'], command=lambda: self.control_parameter_callback(parameter), 
                                       bg="#042344", fg="white", font=("Arial", 10, "bold"))
+            textbox.bind("<Button-3>", self.control_param_clicked)
             textbox.pack(expand=True)
             # Label at the bottom for the slot name
             label = tk.Label(frame, text=slot_name, bg="#555555", fg="white", font=("Arial", 10, "bold"))
@@ -209,9 +257,9 @@ class SlideMenu(tk.Frame):
         row_offset = 1  # Start after the close button
         for row in range(2):
             for col in range(3):
-                slot_text = slots_page1[row][col]
                 num =1+(row)*3+col
-                slot_frame = create_slot(self.content_frame, slot_text, self.fx_parameters[f'Param_{num}'])
+                slot_text = f'param_{num}'
+                slot_frame = create_slot(self.content_frame, slot_text, self.fx_parameters[slot_text])
                 slot_frame.grid(row=row + row_offset, column=col, padx=15, pady=15)
                 
         # Label for Page 1
@@ -222,14 +270,16 @@ class SlideMenu(tk.Frame):
         row_offset += 3  # Adjust the row offset for Page 2
         for row in range(2):
             for col in range(3):
-                slot_text = slots_page2[row][col]
                 num =7+(row)*3+col
-                slot_frame = create_slot(self.content_frame, slot_text,self.fx_parameters[f'Param_{num}'])
+                slot_text = f'param_{num}'
+                slot_frame = create_slot(self.content_frame, slot_text,self.fx_parameters[slot_text])
                 slot_frame.grid(row=row + row_offset, column=col, padx=15, pady=15)
 
         # Label for Page 2
         page2_label = tk.Label(self.content_frame, text="Page 2", bg="#333333", fg="white", font=("Arial", 12, "bold"))
         page2_label.grid(row=row_offset + 2, column=0, columnspan=3, pady=(0, 10))
+
+        
 
     def menu_item_selected(self, slot):
         # Define what happens when a slot is clicked
