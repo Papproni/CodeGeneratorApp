@@ -49,7 +49,7 @@ class AddBlock(OptionManager):
         # OPTIONS: 
         self.add_option("INPUT NUM",  "NUM", 2, max_input_lim,default_value=2, visible_on_block=False,bindable=False)
         self.last_opt_added()
-        canvas.tag_lower("text_background",'all')
+        canvas.tag_lower("background",'all')
 class SubBlock(OptionManager):
     def __init__(self,canvas,tag):
         super().__init__()
@@ -94,7 +94,7 @@ class SubBlock(OptionManager):
                 # OPTIONS: 
         self.add_option("INPUT NUM",  "NUM", 2, max_input_lim,default_value=2, visible_on_block=False,bindable=False)
         self.last_opt_added()
-        canvas.tag_lower("text_background",'all')
+        canvas.tag_lower("background",'all')
         
 class DivBlock(OptionManager):
     def __init__(self,canvas,tag):
@@ -139,7 +139,7 @@ class DivBlock(OptionManager):
         # OPTIONS: 
         self.add_option("INPUT NUM",  "NUM", 2, max_input_lim,default_value=2, visible_on_block=False,bindable=False)
         self.last_opt_added()
-        canvas.tag_lower("text_background",'all')
+        canvas.tag_lower("background",'all')
 
 class MulBlock(OptionManager):
     def __init__(self,canvas,tag):
@@ -184,7 +184,7 @@ class MulBlock(OptionManager):
         # OPTIONS: 
         self.add_option("INPUT NUM",  "NUM", 2, max_input_lim,default_value=2, visible_on_block=False, bindable=False)
         self.last_opt_added()
-        canvas.tag_lower("text_background",'all')
+        canvas.tag_lower("background",'all')
 class ABSBlock(OptionManager):
     def __init__(self,canvas,tag):
         super().__init__()

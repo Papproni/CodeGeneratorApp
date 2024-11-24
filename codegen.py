@@ -292,13 +292,15 @@ class CodeGeneratorApp:
             # Delete assigned parameters!
             for block in self.blocks:
                 if block.tag ==self.selected_block:
-                    try:
+           
                         for opt in block.option_vars:
+                            try:
                                 binded_param = block.option_vars[opt]['binded_src']
                                 if(binded_param != None):
                                     self.slidemenu.free_control_parameter(binded_param)
-                    except:
-                        pass
+                            except:
+                                pass
+                    
                         
             
             

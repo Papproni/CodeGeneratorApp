@@ -9,9 +9,10 @@ Generated on: {{ date }} */
 // Process Function for SAB_{{ name }}_tst
 void SAB_{{ name }}_init( SAB_{{ name }}_tst* self, float input_f32, float output_f32){
     // Generated outputs from other Jinja templates
-    {% for init_output in generated_init_outputs %}
+    {% for init_output in generated_init_outputs -%}
     {{ init_output }}
-    {% endfor %}
+    {%- endfor %}
+
 };
 
 // Process Function for SAB_{{ name }}_tst
