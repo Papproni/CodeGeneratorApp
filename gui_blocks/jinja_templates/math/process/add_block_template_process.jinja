@@ -1,5 +1,1 @@
-{%- for pre_instance in pre_instances -%}
-{%- if loop.index == 1 -%}
-self->{{ instance_name }}_output_f32 = self->{{ pre_instance }}_output_f32 + self->{{ pre_instance }}_output_f32;
-{%- endif -%}
-{%- endfor -%}
+self->{{ instance_name }}_output_f32 = self->{{ pre_instances[0] }}_output_f32 + self->{{ pre_instances[1] }}_output_f32;
