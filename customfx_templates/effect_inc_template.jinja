@@ -6,6 +6,7 @@ Generated on: {{ date }} */
 
 #include "sab_intercom.h"
 #include "stdint.h"
+#include "arm_math.h"
 #define float32_t float
 
 // Effect: {{ name }}
@@ -33,7 +34,7 @@ typedef struct {
 void SAB_{{ name }}_init( SAB_{{ name }}_tst* self);
 
 // Process Function for SAB_{{ name }}_tst
-int SAB_{{ name }}_process( SAB_{{ name }}_tst* self, float input_f32, float output_f32);
+float32_t SAB_{{ name }}_process( SAB_{{ name }}_tst* self, float32_t input_f32, float32_t output_f32);
 
 
 

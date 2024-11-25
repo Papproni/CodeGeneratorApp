@@ -1,12 +1,10 @@
 /*THIS FILE IS GENERATED! DO NOT MODIFY!
 Generated on: {{ date }} */
 
-#ifndef SAB_{{ name|upper }}_H
-#define SAB_{{ name|upper }}_H
-
 #include "SAB_{{name}}.h"
 #include <math.h>
 #include <stdint.h>
+
 
 
 typedef enum {
@@ -22,7 +20,7 @@ typedef struct {
 } BiquadCoeffs;
 
 void calculate_biquad_coeffs(float32_t* coeffs_af32,FilterType type, float freq, float Q, float sample_rate) {
-    float omega = 2.0f * PI * freq / sample_rate;
+    float omega = 2.0f * 3.14 * freq / sample_rate;
     float alpha = sinf(omega) / (2.0f * Q);
     float cos_omega = cosf(omega);
 
@@ -70,11 +68,16 @@ void calculate_biquad_coeffs(float32_t* coeffs_af32,FilterType type, float freq,
     coeffs.a1 /= a0;
     coeffs.a2 /= a0;
 
-    self->coeffs_af32[0]=coeffs.b0;
-    self->coeffs_af32[1]=coeffs.b1;
-    self->coeffs_af32[2]=coeffs.b2;
-    self->coeffs_af32[3]=coeffs.a1;
-    self->coeffs_af32[4]=coeffs.a2;
+    coeffs_af32[0]=coeffs.b0;
+    coeffs_af32[1]=coeffs.b1;
+    coeffs_af32[2]=coeffs.b2;
+    coeffs_af32[3]=-coeffs.a1;
+    coeffs_af32[4]=-coeffs.a2;
+}
+
+static float32_t conv_raw_to_param_value(uint8_t value, float32_t low, float32_t high) {
+	float32_t v_f32 = value;
+    return low + (v_f32 / 255.0f) * (high - low);
 }
 
 // Process Function for SAB_{{ name }}_tst
@@ -88,7 +91,7 @@ void SAB_{{ name }}_init( SAB_{{ name }}_tst* self){
 
 	// PARAMS:
     {% for control in control_params %}
-    add_parameter(&self->intercom_parameters_aun[{{ loop.index0 }}],"{{control.display_name}}",PARAM_TYPE_POT,69);
+    add_parameter(&self->intercom_parameters_aun[{{ loop.index0 }}],"{{control.display_name | upper}}",PARAM_TYPE_POT,69);
     {%- endfor %}
 
     // Generated outputs from other Jinja templates
@@ -99,12 +102,12 @@ void SAB_{{ name }}_init( SAB_{{ name }}_tst* self){
 };
 
 // Process Function for SAB_{{ name }}_tst
-int SAB_{{ name }}_process( SAB_{{ name }}_tst* self, float input_f32, float output_f32){
+float32_t SAB_{{ name }}_process( SAB_{{ name }}_tst* self, float32_t input_f32, float32_t output_f32){
 
     {%- for control in control_params -%}
     {%- if control.display_name != 'None' %}
     // {{control.display_name}}
-    self->param_{{ loop.index0 +1}}_value = conv_raw_to_param_value(&self->intercom_parameters_aun[{{ loop.index0 }}].value,{{control.min_value}}, {{control.max_value}});
+    self->param_{{ loop.index0 +1}}_value = conv_raw_to_param_value(self->intercom_parameters_aun[{{ loop.index0 }}].value_u8,{{control.min_value}}, {{control.max_value}});
     {%- endif %}
     {%- endfor %}
 
@@ -112,4 +115,6 @@ int SAB_{{ name }}_process( SAB_{{ name }}_tst* self, float input_f32, float out
     {% for process_output in generated_process_outputs %}
     {{ process_output }}
     {% endfor %}
+
+    return output_f32;
 };

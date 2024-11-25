@@ -169,7 +169,7 @@ class SAB_fx_builder():
             
 
         # Step 3: Generate the top-level FX source file
-        fx_inc_output_path = os.path.join(inc_dir, "custom_fx.h")
+        fx_inc_output_path = os.path.join(inc_dir, "SAB_custom_fx.h")
         name = "custom_fx"
         # Load and render the template
         env = Environment(loader=FileSystemLoader(os.path.dirname(self.template_fx_inc)))
@@ -179,7 +179,7 @@ class SAB_fx_builder():
         with open(fx_inc_output_path, "w") as f:
             f.write(rendered_content)
 
-        fx_src_output_path = os.path.join(src_dir, "custom_fx.c")
+        fx_src_output_path = os.path.join(src_dir, "SAB_custom_fx.c")
         # Load and render the template
         env = Environment(loader=FileSystemLoader(os.path.dirname(self.template_fx_src)))
         template = env.get_template(os.path.basename(self.template_fx_src))

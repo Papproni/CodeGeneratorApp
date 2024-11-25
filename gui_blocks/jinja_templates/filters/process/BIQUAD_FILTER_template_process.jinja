@@ -19,7 +19,7 @@
 {%- endif -%}
 
 {% if bind is not none %}
-calculate_biquad_coeffs(self->{{ instance_name }}_coeffs_af32,{{Type}}, {{Freq_c}}, {{Q_c}}, 48000)
+calculate_biquad_coeffs(self->{{ instance_name }}_coeffs_af32,{{Type}}, {{Freq_c}}, {{Q_c}}, 48000);
 {%- endif %}
 {%- for pre_instance in pre_instances -%}
 {%- if loop.index == 1 -%}
