@@ -1,0 +1,7 @@
+{%- if 'param_' not in VALUE -%}
+    {%- set VALUE_c = VALUE -%}
+{%- else -%}
+    {% set VALUE_c = 'self->'+ VALUE + '_value' -%}
+{%- endif -%}
+
+self->{{ instance_name }}_output_f32 = {{VALUE_c}};
