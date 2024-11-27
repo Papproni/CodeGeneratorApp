@@ -121,7 +121,7 @@ class BiquadFilter(OptionManager):
         #   Q:              Filter characteristics  
         #   Type:           Type of filter           
         self.add_option("Type","OPTIONBOX",default_value="LPF,HPF,BANDPASS,NOTCH",bindable=False)
-        self.add_option("Freq","NUM",10,20000,default_value=440)
+        self.add_option("Freq","NUM",0,20000,default_value=440)
         self.add_option("Q","NUM",0.1,100,default_value=0.707)
         self.add_option("Gain","NUM",0,10,default_value=1)
         
