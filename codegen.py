@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import Canvas, Menu, StringVar, OptionMenu
+from tkinter import Canvas, Menu, StringVar, OptionMenu,filedialog
 
 # BLOCKS
 # import sab_filters
@@ -61,6 +61,9 @@ class CodeGeneratorApp:
         self.root.wm_attributes("-topmost", True)
         root.geometry("1000x1000")
 
+        self.codegen_location_src = None
+        self.codegen_location_inc = None
+
         self.canvas = Canvas(root, width=800, height=800, bg="white")
         self.canvas.pack()
 
@@ -89,6 +92,10 @@ class CodeGeneratorApp:
     def create_menu(self):
         menubar = Menu(self.root)
         self.root.config(menu=menubar)
+
+        file_menu = Menu(menubar, tearoff=0)
+        menubar.add_cascade(label="File", menu=file_menu)
+        file_menu.add_command(label="Choose gen loc", command=self.set_gen_location)
 
         io_menu = Menu(menubar, tearoff=0)
         menubar.add_cascade(label="IO", menu=io_menu)
@@ -127,6 +134,11 @@ class CodeGeneratorApp:
         
         special_menu.add_command(label="PID",                       command=self.add_Add_block)
         special_menu.add_command(label="State Space Control",       command=self.add_Add_block)
+
+    def set_gen_location(self):
+        print("set_gen_location")
+        self.codegen_location_inc = filedialog.askdirectory(title="Select folder for .h")
+        self.codegen_location_src = filedialog.askdirectory(title="Select folder for .src")
 
     def get_unique_block_tag(self):
         self.unique_num = self.unique_num + 1 

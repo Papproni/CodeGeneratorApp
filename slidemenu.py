@@ -58,8 +58,12 @@ class SlideMenu(tk.Frame):
         self.generate_btn = tk.Button(self.content_frame, 
                                       text="GENERATE CODE", command=self.code_gen_func, 
                                       bg="#044444", fg="white", font=("Arial", 10, "bold"))
+
         self.generate_btn.grid(row=0, column=0, columnspan=6, pady=10, padx=100, sticky="e")
     
+    def set_gen_src(self):
+        print("set_gen_src")
+
     def on_hover(self, event):
         if(self.parameter_choosing_state.get() == True):
             event.widget.config(bg="yellow")  # Change background to yellow on hover
