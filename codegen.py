@@ -284,7 +284,7 @@ class CodeGeneratorApp:
 
         builder = fx_builder.SAB_fx_builder()
         
-        builder.generate_code(self.arrows,self.blocks,self.slidemenu.fx_parameters)
+        builder.generate_code(self.arrows,self.blocks,self.slidemenu.fx_parameters,output_path_src=self.codegen_location_src,output_path_inc=self.codegen_location_inc)
         pass
 
     def select_block(self, event):

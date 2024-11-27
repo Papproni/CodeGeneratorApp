@@ -86,7 +86,7 @@ class SAB_fx_builder():
             else:
                 print(f"Execute {block}, pre: None")
     
-    def generate_code(self, arrows, blocks, controls):
+    def generate_code(self, arrows, blocks, controls, output_path_src, output_path_inc):
         """
         Generate code for each item in the signal path, using templates and parameters.
 
@@ -169,7 +169,17 @@ class SAB_fx_builder():
             
 
         # Step 3: Generate the top-level FX source file
-        fx_inc_output_path = os.path.join(inc_dir, "SAB_custom_fx.h")
+        if(output_path_inc == None):
+            fx_inc_output_path = os.path.join(inc_dir, "SAB_custom_fx.h")
+        else:
+            fx_inc_output_path = os.path.join(output_path_inc, "SAB_custom_fx.h")
+
+        if(output_path_src == None):
+            fx_src_output_path = os.path.join(src_dir, "SAB_custom_fx.c")
+        else:
+            fx_src_output_path = os.path.join(output_path_src, "SAB_custom_fx.c")
+
+
         name = "custom_fx"
         # Load and render the template
         env = Environment(loader=FileSystemLoader(os.path.dirname(self.template_fx_inc)))
@@ -179,7 +189,7 @@ class SAB_fx_builder():
         with open(fx_inc_output_path, "w") as f:
             f.write(rendered_content)
 
-        fx_src_output_path = os.path.join(src_dir, "SAB_custom_fx.c")
+        
         # Load and render the template
         env = Environment(loader=FileSystemLoader(os.path.dirname(self.template_fx_src)))
         template = env.get_template(os.path.basename(self.template_fx_src))
