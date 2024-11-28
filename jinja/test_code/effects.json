@@ -89,19 +89,6 @@
     {
         "name": "equalizer",
         "variables": [
-            {"name": "vol", "type": "float32_t"},
-            {"name": "gain", "type": "float32_t"},
-            {"name": "20hz", "type": "float32_t"},
-            {"name": "40hz", "type": "float32_t"},
-            {"name": "80hz", "type": "float32_t"},
-            {"name": "160hz", "type": "float32_t"},
-            {"name": "315hz", "type": "float32_t"},
-            {"name": "630hz", "type": "float32_t"},
-            {"name": "1.25khz", "type": "float32_t"},
-            {"name": "2.5khz", "type": "float32_t"},
-            {"name": "5khz", "type": "float32_t"},
-            {"name": "10khz", "type": "float32_t"},
-            {"name": "20khz", "type": "float32_t"}
         ]
     },
     {

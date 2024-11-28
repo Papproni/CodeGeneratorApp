@@ -47,6 +47,7 @@ void init_effect_chain(GuitarEffect** chain, EffectType* fx_chain, int chain_len
             chain[i] = (GuitarEffect*)malloc(sizeof(SAB_{{ effect.name}}_tst));
             chain[i]->init = SAB_{{ effect.name }}_init;
             chain[i]->process = SAB_{{ effect.name }}_process;
+            chain[i]->delete  = SAB_{{ effect.name }}_delete;
             break;
         {%- endfor %}
         default:
@@ -55,8 +56,6 @@ void init_effect_chain(GuitarEffect** chain, EffectType* fx_chain, int chain_len
         }
         // Initialize the effect
         chain[i]->init(chain[i]);
-        // Copy data from flash (simulated)
-        chain[i]->copy_from_flash(chain[i]);
     }
 }
 

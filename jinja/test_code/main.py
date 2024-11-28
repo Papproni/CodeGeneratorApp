@@ -75,7 +75,7 @@ for effect in effects:
         dots = '.' * (total_length - len(file_name) - len(status))
         print(f"File {generated_libs_counter}: {file_name}{dots}{bcolors.OKGREEN}{status}{bcolors.ENDC}")
     # File name to be created in the 'generated' directory
-    filename_src = os.path.join(output_dir_src, f"SAB_{effect['name'].lower()}.h")
+    filename_src = os.path.join(output_dir_src, f"SAB_{effect['name'].lower()}.c")
 
     # Render template with effect data
     content = template_src.render(effect, date=current_date)

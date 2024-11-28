@@ -1,5 +1,5 @@
 /*THIS FILE IS GENERATED! DO NOT MODIFY!
-Generated on: 2024.11.11. */
+Generated on: 2024.11.28. */
 
 #ifndef SAB_OVERDRIVE_H
 #define SAB_OVERDRIVE_H
@@ -16,6 +16,19 @@ typedef struct {
      
     fx_data_tst			intercom_fx_data;
 	sab_fx_param_tun 	intercom_parameters_aun[NUM_OF_MAX_PARAMS];
+
+    float32_t param_1_value;
+    float32_t param_2_value;
+    float32_t param_3_value;
+    float32_t param_4_value;
+    float32_t param_5_value;
+    float32_t param_6_value;
+    float32_t param_7_value;
+    float32_t param_8_value;
+    float32_t param_9_value;
+    float32_t param_10_value;
+    float32_t param_11_value;
+    float32_t param_12_value;
         float32_t gain_f32;
         float32_t tone_f32;
         float32_t volume_f32;
@@ -23,11 +36,13 @@ typedef struct {
 
 
 // Process Function for SAB_overdrive_tst
-void SAB_overdrive_init( SAB_overdrive_tst* self, float input_f32, float output_f32);
+void SAB_overdrive_init( SAB_overdrive_tst* self);
 
 // Process Function for SAB_overdrive_tst
-int SAB_overdrive_process( SAB_overdrive_tst* self, float input_f32, float output_f32);
+float32_t SAB_overdrive_process( SAB_overdrive_tst* self, float input_f32);
 
+// Process Function for SAB_overdrive_tst
+void SAB_overdrive_delete( SAB_overdrive_tst* self);
 
 
 #endif

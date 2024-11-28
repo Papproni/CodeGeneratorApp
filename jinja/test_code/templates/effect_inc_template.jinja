@@ -17,6 +17,19 @@ typedef struct {
     fx_data_tst			intercom_fx_data;
 	sab_fx_param_tun 	intercom_parameters_aun[NUM_OF_MAX_PARAMS];
 
+    float32_t param_1_value;
+    float32_t param_2_value;
+    float32_t param_3_value;
+    float32_t param_4_value;
+    float32_t param_5_value;
+    float32_t param_6_value;
+    float32_t param_7_value;
+    float32_t param_8_value;
+    float32_t param_9_value;
+    float32_t param_10_value;
+    float32_t param_11_value;
+    float32_t param_12_value;
+
     {%- set type_suffix_map = {
         'float': '_f32',
         'float32_t': '_f32',
@@ -34,11 +47,13 @@ typedef struct {
 
 
 // Process Function for SAB_{{ name }}_tst
-void SAB_{{ name }}_init( SAB_{{ name }}_tst* self, float input_f32, float output_f32);
+void SAB_{{ name }}_init( SAB_{{ name }}_tst* self);
 
 // Process Function for SAB_{{ name }}_tst
-int SAB_{{ name }}_process( SAB_{{ name }}_tst* self, float input_f32, float output_f32);
+float32_t SAB_{{ name }}_process( SAB_{{ name }}_tst* self, float input_f32);
 
+// Process Function for SAB_{{ name }}_tst
+void SAB_{{ name }}_delete( SAB_{{ name }}_tst* self);
 
 
 #endif

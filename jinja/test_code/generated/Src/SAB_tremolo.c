@@ -1,19 +1,19 @@
 /*THIS FILE IS GENERATED! DO NOT MODIFY!
-Generated on: {{ date }} */
+Generated on: 2024.11.28. */
 
-#ifndef SAB_{{ name|upper }}_H
-#define SAB_{{ name|upper }}_H
+#ifndef SAB_TREMOLO_H
+#define SAB_TREMOLO_H
 
-#include "SAB_{{name}}.h"
+#include "SAB_tremolo.h"
 
-void SAB_{{ name }}_delete( SAB_{{ name }}_tst* self){
+void SAB_tremolo_delete( SAB_tremolo_tst* self){
     // TODO
 }
 
 
-// Process Function for SAB_{{ name }}_tst
-void SAB_{{ name }}_init( SAB_{{ name }}_tst* self){
-    strcpy(self->intercom_fx_data.name, "{{ name }}");
+// Process Function for SAB_tremolo_tst
+void SAB_tremolo_init( SAB_tremolo_tst* self){
+    strcpy(self->intercom_fx_data.name, "tremolo");
 	self->intercom_fx_data.color[0] = 255; 	// R
 	self->intercom_fx_data.color[1] = 0;	// G
 	self->intercom_fx_data.color[2] = 0;	// B
@@ -35,9 +35,8 @@ void SAB_{{ name }}_init( SAB_{{ name }}_tst* self){
     add_parameter(&self->intercom_parameters_aun[11],"NONE",PARAM_TYPE_POT,69);
 };
 
-// Process Function for SAB_{{ name }}_tst
-float32_t SAB_{{ name }}_process( SAB_{{ name }}_tst* self, float input_f32){
+// Process Function for SAB_tremolo_tst
+float32_t SAB_tremolo_process( SAB_tremolo_tst* self, float input_f32){
     // TODO
 };
-
 

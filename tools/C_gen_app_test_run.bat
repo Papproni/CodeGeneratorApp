@@ -11,7 +11,7 @@ REM Navigate to the directory containing the Python script
 cd /d "%~dp0"
 
 REM Run the Python script
-py c_code_gen_test.py
+py ..\jinja\test_code\main.py
 
 REM Pause the command prompt so it doesn't close immediately
 pause
