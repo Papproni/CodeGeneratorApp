@@ -219,7 +219,8 @@ class SAB_fx_builder():
         try:
             block.fill_template_data(template_data)
         except:
-            print("NO fill_template_data found while generating: {block.tag} | {block.type}")
+            pass
+            # print("NO fill_template_data found while generating: {block.tag} | {block.type}")
 
         template_data['blockID'] = block.tag
         template_data['blocktype'] = block.type

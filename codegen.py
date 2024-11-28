@@ -11,6 +11,7 @@ from gui_blocks import sab_math
 import fx_builder
 
 import slidemenu
+import SAB_save
 
 import networkx as nx
 import xml.etree.ElementTree as ET
@@ -71,9 +72,13 @@ class CodeGeneratorApp:
         self.canvas.pack()
 
         self.slidemenu = slidemenu.SlideMenu(root,self.generate_c_code)
-
         self.blocks = []
         self.arrows = []
+
+        self.save_load      = SAB_save.SAB_save_load(self.canvas,
+                                                self.blocks,
+                                                self.arrows,
+                                                self.slidemenu.fx_parameters)
         self.selected_output_circle = None
         self.arrow_line = None
         self.drag_data = {"x": 0, "y": 0, "item": None, "tags": None}
@@ -144,17 +149,9 @@ class CodeGeneratorApp:
         
         print("SAVE")
 
-        xml_file_data = ET.Element("root")
-        
+        self.save_load.save()
 
-        blocks = ET.SubElement(xml_file_data, "blocks")
-        block = ET.SubElement(blocks, "block")
-        ET.SubElement(block, "type").text = "biquad_filter"
-        ET.SubElement(block, "tag").text = "block1"
-        opts = ET.SubElement(block, "opts")
-        ET.SubElement(block, "Freq").text = "5000"
-        ET.SubElement(block, "Q").text = "0.707"
-        ET.SubElement(block, "type").text = "LPF"
+
         # Need to save blocks 
         # 1.
         # save blocks
