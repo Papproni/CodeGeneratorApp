@@ -55,7 +55,7 @@ class SAB_save_load():
             mode="r"
         )
         # Parse the XML file
-        tree = ET.parse(file_path)
+        tree = ET.parse(self.open_here.name)
         root = tree.getroot()  # Get the root element
 
         # Process blocks, arrows, and fx_parameters
@@ -193,7 +193,5 @@ def process_fx_parameters(fx_parameters):
     else:
         print("No FX Parameters found.")
 
-# Example usage
-file_path = "blocks.xml"  # Replace with your XML file's path
-parse_xml(file_path)
+
 
