@@ -17,7 +17,7 @@ class FilterBank(OptionManager):
         self.canvas = canvas
 
         # default values
-        self.type            = "FILTERBANK_BLOCK"
+        self.type            = "filterbank_block"
         # must be changed 
         self.tag             = tag
         
@@ -86,7 +86,7 @@ class BiquadFilter(OptionManager):
         self.canvas = canvas
 
         # default values
-        self.type            = "BIQUAD_FILTER"
+        self.type            = "biquad_filter_block"
         # must be changed 
         self.tag             = tag
         
@@ -198,7 +198,7 @@ class MovingAverage(OptionManager):
         self.canvas = canvas
 
         # default values
-        self.type            = "MOVING_AVG_FILTER"
+        self.type            = "moving_avg_filter_block"
         # must be changed 
         self.tag             = tag
         

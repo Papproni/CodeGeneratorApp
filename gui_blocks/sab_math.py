@@ -11,7 +11,7 @@ class AddBlock(OptionManager):
         self.canvas = canvas
 
         # default values
-        self.type            = "ADD_BLOCK"
+        self.type            = "add_block"
         # must be changed 
         self.tag             = tag
         
@@ -61,7 +61,7 @@ class SubBlock(OptionManager):
         self.canvas = canvas
 
         # default values
-        self.type            = "SUB_BLOCK"
+        self.type            = "sub_block"
         # must be changed 
         self.tag             = tag
         
@@ -111,7 +111,7 @@ class DivBlock(OptionManager):
         self.canvas = canvas
 
         # default values
-        self.type            = "DIV_BLOCK"
+        self.type            = "div_block"
         # must be changed 
         self.tag             = tag
         
@@ -160,7 +160,7 @@ class MulBlock(OptionManager):
         self.canvas = canvas
 
         # default values
-        self.type            = "MUL_BLOCK"
+        self.type            = "mul_block"
         # must be changed 
         self.tag             = tag
         
@@ -208,7 +208,7 @@ class ABSBlock(OptionManager):
         self.canvas = canvas
 
         # default values
-        self.type            = "ABS_BLOCK"
+        self.type            = "abs_block"
         # must be changed 
         self.tag             = tag
         
@@ -256,7 +256,7 @@ class LimitBlock(OptionManager):
         self.canvas = canvas
 
         # default values
-        self.type            = "LIM_BLOCK"
+        self.type            = "lim_block"
         # must be changed 
         self.tag             = tag
         
@@ -318,7 +318,7 @@ class ConstBlock(OptionManager):
         self.canvas = canvas
 
         # default values
-        self.type            = "CONST_BLOCK"
+        self.type            = "const_block"
         # must be changed 
         self.tag             = tag
         

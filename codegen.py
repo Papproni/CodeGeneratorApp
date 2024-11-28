@@ -123,56 +123,58 @@ class CodeGeneratorApp:
         math_menu = Menu(menubar, tearoff=0)
         menubar.add_cascade(label="Math", menu=math_menu)
         
-        math_menu.add_command(label="Const",    command=self.add_Const_block)
-        math_menu.add_command(label="Add",      command=self.add_Add_block)
-        math_menu.add_command(label="Mul",      command=self.add_Mul_block)
-        math_menu.add_command(label="Div",      command=self.add_Div_block)
-        math_menu.add_command(label="Sub",      command=self.add_Sub_block)
-        math_menu.add_command(label="Lim",      command=self.add_Lim_block)
-        math_menu.add_command(label="ABS",      command=self.add_ABS_block)
+        math_menu.add_command(label="Const",    command=self.add_const_block)
+        math_menu.add_command(label="Add",      command=self.add_add_block)
+        math_menu.add_command(label="Mul",      command=self.add_mul_block)
+        math_menu.add_command(label="Div",      command=self.add_div_block)
+        math_menu.add_command(label="Sub",      command=self.add_sub_block)
+        math_menu.add_command(label="Lim",      command=self.add_lim_block)
+        math_menu.add_command(label="ABS",      command=self.add_abs_block)
         
         special_menu = Menu(menubar, tearoff=0)
         menubar.add_cascade(label="Special", menu=special_menu)
         
-        special_menu.add_command(label="Generator",     command=self.add_Add_block)
-        special_menu.add_command(label="Delay line",    command=self.add_Add_block)
-        special_menu.add_command(label="Reverb",        command=self.add_Add_block)
-        special_menu.add_command(label="PitchShift",    command=self.add_Add_block)
+        special_menu.add_command(label="Generator",     command=self.add_add_block)
+        special_menu.add_command(label="Delay line",    command=self.add_add_block)
+        special_menu.add_command(label="Reverb",        command=self.add_add_block)
+        special_menu.add_command(label="PitchShift",    command=self.add_add_block)
         
         special_menu = Menu(menubar, tearoff=0)
         menubar.add_cascade(label="Control", menu=special_menu)
         
-        special_menu.add_command(label="PID",                       command=self.add_Add_block)
-        special_menu.add_command(label="State Space Control",       command=self.add_Add_block)
+        special_menu.add_command(label="PID",                       command=self.add_add_block)
+        special_menu.add_command(label="State Space Control",       command=self.add_add_block)
 
     def save_custom_fx(self):
-        
         print("SAVE")
-
         self.save_load.save()
-
-
-        # Need to save blocks 
-        # 1.
-        # save blocks
-        # tag
-        # values
-        # position
-
-
-        # 2.
-        # save arrows
-        
-        # 3.
-        # save parameters
-
-        
+    
+    def call_function_with_params(self, block_type, **kwargs):
+        func_name = f"add_{block_type}"  # Construct the function name dynamically
+        func = getattr(self, func_name, None)  # Get the function by name
+        if callable(func):
+            func(**kwargs)  # Call the function with the provided keyword arguments
+        else:
+            print(f"Function {func_name} does not exist!")
+            
     def load_custom_fx(self):
         # Delete all elements, settings
         for block in self.blocks[:]:
             self.delete_block(block.tag)
 
-        self.add_input_block(x=100,y=100)
+        blocks,arrows, fx_params = self.save_load.load()
+        # Init blocks
+        for block in blocks:
+            x = int(float(block.attrib['x']))
+            y = int(float(block.attrib['y']))
+            self.call_function_with_params(block.attrib['type'],
+                                           tag = block.attrib['tag'],
+                                           x = x,
+                                           y = y)
+        # init arrows
+
+        # init params
+
         print("LOAD")
 
     def set_gen_location(self):
@@ -184,7 +186,7 @@ class CodeGeneratorApp:
         self.unique_num = self.unique_num + 1 
         return f"block{self.unique_num}"
 
-    def add_ABS_block(self,tag = None, x=50, y=50):
+    def add_abs_block(self,tag = None, x=50, y=50):
         if tag is None:
             tag = self.get_unique_block_tag()
 
@@ -193,7 +195,7 @@ class CodeGeneratorApp:
         self.blocks.append(new_block)
         self.bind_events()  # Ensure events are bound after adding blocks
     
-    def add_Lim_block(self,tag = None, x=50, y=50):
+    def add_lim_block(self,tag = None, x=50, y=50):
         if tag is None:
             tag = self.get_unique_block_tag()
 
@@ -211,7 +213,7 @@ class CodeGeneratorApp:
         self.blocks.append(new_block)
         self.bind_events()  # Ensure events are bound after adding blocks
 
-    def add_Const_block(self,tag = None, x=50, y=50):
+    def add_const_block(self,tag = None, x=50, y=50):
         if tag is None:
             tag = self.get_unique_block_tag()
 
@@ -220,7 +222,7 @@ class CodeGeneratorApp:
         self.blocks.append(new_block)
         self.bind_events()  # Ensure events are bound after adding blocks
 
-    def add_Add_block(self,tag = None, x=50, y=50):
+    def add_add_block(self,tag = None, x=50, y=50):
         if tag is None:
             tag = self.get_unique_block_tag()
 
@@ -229,7 +231,7 @@ class CodeGeneratorApp:
         self.blocks.append(new_block)
         self.bind_events()  # Ensure events are bound after adding blocks
 
-    def add_Mul_block(self,tag = None, x=50, y=50):
+    def add_mul_block(self,tag = None, x=50, y=50):
         if tag is None:
             tag = self.get_unique_block_tag()
 
@@ -238,7 +240,7 @@ class CodeGeneratorApp:
         self.blocks.append(new_block)
         self.bind_events()  # Ensure events are bound after adding blocks
     
-    def add_Div_block(self,tag = None, x=50, y=50):
+    def add_div_block(self,tag = None, x=50, y=50):
         if tag is None:
             tag = self.get_unique_block_tag()
 
@@ -247,7 +249,7 @@ class CodeGeneratorApp:
         self.blocks.append(new_block)
         self.bind_events()  # Ensure events are bound after adding blocks
         
-    def add_Sub_block(self,tag = None, x=50, y=50):
+    def add_sub_block(self,tag = None, x=50, y=50):
         if tag is None:
             tag = self.get_unique_block_tag()
 
