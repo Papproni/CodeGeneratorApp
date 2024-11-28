@@ -6,7 +6,7 @@ math_color = "orange"
 max_input_lim = 2
 
 class AddBlock(OptionManager):
-    def __init__(self,canvas,tag,x=None,y=None):
+    def __init__(self,canvas,tag,x=None,y=None,load_data = None):
         super().__init__()
         self.canvas = canvas
 
@@ -56,7 +56,7 @@ class AddBlock(OptionManager):
         self.last_opt_added()
         canvas.tag_lower("background",'all')
 class SubBlock(OptionManager):
-    def __init__(self,canvas,tag,x=None,y=None):
+    def __init__(self,canvas,tag,x=None,y=None,load_data = None):
         super().__init__()
         self.canvas = canvas
 
@@ -106,7 +106,7 @@ class SubBlock(OptionManager):
         canvas.tag_lower("background",'all')
         
 class DivBlock(OptionManager):
-    def __init__(self,canvas,tag,x=None,y=None):
+    def __init__(self,canvas,tag,x=None,y=None, load_data = None):
         super().__init__()
         self.canvas = canvas
 
@@ -155,7 +155,7 @@ class DivBlock(OptionManager):
         canvas.tag_lower("background",'all')
 
 class MulBlock(OptionManager):
-    def __init__(self,canvas,tag,x = None,y = None):
+    def __init__(self,canvas,tag,x = None,y = None, load_data = None):
         super().__init__()
         self.canvas = canvas
 
@@ -203,7 +203,7 @@ class MulBlock(OptionManager):
         self.last_opt_added()
         canvas.tag_lower("background",'all')
 class ABSBlock(OptionManager):
-    def __init__(self,canvas,tag,x = None,y = None):
+    def __init__(self,canvas,tag,x = None,y = None, load_data = None):
         super().__init__()
         self.canvas = canvas
 
@@ -249,7 +249,7 @@ class ABSBlock(OptionManager):
         
 
 class LimitBlock(OptionManager):
-    def __init__(self,canvas,tag,x = None,y = None):
+    def __init__(self,canvas,tag,x = None,y = None, load_data = None):
         
         super().__init__()
         
@@ -313,7 +313,7 @@ class LimitBlock(OptionManager):
     
 
 class ConstBlock(OptionManager):
-    def __init__(self,canvas,tag,x = None,y = None):
+    def __init__(self,canvas,tag,x = None,y = None, load_data = None):
         super().__init__()
         self.canvas = canvas
 

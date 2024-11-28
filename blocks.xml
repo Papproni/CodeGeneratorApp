@@ -1,109 +1,52 @@
 <?xml version="1.0" ?>
 <SAB_code_gen_data>
   <blocks>
-    <block type="input_block" tag="block3" x="32.0" y="208.0">
-      <option_vars/>
-    </block>
-    <block type="output_block" tag="block4" x="437.0" y="240.0">
-      <option_vars/>
-    </block>
-    <block type="biquad_filter_block" tag="block1" x="218.0" y="35.0">
-      <option_vars>
-        <Type var_value="LPF"/>
-        <Freq var_value="440"/>
-        <Q var_value="0.707"/>
-        <Gain var_value="1"/>
-      </option_vars>
+    <block type="input_block" tag="block0" x="48.0" y="50.0"/>
+    <block type="output_block" tag="block1" x="401.0" y="60.0"/>
+    <block type="biquad_filter_block" tag="block2" x="220.0" y="55.0">
+      <option_vars Type="LPF" Freq="param_1" Q="param_2" Gain="1"/>
     </block>
   </blocks>
   <arrows>
-    <arrow src_out_id="3" dst_in_id="11" arrow_id="22" dst_block_tag="block1" src_block_tag="block3"/>
-    <arrow src_out_id="12" dst_in_id="7" arrow_id="23" dst_block_tag="block4" src_block_tag="block1"/>
+    <arrow src_out_id="3" dst_in_id="11" arrow_id="22" dst_block_tag="block2" src_block_tag="block0"/>
+    <arrow src_out_id="12" dst_in_id="7" arrow_id="23" dst_block_tag="block1" src_block_tag="block2"/>
   </arrows>
   <fx_parameters>
-    <param_1 assigned_block_tag="None" assigned_block_setting="None">
-      <settings>
-        <settings min_value="0"/>
-        <settings max_value="1"/>
-        <settings display_name="None"/>
-      </settings>
+    <param_1>
+      <settings min_value="2" max_value="10" display_name="Freq"/>
     </param_1>
-    <param_2 assigned_block_tag="None" assigned_block_setting="None">
-      <settings>
-        <settings min_value="0"/>
-        <settings max_value="1"/>
-        <settings display_name="None"/>
-      </settings>
+    <param_2>
+      <settings min_value="-5" max_value="0" display_name="Q"/>
     </param_2>
-    <param_3 assigned_block_tag="None" assigned_block_setting="None">
-      <settings>
-        <settings min_value="0"/>
-        <settings max_value="1"/>
-        <settings display_name="None"/>
-      </settings>
+    <param_3>
+      <settings min_value="0" max_value="1" display_name="None"/>
     </param_3>
-    <param_4 assigned_block_tag="None" assigned_block_setting="None">
-      <settings>
-        <settings min_value="0"/>
-        <settings max_value="1"/>
-        <settings display_name="None"/>
-      </settings>
+    <param_4>
+      <settings min_value="0" max_value="1" display_name="None"/>
     </param_4>
-    <param_5 assigned_block_tag="None" assigned_block_setting="None">
-      <settings>
-        <settings min_value="0"/>
-        <settings max_value="1"/>
-        <settings display_name="None"/>
-      </settings>
+    <param_5>
+      <settings min_value="0" max_value="1" display_name="None"/>
     </param_5>
-    <param_6 assigned_block_tag="None" assigned_block_setting="None">
-      <settings>
-        <settings min_value="0"/>
-        <settings max_value="1"/>
-        <settings display_name="None"/>
-      </settings>
+    <param_6>
+      <settings min_value="0" max_value="1" display_name="None"/>
     </param_6>
-    <param_7 assigned_block_tag="None" assigned_block_setting="None">
-      <settings>
-        <settings min_value="0"/>
-        <settings max_value="1"/>
-        <settings display_name="None"/>
-      </settings>
+    <param_7>
+      <settings min_value="0" max_value="1" display_name="None"/>
     </param_7>
-    <param_8 assigned_block_tag="None" assigned_block_setting="None">
-      <settings>
-        <settings min_value="0"/>
-        <settings max_value="1"/>
-        <settings display_name="None"/>
-      </settings>
+    <param_8>
+      <settings min_value="0" max_value="1" display_name="None"/>
     </param_8>
-    <param_9 assigned_block_tag="None" assigned_block_setting="None">
-      <settings>
-        <settings min_value="0"/>
-        <settings max_value="1"/>
-        <settings display_name="None"/>
-      </settings>
+    <param_9>
+      <settings min_value="0" max_value="1" display_name="None"/>
     </param_9>
-    <param_10 assigned_block_tag="None" assigned_block_setting="None">
-      <settings>
-        <settings min_value="0"/>
-        <settings max_value="1"/>
-        <settings display_name="None"/>
-      </settings>
+    <param_10>
+      <settings min_value="0" max_value="1" display_name="None"/>
     </param_10>
-    <param_11 assigned_block_tag="None" assigned_block_setting="None">
-      <settings>
-        <settings min_value="0"/>
-        <settings max_value="1"/>
-        <settings display_name="None"/>
-      </settings>
+    <param_11>
+      <settings min_value="0" max_value="1" display_name="None"/>
     </param_11>
-    <param_12 assigned_block_tag="None" assigned_block_setting="None">
-      <settings>
-        <settings min_value="0"/>
-        <settings max_value="1"/>
-        <settings display_name="None"/>
-      </settings>
+    <param_12>
+      <settings min_value="0" max_value="1" display_name="None"/>
     </param_12>
   </fx_parameters>
 </SAB_code_gen_data>

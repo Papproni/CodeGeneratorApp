@@ -11,7 +11,7 @@ import numpy as np
 # numofOutputs: 1
 # number of channels per inputs: USER DEFINED
 class FilterBank(OptionManager):
-    def __init__(self,canvas,tag,x = None,y = None):
+    def __init__(self,canvas,tag,x = None,y = None, load_data = None):
         super().__init__()
         
         self.canvas = canvas
@@ -79,7 +79,7 @@ class FilterBank(OptionManager):
 # numofOutputs:                     1
 # number of channels per inputs:    1
 class BiquadFilter(OptionManager):
-    def __init__(self,canvas,tag,x=None,y=None):
+    def __init__(self,canvas,tag,x=None,y=None,load_data = None):
         super().__init__()
         
         
@@ -193,7 +193,7 @@ class BiquadFilter(OptionManager):
 # numofOutputs:                     1
 # number of channels per inputs:    1
 class MovingAverage(OptionManager):
-    def __init__(self,canvas,tag,x=None,y=None):
+    def __init__(self,canvas,tag,x=None,y=None, load_data = None):
         super().__init__()
         self.canvas = canvas
 

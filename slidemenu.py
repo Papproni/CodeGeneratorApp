@@ -215,9 +215,9 @@ class SlideMenu(tk.Frame):
     
     def free_control_parameter(self,parameter):
         self.fx_parameters[parameter]['assigned_block_setting'] = None
-        default = self.fx_parameters[self.current_parameter_clicked]['default_value']
-        self.fx_parameters[self.current_parameter_clicked]['var'].set(default)
-        self.fx_parameters[self.current_parameter_clicked]['settings']['display_name'].set(default)
+        default = self.fx_parameters[parameter]['default_value']
+        self.fx_parameters[parameter]['var'].set(default)
+        self.fx_parameters[parameter]['settings']['display_name'].set(default)
 
 
 

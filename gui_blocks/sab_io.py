@@ -12,7 +12,7 @@ from tkinter import Canvas, Menu, StringVar, OptionMenu
 
 
 class InputBlock:
-    def __init__(self,canvas,tag,x=None,y=None):
+    def __init__(self,canvas,tag,x=None,y=None,load_data = None):
         # default values
         self.type            = "input_block"
         # must be changed 
@@ -56,7 +56,7 @@ class InputBlock:
 
 
 class OutputBlock:
-    def __init__(self,canvas,tag,x=None,y=None):
+    def __init__(self,canvas,tag,x=None,y=None,load_data = None):
         super().__init__()
         # default values
         self.type            = "output_block"

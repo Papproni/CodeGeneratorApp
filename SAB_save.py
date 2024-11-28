@@ -60,10 +60,16 @@ class SAB_save_load():
 
         # Process blocks, arrows, and fx_parameters
         blocks = root.find("blocks")
+        block_options = {}
+        for block in blocks:
+            block_options[block.attrib['tag']] = block.find("option_vars")
         arrows = root.find("arrows")
         fx_params = root.find("fx_parameters")
+        param_options = {}
+        for fx_param in fx_params:
+            param_options[fx_param] = fx_param.find("settings")
 
-        return blocks,arrows,fx_params
+        return blocks,arrows,fx_params, block_options, param_options
 
 
     def create_xml_from_blocks(self,block_data):
@@ -83,13 +89,11 @@ class SAB_save_load():
 
             # # Add options if present
             try:
-                opts_elem = ET.SubElement(block_elem, "option_vars")
+                opts = {}
                 for opt in block.option_vars:
                     var_value = block.option_vars[opt].get('var').get()
-
-                    ET.SubElement(opts_elem, opt, {
-                    "var_value"        :str(var_value)
-                })
+                    opts[opt] = var_value
+                ET.SubElement(block_elem, "option_vars", opts)
             except:
                 pass
             
@@ -117,14 +121,14 @@ class SAB_save_load():
 
         # Add arrows
         for fx_parameter in fx_parameters.items():
-            fx_param = ET.SubElement(fx_parameters_root, fx_parameter[0],{
-                "assigned_block_tag"        :str(fx_parameter[1]['assigned_block_tag']),
-                "assigned_block_setting"    :str(fx_parameter[1]['assigned_block_setting'])
-            })
-            setting_xml = ET.SubElement(fx_param, "settings")
+            fx_param = ET.SubElement(fx_parameters_root, fx_parameter[0])
             settings = fx_parameter[1]['settings']
+
+            setting_list = {}
             for setting in settings.items():
-                ET.SubElement(setting_xml, "settings",{str(setting[0]):str(setting[1].get())})
+                setting_list[str(setting[0])] = str(setting[1].get())
+            
+            ET.SubElement(fx_param, "settings",setting_list)
                 
             
 
