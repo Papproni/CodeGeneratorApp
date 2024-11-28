@@ -13,6 +13,9 @@ import fx_builder
 import slidemenu
 
 import networkx as nx
+import xml.etree.ElementTree as ET
+
+
 
 # On screen user has 6 options to use
 # maximum 12 options are available
@@ -95,6 +98,8 @@ class CodeGeneratorApp:
 
         file_menu = Menu(menubar, tearoff=0)
         menubar.add_cascade(label="File", menu=file_menu)
+        file_menu.add_command(label="Save", command=self.save_custom_fx)
+        file_menu.add_command(label="Load", command=self.load_custom_fx)
         file_menu.add_command(label="Choose gen loc", command=self.set_gen_location)
 
         io_menu = Menu(menubar, tearoff=0)
@@ -135,6 +140,44 @@ class CodeGeneratorApp:
         special_menu.add_command(label="PID",                       command=self.add_Add_block)
         special_menu.add_command(label="State Space Control",       command=self.add_Add_block)
 
+    def save_custom_fx(self):
+        
+        print("SAVE")
+
+        xml_file_data = ET.Element("root")
+        
+
+        blocks = ET.SubElement(xml_file_data, "blocks")
+        block = ET.SubElement(blocks, "block")
+        ET.SubElement(block, "type").text = "biquad_filter"
+        ET.SubElement(block, "tag").text = "block1"
+        opts = ET.SubElement(block, "opts")
+        ET.SubElement(block, "Freq").text = "5000"
+        ET.SubElement(block, "Q").text = "0.707"
+        ET.SubElement(block, "type").text = "LPF"
+        # Need to save blocks 
+        # 1.
+        # save blocks
+        # tag
+        # values
+        # position
+
+
+        # 2.
+        # save arrows
+        
+        # 3.
+        # save parameters
+
+        
+    def load_custom_fx(self):
+        # Delete all elements, settings
+        for block in self.blocks[:]:
+            self.delete_block(block.tag)
+
+        self.add_input_block(x=100,y=100)
+        print("LOAD")
+
     def set_gen_location(self):
         print("set_gen_location")
         self.codegen_location_inc = filedialog.askdirectory(title="Select folder for .h")
@@ -144,99 +187,111 @@ class CodeGeneratorApp:
         self.unique_num = self.unique_num + 1 
         return f"block{self.unique_num}"
 
-    def add_ABS_block(self,x=50, y=50):
-        tag = self.get_unique_block_tag()
+    def add_ABS_block(self,tag = None, x=50, y=50):
+        if tag is None:
+            tag = self.get_unique_block_tag()
 
-        new_block = sab_math.ABSBlock(self.canvas,tag)
+        new_block = sab_math.ABSBlock(self.canvas,tag,x=x,y=y)
         
         self.blocks.append(new_block)
         self.bind_events()  # Ensure events are bound after adding blocks
     
-    def add_Lim_block(self,x=50, y=50):
-        tag = self.get_unique_block_tag()
+    def add_Lim_block(self,tag = None, x=50, y=50):
+        if tag is None:
+            tag = self.get_unique_block_tag()
 
-        new_block = sab_math.LimitBlock(self.canvas,tag)
+        new_block = sab_math.LimitBlock(self.canvas,tag,x=x,y=y)
         
         self.blocks.append(new_block)
         self.bind_events()  # Ensure events are bound after adding blocks
     
-    def add_mavg_filter_block(self,x=50, y=50):
-        tag = self.get_unique_block_tag()
+    def add_mavg_filter_block(self,tag = None, x=50, y=50):
+        if tag is None:
+            tag = self.get_unique_block_tag()
 
-        new_block = sab_filters.MovingAverage(self.canvas,tag)
+        new_block = sab_filters.MovingAverage(self.canvas,tag,x=x,y=y)
         
         self.blocks.append(new_block)
         self.bind_events()  # Ensure events are bound after adding blocks
 
-    def add_Const_block(self, x=50, y=50):
-        tag = self.get_unique_block_tag()
+    def add_Const_block(self,tag = None, x=50, y=50):
+        if tag is None:
+            tag = self.get_unique_block_tag()
 
-        new_block = sab_math.ConstBlock(self.canvas,tag)
+        new_block = sab_math.ConstBlock(self.canvas,tag,x=x,y=y)
         
         self.blocks.append(new_block)
         self.bind_events()  # Ensure events are bound after adding blocks
 
-    def add_Add_block(self, x=50, y=50):
-        tag = self.get_unique_block_tag()
+    def add_Add_block(self,tag = None, x=50, y=50):
+        if tag is None:
+            tag = self.get_unique_block_tag()
 
-        new_block = sab_math.AddBlock(self.canvas,tag)
+        new_block = sab_math.AddBlock(self.canvas,tag,x=x,y=y)
         
         self.blocks.append(new_block)
         self.bind_events()  # Ensure events are bound after adding blocks
 
-    def add_Mul_block(self, x=50, y=50):
-        tag = self.get_unique_block_tag()
+    def add_Mul_block(self,tag = None, x=50, y=50):
+        if tag is None:
+            tag = self.get_unique_block_tag()
 
-        new_block = sab_math.MulBlock(self.canvas,tag)
+        new_block = sab_math.MulBlock(self.canvas,tag,x=x,y=y)
         
         self.blocks.append(new_block)
         self.bind_events()  # Ensure events are bound after adding blocks
     
-    def add_Div_block(self, x=50, y=50):
-        tag = self.get_unique_block_tag()
+    def add_Div_block(self,tag = None, x=50, y=50):
+        if tag is None:
+            tag = self.get_unique_block_tag()
 
-        new_block = sab_math.DivBlock(self.canvas,tag)
+        new_block = sab_math.DivBlock(self.canvas,tag,x=x,y=y)
         
         self.blocks.append(new_block)
         self.bind_events()  # Ensure events are bound after adding blocks
         
-    def add_Sub_block(self, x=50, y=50):
-        tag = self.get_unique_block_tag()
+    def add_Sub_block(self,tag = None, x=50, y=50):
+        if tag is None:
+            tag = self.get_unique_block_tag()
 
-        new_block = sab_math.SubBlock(self.canvas,tag)
+        new_block = sab_math.SubBlock(self.canvas,tag,x=x,y=y)
         
         self.blocks.append(new_block)
         self.bind_events()  # Ensure events are bound after adding blocks
         
 
-    def add_input_block(self, x=50, y=50):
-        tag = self.get_unique_block_tag()
+    def add_input_block(self,tag = None, x=50, y=50):
+        if tag is None:
+            tag = self.get_unique_block_tag()
 
-        new_block = sab_io.InputBlock(self.canvas,tag)
+        new_block = sab_io.InputBlock(self.canvas,tag,x=x,y=y)
         
         self.blocks.append(new_block)
         self.bind_events()  # Ensure events are bound after adding blocks
 
-    def add_output_block(self, x=200, y=150):
-        tag = self.get_unique_block_tag()
+    def add_output_block(self,tag = None, x=50, y=50):
+        if tag is None:
+            tag = self.get_unique_block_tag()
 
-        new_block = sab_io.OutputBlock(self.canvas,tag)
+        new_block = sab_io.OutputBlock(self.canvas,tag,x=x,y=y)
 
         self.blocks.append(new_block)
         self.bind_events()  # Ensure events are bound after adding blocks
 
-    def add_filterbank_block(self, x=200, y=150):
-        tag = self.get_unique_block_tag()
+    def add_filterbank_block(self,tag = None, x=50, y=50):
+        if tag is None:
+            tag = self.get_unique_block_tag()
 
-        new_block = sab_filters.FilterBank(self.canvas,tag)
+        new_block = sab_filters.FilterBank(self.canvas,tag,x=x,y=y)
     
         self.blocks.append(new_block)
         self.bind_events()  # Ensure events are bound after adding blocks
     
-    def add_biquad_filter_block(self, x=200, y=200):
-        tag = self.get_unique_block_tag()
+    def add_biquad_filter_block(self,tag = None, x=50, y=50):
+        if tag is None:
+            tag = self.get_unique_block_tag()
 
-        new_block = sab_filters.BiquadFilter(self.canvas,tag)
+        new_block = sab_filters.BiquadFilter(self.canvas,tag,x=x,y=y)
     
         self.blocks.append(new_block)
         self.bind_events()  # Ensure
@@ -300,7 +355,9 @@ class CodeGeneratorApp:
         self.selected_arrow = self.canvas.find_withtag("current")[0]
         print("select_arrow")
 
-    def delete_block(self):
+    def delete_block(self,block_to_delete=None):
+        if block_to_delete is not None:
+            self.selected_block = block_to_delete
         if self.selected_block:
             # Delete assigned parameters!
             for block in self.blocks:

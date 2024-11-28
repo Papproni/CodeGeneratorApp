@@ -11,7 +11,7 @@ import numpy as np
 # numofOutputs: 1
 # number of channels per inputs: USER DEFINED
 class FilterBank(OptionManager):
-    def __init__(self,canvas,tag):
+    def __init__(self,canvas,tag,x = None,y = None):
         super().__init__()
         
         self.canvas = canvas
@@ -29,9 +29,12 @@ class FilterBank(OptionManager):
         self.output_num      = 1
         self.output_channel  = 1
 
-        # Create Block
-        self.x = 50
-        self.y = 50
+        if x is None:
+            self.x = 50
+            self.y = 50
+        else:
+            self.x = x
+            self.y = y
         self.w = 125
         self.io_circle_radius = 10
         
@@ -76,7 +79,7 @@ class FilterBank(OptionManager):
 # numofOutputs:                     1
 # number of channels per inputs:    1
 class BiquadFilter(OptionManager):
-    def __init__(self,canvas,tag):
+    def __init__(self,canvas,tag,x=None,y=None):
         super().__init__()
         
         
@@ -95,9 +98,12 @@ class BiquadFilter(OptionManager):
         self.output_num      = 1
         self.output_channel  = 1
 
-        # Create Block
-        self.x = 50
-        self.y = 50
+        if x is None:
+            self.x = 50
+            self.y = 50
+        else:
+            self.x = x
+            self.y = y
         self.w = 125
         self.io_circle_radius = 10
         
@@ -187,7 +193,7 @@ class BiquadFilter(OptionManager):
 # numofOutputs:                     1
 # number of channels per inputs:    1
 class MovingAverage(OptionManager):
-    def __init__(self,canvas,tag):
+    def __init__(self,canvas,tag,x=None,y=None):
         super().__init__()
         self.canvas = canvas
 
@@ -204,9 +210,12 @@ class MovingAverage(OptionManager):
         self.output_num      = 1
         self.output_channel  = 1
 
-        # Create Block
-        self.x = 50
-        self.y = 50
+        if x is None:
+            self.x = 50
+            self.y = 50
+        else:
+            self.x = x
+            self.y = y
         self.w = 150
         self.io_circle_radius = 10
         

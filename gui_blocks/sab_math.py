@@ -6,7 +6,7 @@ math_color = "orange"
 max_input_lim = 2
 
 class AddBlock(OptionManager):
-    def __init__(self,canvas,tag):
+    def __init__(self,canvas,tag,x=None,y=None):
         super().__init__()
         self.canvas = canvas
 
@@ -24,8 +24,13 @@ class AddBlock(OptionManager):
         self.output_channel  = 1
 
         # Create Block
-        self.x = 50
-        self.y = 50
+        if x is None:
+            self.x = 50
+            self.y = 50
+        else:
+            self.x = x
+            self.y = y
+
         self.w = 40
         self.h = 55
         self.io_circle_radius = 10
@@ -51,7 +56,7 @@ class AddBlock(OptionManager):
         self.last_opt_added()
         canvas.tag_lower("background",'all')
 class SubBlock(OptionManager):
-    def __init__(self,canvas,tag):
+    def __init__(self,canvas,tag,x=None,y=None):
         super().__init__()
         self.canvas = canvas
 
@@ -68,9 +73,13 @@ class SubBlock(OptionManager):
         self.output_num      = 1
         self.output_channel  = 1
 
-        # Create Block
-        self.x = 50
-        self.y = 50
+         # Create Block
+        if x is None:
+            self.x = 50
+            self.y = 50
+        else:
+            self.x = x
+            self.y = y
         self.w = 40
         self.h = 55
         self.io_circle_radius = 10
@@ -97,7 +106,7 @@ class SubBlock(OptionManager):
         canvas.tag_lower("background",'all')
         
 class DivBlock(OptionManager):
-    def __init__(self,canvas,tag):
+    def __init__(self,canvas,tag,x=None,y=None):
         super().__init__()
         self.canvas = canvas
 
@@ -114,9 +123,13 @@ class DivBlock(OptionManager):
         self.output_num      = 1
         self.output_channel  = 1
 
-        # Create Block
-        self.x = 50
-        self.y = 50
+         # Create Block
+        if x is None:
+            self.x = 50
+            self.y = 50
+        else:
+            self.x = x
+            self.y = y
         self.w = 40
         self.h = 55
         self.io_circle_radius = 10
@@ -142,7 +155,7 @@ class DivBlock(OptionManager):
         canvas.tag_lower("background",'all')
 
 class MulBlock(OptionManager):
-    def __init__(self,canvas,tag):
+    def __init__(self,canvas,tag,x = None,y = None):
         super().__init__()
         self.canvas = canvas
 
@@ -159,9 +172,13 @@ class MulBlock(OptionManager):
         self.output_num      = 1
         self.output_channel  = 1
 
-        # Create Block
-        self.x = 50
-        self.y = 50
+         # Create Block
+        if x is None:
+            self.x = 50
+            self.y = 50
+        else:
+            self.x = x
+            self.y = y
         self.w = 40
         self.h = 55
         self.io_circle_radius = 10
@@ -186,7 +203,7 @@ class MulBlock(OptionManager):
         self.last_opt_added()
         canvas.tag_lower("background",'all')
 class ABSBlock(OptionManager):
-    def __init__(self,canvas,tag):
+    def __init__(self,canvas,tag,x = None,y = None):
         super().__init__()
         self.canvas = canvas
 
@@ -204,8 +221,13 @@ class ABSBlock(OptionManager):
         self.output_channel  = 1
 
         # Create Block
-        self.x = 50
-        self.y = 50
+        if x is None:
+            self.x = 50
+            self.y = 50
+        else:
+            self.x = x
+            self.y = y
+
         self.w = 60
         self.h = 30
         self.io_circle_radius = 10
@@ -227,7 +249,7 @@ class ABSBlock(OptionManager):
         
 
 class LimitBlock(OptionManager):
-    def __init__(self,canvas,tag):
+    def __init__(self,canvas,tag,x = None,y = None):
         
         super().__init__()
         
@@ -246,9 +268,13 @@ class LimitBlock(OptionManager):
         self.output_num      = 1
         self.output_channel  = 1
 
-        # Create Block
-        self.x = 50
-        self.y = 50
+         # Create Block
+        if x is None:
+            self.x = 50
+            self.y = 50
+        else:
+            self.x = x
+            self.y = y
         self.w = 120
         self.io_circle_radius = 10
         
@@ -287,7 +313,7 @@ class LimitBlock(OptionManager):
     
 
 class ConstBlock(OptionManager):
-    def __init__(self,canvas,tag):
+    def __init__(self,canvas,tag,x = None,y = None):
         super().__init__()
         self.canvas = canvas
 
@@ -304,9 +330,13 @@ class ConstBlock(OptionManager):
         self.output_num      = 1
         self.output_channel  = 1
 
-        # Create Block
-        self.x = 50
-        self.y = 50
+         # Create Block
+        if x is None:
+            self.x = 50
+            self.y = 50
+        else:
+            self.x = x
+            self.y = y
         self.w = 125
         self.io_circle_radius = 10
         
