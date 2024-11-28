@@ -1,6 +1,9 @@
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
 
+import tkinter as tk
+from tkinter import filedialog
+
 
 # Data to populate the XML
 block_data = [
@@ -61,7 +64,13 @@ class SAB_save_load():
         # save parameters
         outputs.append(self.create_xml_from_fx_parameters(self.fx_parameters))
 
-        with open("blocks.xml", "w", encoding="utf-8") as f:
+        self.save_here = filedialog.asksaveasfile(
+            title="Save as...",
+            defaultextension=".xml",  # Default extension
+            filetypes=[("XML files", "*.xml"), ("All files", "*.*")],  # File types
+            mode="w"  # Open in write mode
+        )
+        with open(self.save_here.name, "w", encoding="utf-8") as f:
             for output in outputs:
                 f.write(self.prettify_xml(output))
  
@@ -79,24 +88,21 @@ class SAB_save_load():
             # Create a block element
             x1,y1,x2,y2 = self.canvas.coords(block.tag)
             block_elem = ET.SubElement(block_root, "block", {
-                "type": block.type,
-                "tag": block.tag,
-                "x": x1,
-                "y": y1
+                "type": str(block.type),
+                "tag": str(block.tag),
+                "x": str(x1),
+                "y": str(y1)
             })
 
-            # Add options if present
+            # # Add options if present
             try:
                 opts_elem = ET.SubElement(block_elem, "option_vars")
                 for opt in block.option_vars:
                     var_value = block.option_vars[opt].get('var').get()
 
                     ET.SubElement(opts_elem, opt, {
-                    "var_value"        :var_value
+                    "var_value"        :str(var_value)
                 })
-                
-                for key, value in block["opts"].items():
-                    ET.SubElement(opts_elem, key).text = value
             except:
                 pass
             
@@ -110,11 +116,11 @@ class SAB_save_load():
         # Add arrows
         for arrow in arrows:
             ET.SubElement(arrows_root, "arrow", {
-                "src_out_id"        :arrow[0],
-                "dst_in_id"         :arrow[1],
-                "arrow_id"          :arrow[2],
-                "dst_block_tag"     :arrow[3],
-                "src_block_tag"     :arrow[4]
+                "src_out_id"        :str(arrow[0]),
+                "dst_in_id"         :str(arrow[1]),
+                "arrow_id"          :str(arrow[2]),
+                "dst_block_tag"     :str(arrow[3]),
+                "src_block_tag"     :str(arrow[4])
             })
         return arrows_root
     
@@ -124,14 +130,14 @@ class SAB_save_load():
 
         # Add arrows
         for fx_parameter in fx_parameters.items():
-            settings = fx_parameter[1]['settings']
-            fx_param = ET.SubElement(fx_parameters_root, fx_parameter[0], {
-                "assigned_block_tag"        :fx_parameter[1]['assigned_block_tag'],
-                "assigned_block_setting"    :fx_parameter[1]['assigned_block_setting']
+            fx_param = ET.SubElement(fx_parameters_root, fx_parameter[0],{
+                "assigned_block_tag"        :str(fx_parameter[1]['assigned_block_tag']),
+                "assigned_block_setting"    :str(fx_parameter[1]['assigned_block_setting'])
             })
             setting_xml = ET.SubElement(fx_param, "settings")
+            settings = fx_parameter[1]['settings']
             for setting in settings.items():
-                ET.SubElement(setting_xml, "settings",{setting[0]:setting[1].get()})
+                ET.SubElement(setting_xml, "settings",{str(setting[0]):str(setting[1].get())})
                 
             
 

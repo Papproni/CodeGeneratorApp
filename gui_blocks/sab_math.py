@@ -52,7 +52,7 @@ class AddBlock(OptionManager):
         self.output_circle       = self.canvas.create_oval(self.x+self.w-self.io_circle_radius,   self.y+(self.h/2-self.io_circle_radius), self.x+self.w+10, self.y+(self.h/2+self.io_circle_radius), fill="yellow",            tags=("output_circle", self.tag))
 
         # OPTIONS: 
-        self.add_option("INPUT NUM",  "NUM", 2, max_input_lim,default_value=2, visible_on_block=False,bindable=False)
+        self.add_option("INPUT_NUM",  "NUM", 2, max_input_lim,default_value=2, visible_on_block=False,bindable=False)
         self.last_opt_added()
         canvas.tag_lower("background",'all')
 class SubBlock(OptionManager):
@@ -101,7 +101,7 @@ class SubBlock(OptionManager):
         self.output_circle       = self.canvas.create_oval(self.x+self.w-self.io_circle_radius,   self.y+(self.h/2-self.io_circle_radius), self.x+self.w+10, self.y+(self.h/2+self.io_circle_radius), fill="yellow",            tags=("output_circle", self.tag))
 
                 # OPTIONS: 
-        self.add_option("INPUT NUM",  "NUM", 2, max_input_lim,default_value=2, visible_on_block=False,bindable=False)
+        self.add_option("INPUT_NUM",  "NUM", 2, max_input_lim,default_value=2, visible_on_block=False,bindable=False)
         self.last_opt_added()
         canvas.tag_lower("background",'all')
         
@@ -150,7 +150,7 @@ class DivBlock(OptionManager):
         self.input_circle2       = self.canvas.create_oval(self.x-self.io_circle_radius,     self.y+30, self.x+10, self.y+50, fill="green",              tags=("input_circle", self.tag))
         self.output_circle       = self.canvas.create_oval(self.x+self.w-self.io_circle_radius,   self.y+(self.h/2-self.io_circle_radius), self.x+self.w+10, self.y+(self.h/2+self.io_circle_radius), fill="yellow",            tags=("output_circle", self.tag))
         # OPTIONS: 
-        self.add_option("INPUT NUM",  "NUM", 2, max_input_lim,default_value=2, visible_on_block=False,bindable=False)
+        self.add_option("INPUT_NUM",  "NUM", 2, max_input_lim,default_value=2, visible_on_block=False,bindable=False)
         self.last_opt_added()
         canvas.tag_lower("background",'all')
 
@@ -199,7 +199,7 @@ class MulBlock(OptionManager):
         self.input_circle2       = self.canvas.create_oval(self.x-self.io_circle_radius,     self.y+30, self.x+10, self.y+50, fill="green",              tags=("input_circle", self.tag))
         self.output_circle       = self.canvas.create_oval(self.x+self.w-self.io_circle_radius,   self.y+(self.h/2-self.io_circle_radius), self.x+self.w+10, self.y+(self.h/2+self.io_circle_radius), fill="yellow",            tags=("output_circle", self.tag))
         # OPTIONS: 
-        self.add_option("INPUT NUM",  "NUM", 2, max_input_lim,default_value=2, visible_on_block=False, bindable=False)
+        self.add_option("INPUT_NUM",  "NUM", 2, max_input_lim,default_value=2, visible_on_block=False, bindable=False)
         self.last_opt_added()
         canvas.tag_lower("background",'all')
 class ABSBlock(OptionManager):

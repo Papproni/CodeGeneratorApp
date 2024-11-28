@@ -1,0 +1,91 @@
+<?xml version="1.0" ?>
+<blocks/>
+<?xml version="1.0" ?>
+<arrows/>
+<?xml version="1.0" ?>
+<fx_parameters>
+  <param_1 assigned_block_tag="None" assigned_block_setting="None">
+    <settings>
+      <settings min_value="0"/>
+      <settings max_value="1"/>
+      <settings display_name="None"/>
+    </settings>
+  </param_1>
+  <param_2 assigned_block_tag="None" assigned_block_setting="None">
+    <settings>
+      <settings min_value="0"/>
+      <settings max_value="1"/>
+      <settings display_name="None"/>
+    </settings>
+  </param_2>
+  <param_3 assigned_block_tag="None" assigned_block_setting="None">
+    <settings>
+      <settings min_value="0"/>
+      <settings max_value="1"/>
+      <settings display_name="None"/>
+    </settings>
+  </param_3>
+  <param_4 assigned_block_tag="None" assigned_block_setting="None">
+    <settings>
+      <settings min_value="0"/>
+      <settings max_value="1"/>
+      <settings display_name="None"/>
+    </settings>
+  </param_4>
+  <param_5 assigned_block_tag="None" assigned_block_setting="None">
+    <settings>
+      <settings min_value="0"/>
+      <settings max_value="1"/>
+      <settings display_name="None"/>
+    </settings>
+  </param_5>
+  <param_6 assigned_block_tag="None" assigned_block_setting="None">
+    <settings>
+      <settings min_value="0"/>
+      <settings max_value="1"/>
+      <settings display_name="None"/>
+    </settings>
+  </param_6>
+  <param_7 assigned_block_tag="None" assigned_block_setting="None">
+    <settings>
+      <settings min_value="0"/>
+      <settings max_value="1"/>
+      <settings display_name="None"/>
+    </settings>
+  </param_7>
+  <param_8 assigned_block_tag="None" assigned_block_setting="None">
+    <settings>
+      <settings min_value="0"/>
+      <settings max_value="1"/>
+      <settings display_name="None"/>
+    </settings>
+  </param_8>
+  <param_9 assigned_block_tag="None" assigned_block_setting="None">
+    <settings>
+      <settings min_value="0"/>
+      <settings max_value="1"/>
+      <settings display_name="None"/>
+    </settings>
+  </param_9>
+  <param_10 assigned_block_tag="None" assigned_block_setting="None">
+    <settings>
+      <settings min_value="0"/>
+      <settings max_value="1"/>
+      <settings display_name="None"/>
+    </settings>
+  </param_10>
+  <param_11 assigned_block_tag="None" assigned_block_setting="None">
+    <settings>
+      <settings min_value="0"/>
+      <settings max_value="1"/>
+      <settings display_name="None"/>
+    </settings>
+  </param_11>
+  <param_12 assigned_block_tag="None" assigned_block_setting="None">
+    <settings>
+      <settings min_value="0"/>
+      <settings max_value="1"/>
+      <settings display_name="None"/>
+    </settings>
+  </param_12>
+</fx_parameters>
