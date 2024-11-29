@@ -1,8 +1,5 @@
 /*THIS FILE IS GENERATED! DO NOT MODIFY!
-Generated on: 2024.11.28. */
-
-#ifndef SAB_CUSTOM_H
-#define SAB_CUSTOM_H
+Generated on: 2024.11.29. */
 
 #include "SAB_CUSTOM.h"
 

@@ -1,8 +1,5 @@
 /*THIS FILE IS GENERATED! DO NOT MODIFY!
-Generated on: 2024.11.28. */
-
-#ifndef SAB_BOOST_H
-#define SAB_BOOST_H
+Generated on: 2024.11.29. */
 
 #include "SAB_boost.h"
 
