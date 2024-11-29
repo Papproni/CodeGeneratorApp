@@ -112,6 +112,7 @@ class CodeGeneratorApp:
 
         io_menu.add_command(label="Input", command=self.add_input_block)
         io_menu.add_command(label="Output", command=self.add_output_block)
+        io_menu.add_command(label="Generator", command=self.add_generator_block)
 
         filter_menu = Menu(menubar, tearoff=0)
         menubar.add_cascade(label="Filters", menu=filter_menu)
@@ -316,6 +317,15 @@ class CodeGeneratorApp:
             tag = self.get_unique_block_tag()
 
         new_block = sab_io.OutputBlock(self.canvas, tag,x=x,y=y, load_data=load_data)
+
+        self.blocks.append(new_block)
+        self.bind_events()  # Ensure events are bound after adding blocks
+
+    def add_generator_block(self,tag = None, x=50, y=50, load_data=None):
+        if tag is None:
+            tag = self.get_unique_block_tag()
+
+        new_block = sab_io.GeneratorBlock(self.canvas, tag,x=x,y=y, load_data=load_data)
 
         self.blocks.append(new_block)
         self.bind_events()  # Ensure events are bound after adding blocks

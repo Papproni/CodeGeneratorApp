@@ -123,7 +123,7 @@ class GeneratorBlock(OptionManager):
         
         # self.filterbank_block    = canvas.create_rectangle(x, y, x+100, y+75+option_height*3, fill="red",         tags=("block", tag,"background"))
         self.filterbank_text_bg  = self.canvas.create_rectangle(self.x,  self.y, self.x+self.w, self.y+40, fill="grey",         tags=("block", self.tag,"text_background"))
-        self.filterbank_text     = self.canvas.create_text(     self.x+self.w/2,    self.y+20, text="Filterbank", font=("Arial", 14), tags=("block", self.tag) )
+        self.filterbank_text     = self.canvas.create_text(     self.x+self.w/2,    self.y+20, text="Generator", font=("Arial", 14), tags=("block", self.tag) )
         
         self.output_circle       = self.canvas.create_oval(self.x+self.w-self.io_circle_radius,   self.y+15, self.x+self.w+10, self.y+35, fill="yellow",            tags=("output_circle", self.tag))
         
@@ -135,7 +135,7 @@ class GeneratorBlock(OptionManager):
         self.add_option("Freq","NUM",1,20000,default_value=10)
         self.add_option("Amp","NUM",0,65535,default_value=1)
         self.add_option("Sig","OPTIONBOX",default_value="SINE,TRIANGLE,SQUARE",bindable=False)
-        self.add_option("Ofset","NUM",0,65535,default_value=10)
+        self.add_option("Offs","NUM",0,65535,default_value=10)
         
         self.last_opt_added()
         self.filterbank_block    = self.canvas.create_rectangle(self.x, self.y, self.x+self.w, self.y+self.opt_start_y+self.opt_height*self.opt_counter, fill="red",         tags=("block", self.tag,"background"))

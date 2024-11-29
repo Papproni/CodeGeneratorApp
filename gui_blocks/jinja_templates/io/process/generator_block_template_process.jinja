@@ -1,0 +1,31 @@
+{% if 'param_' not in Freq %}
+    {%- set Freq_c = 'self->'+instance_name+'_freq' -%}
+{%- else %}
+    {%- set Freq_c = 'self->' + Freq + '_value' -%}
+{% endif %}
+{% if 'param_' not in Amp %}
+    {%- set Amp_c =' self->'+instance_name+'_amp' -%}
+{%- else %}
+    {%- set Amp_c = 'self->' + Amp + '_value' -%}
+{% endif %}
+{% if 'param_' not in Offs %}
+    {%- set Offs_c = 'self->'+instance_name+'_offs' -%}
+{%- else %}
+    {%- set Offs_c = 'self->' + Offs + '_value' -%}
+{%- endif -%}
+{%- set time_c = 'self->'+instance_name+'_time' -%}
+{%- set phase_c = 'self->'+instance_name+'_phase' -%}
+{%- set out_c = 'self->'+instance_name+'_output_f32' -%}
+// {{instance_name}} process: {{Sig}}
+    {{phase_c}} = fmod({{time_c}}, 1.0/{{Freq_c}}) * {{Freq_c}};
+{% if Sig == "TRIANGLE" %}
+    if ({{phase_c}} < 0.5)
+        {{out_c}} = {{Amp_c}} * (4 * {{phase_c}} - 1);
+    else
+        {{out_c}} = {{Amp_c}} * (3 - 4 * {{phase_c}});
+{% elif Sig == "SQUARE" %}
+    {{out_c}} = ({{phase_c}} < 0.5) ? {{Amp_c}} : -{{Amp_c}};
+{% elif Sig == "SINE" %}
+    {{out_c}} = {{Amp_c}} * sin(2 * 3.141592653 * {{Freq_c}} * {{time_c}});
+{% endif %}
+    {{out_c}} += {{Offs_c}}

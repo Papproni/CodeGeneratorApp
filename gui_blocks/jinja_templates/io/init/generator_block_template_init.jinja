@@ -1,0 +1,13 @@
+{% if 'param_' not in Freq %}
+    {%- set Freq_c = Freq -%}
+    self->{{instance_name}}_freq = {{Freq_c}};
+{% endif %}
+{%- if 'param_' not in Amp -%}
+    {%- set Amp_c = Amp -%}
+    self->{{instance_name}}_amp = {{Amp_c}};
+{% endif %}
+{%- if 'param_' not in Offs -%}
+    {%- set Offs_c = Offs -%}
+    self->{{instance_name}}_offs = {{Offs_c}};
+{%- endif %}
+self->{{instance_name}}_time = 0;
