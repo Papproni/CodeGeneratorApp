@@ -2,24 +2,30 @@
 <SAB_code_gen_data>
   <blocks>
     <block type="input_block" tag="block0" x="48.0" y="50.0"/>
-    <block type="output_block" tag="block1" x="401.0" y="60.0"/>
+    <block type="output_block" tag="block1" x="474.0" y="252.0"/>
     <block type="biquad_filter_block" tag="block2" x="220.0" y="55.0">
-      <option_vars Type="LPF" Freq="param_1" Q="param_2" Gain="1"/>
+      <option_vars Type="LPF" Freq="param_1" Q="0.707" Gain="param_2"/>
     </block>
-    <block type="biquad_filter_block" tag="block3" x="247.0" y="343.0">
+    <block type="add_block" tag="block3" x="393.0" y="271.0">
+      <option_vars INPUT_NUM="2"/>
+    </block>
+    <block type="biquad_filter_block" tag="block4" x="166.0" y="355.0">
       <option_vars Type="LPF" Freq="440" Q="0.707" Gain="1"/>
     </block>
   </blocks>
   <arrows>
-    <arrow src_out_id="39" dst_in_id="47" arrow_id="58" dst_block_tag="block2" src_block_tag="block0"/>
-    <arrow src_out_id="48" dst_in_id="43" arrow_id="59" dst_block_tag="block1" src_block_tag="block2"/>
+    <arrow src_out_id="84" dst_in_id="92" arrow_id="121" dst_block_tag="block2" src_block_tag="block0"/>
+    <arrow src_out_id="84" dst_in_id="110" arrow_id="122" dst_block_tag="block4" src_block_tag="block0"/>
+    <arrow src_out_id="111" dst_in_id="106" arrow_id="123" dst_block_tag="block3" src_block_tag="block4"/>
+    <arrow src_out_id="93" dst_in_id="106" arrow_id="124" dst_block_tag="block3" src_block_tag="block2"/>
+    <arrow src_out_id="107" dst_in_id="88" arrow_id="125" dst_block_tag="block1" src_block_tag="block3"/>
   </arrows>
   <fx_parameters>
     <param_1>
       <settings min_value="2" max_value="10" display_name="Freq"/>
     </param_1>
     <param_2>
-      <settings min_value="-5" max_value="0" display_name="Q"/>
+      <settings min_value="-5" max_value="0" display_name="Gain"/>
     </param_2>
     <param_3>
       <settings min_value="0" max_value="1" display_name="None"/>
