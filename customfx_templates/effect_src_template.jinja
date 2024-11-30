@@ -80,6 +80,10 @@ static float32_t conv_raw_to_param_value(uint8_t value, float32_t low, float32_t
     return low + (v_f32 / 255.0f) * (high - low);
 }
 
+void SAB_{{ name }}_delete( SAB_{{ name }}_tst* self){
+    // TODO
+}
+
 // Process Function for SAB_{{ name }}_tst
 void SAB_{{ name }}_init( SAB_{{ name }}_tst* self){
 
