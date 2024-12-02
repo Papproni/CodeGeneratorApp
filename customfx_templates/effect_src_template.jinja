@@ -75,11 +75,6 @@ void calculate_biquad_coeffs(float32_t* coeffs_af32,FilterType type, float freq,
     coeffs_af32[4]=-coeffs.a2;
 }
 
-static float32_t conv_raw_to_param_value(uint8_t value, float32_t low, float32_t high) {
-	float32_t v_f32 = value;
-    return low + (v_f32 / 255.0f) * (high - low);
-}
-
 void SAB_{{ name }}_delete( SAB_{{ name }}_tst* self){
     // TODO
 }
@@ -95,7 +90,12 @@ void SAB_{{ name }}_init( SAB_{{ name }}_tst* self){
 
 	// PARAMS:
     {% for control in control_params %}
-    add_parameter(&self->intercom_parameters_aun[{{ loop.index0 }}],"{{control.display_name | upper}}",PARAM_TYPE_POT,69);
+    add_parameter(&self->intercom_parameters_aun[{{ loop.index0 }}],"{{control.display_name | upper}}", 
+    {%- if 'None' not in control.display_name -%}
+    PARAM_TYPE_POT
+    {%- else -%}
+        PARAM_TYPE_UNUSED
+    {%- endif -%},69);
     {%- endfor %}
 
     // Generated outputs from other Jinja templates
@@ -106,7 +106,7 @@ void SAB_{{ name }}_init( SAB_{{ name }}_tst* self){
 };
 
 // Process Function for SAB_{{ name }}_tst
-float32_t SAB_{{ name }}_process( SAB_{{ name }}_tst* self, float32_t input_f32, float32_t output_f32){
+float32_t SAB_{{ name }}_process( SAB_{{ name }}_tst* self, float32_t input_f32){
 
     {%- for control in control_params -%}
     {%- if control.display_name != 'None' %}
@@ -119,6 +119,4 @@ float32_t SAB_{{ name }}_process( SAB_{{ name }}_tst* self, float32_t input_f32,
     {% for process_output in generated_process_outputs %}
     {{ process_output }}
     {% endfor %}
-
-    return output_f32;
 };
