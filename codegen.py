@@ -16,33 +16,6 @@ import SAB_save
 import networkx as nx
 import xml.etree.ElementTree as ET
 
-
-
-# On screen user has 6 options to use
-# maximum 12 options are available
-# each slot can be a "checkbox" or a "potentiometer"
-
-# In gui user must choose a parameter assign it to a one of above
-# USER MUST: Set a name for the parameter
-# IF potentiometer is choosen:
-    # he must choose Min and Max Value
-    # on the menu user must choose a place on the screen
-    # User can chage parameters on screen according to position (IE: on P1 and P7 = POT1)
-    # User can set potentiometer variable to Side, if thats needed, the outside control must be used!
-
-# IF checkbox is choosen 
-    # he must choose Min and Max Value for checked and unchecked box (touch)
-    # on the menu user must choose a place on the screen 
-
-
-#
-# *-------------------*    *-------------------*
-# |  P1  |  P2  |  P3  |    |  P7  |  P8  |  P9  |
-# |--------------------|    |--------------------|
-# |  P4  |  P5  |  P6  |    |  P10 |  P11 | P12  |
-# *-------------------*    *-------------------*
-#         Page 1                    Page 2
-
 class Potmeter:
     def __init__(self):
         self.name = "None"
@@ -512,11 +485,6 @@ class CodeGeneratorApp:
                 print(name)
         except:
             pass
-        
-        
-        
-        
-        
 
     def on_block_drag(self, event):
         print("on_block_drag")
@@ -614,12 +582,9 @@ class CodeGeneratorApp:
                         print("EXCEPTION: ", self.selected_output_circle)
                     
                     x3, y3, x4, y4 = self.canvas.coords(target_input_circle)
-                    # self.canvas.coords(self.arrow_line, (x1 + x2)/2, (y1 + y2)/2, (x3 + x4) / 2, (y3 + y4) / 2)
                     self.arrows.append((self.selected_output_circle, item, self.arrow_line, self.selected_input_circle_block, self.selected_output_circle_block))
                     self.arrow_line = None
                     self.selected_output_circle = None
-                    # self.canvas.unbind("<Motion>")
-                    # self.canvas.unbind("<ButtonPress-1>")
                     print("connected")
                     break
                 else:
@@ -633,8 +598,6 @@ class CodeGeneratorApp:
             self.canvas.delete(self.arrow_line)
             self.arrow_line = None
             self.selected_output_circle = None
-            # self.canvas.unbind("<Motion>")
-            # self.canvas.unbind("<ButtonPress-1>")
 
     def update_arrows(self):
         # Update the arrow positions
