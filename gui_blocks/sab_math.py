@@ -3,10 +3,10 @@ from tkinter import Canvas, Menu, StringVar, OptionMenu
 from gui_blocks.gui_elements.option_manager import OptionManager
 
 math_color = "orange"
-max_input_lim = 2
+max_input_lim = 16
 
 class AddBlock(OptionManager):
-    def __init__(self,canvas,tag,x=None,y=None,load_data = None):
+    def __init__(self,canvas :Canvas,tag,x=None,y=None,load_data = None):
         super().__init__()
         self.canvas = canvas
 
@@ -31,30 +31,56 @@ class AddBlock(OptionManager):
             self.x = x
             self.y = y
 
-        self.w = 40
-        self.h = 55
-        self.io_circle_radius = 10
+        self.circle_y_offset    = 5  # px
+        self.circle_y_distance  = 25 # px
+        self.io_circle_radius   = 10 # px
+
+        self.w = 40 # px
+        self.num_of_inputs = 2
+        self.h = self.circle_y_offset + self.num_of_inputs * self.circle_y_distance
         
         # Option params
         self.opt_start_y    = 20
-        self.opt_height     = 50 # pixel
+        self.opt_height     = 75 # pixel
         self.opt_counter    = 0
         self.opt_text_start = 20 # 20%
         self.opt_box_start  = 70 # 70%
         
-        
-        # self.filterbank_block    = canvas.create_rectangle(x, y, x+100, y+75+option_height*3, fill="red",         tags=("block", tag,"background"))
         self.bg  = self.canvas.create_rectangle(self.x,  self.y, self.x+self.w, self.y+self.h, fill=math_color,         tags=("block", self.tag,"text_background"))
         self.text     = self.canvas.create_text(     self.x+self.w/2,    self.y+self.h/2, text="+", font=("Arial", 14), tags=("block", self.tag) )
         
-        self.input_circle1       = self.canvas.create_oval(self.x-self.io_circle_radius,     self.y+5, self.x+10, self.y+25, fill="green",              tags=("input_circle", self.tag))
-        self.input_circle2       = self.canvas.create_oval(self.x-self.io_circle_radius,     self.y+30, self.x+10, self.y+50, fill="green",              tags=("input_circle", self.tag))
+
+        self.input_circle_y =self.y+self.circle_y_offset 
+        self.input_circles = []
+        for i in range(self.num_of_inputs):
+            self.input_circles.append(self.canvas.create_oval(self.x-self.io_circle_radius,     self.input_circle_y, self.x+10, self.y+25+25*i, fill="green",              tags=("input_circle", self.tag)))
+            self.input_circle_y = self.input_circle_y + self.circle_y_distance
+        
+        # self.input_circle2       = self.canvas.create_oval(self.x-self.io_circle_radius,     self.input_circle_y, self.x+10, self.y+50, fill="green",              tags=("input_circle", self.tag))
+        # self.input_circle_y = self.input_circle_y + self.circle_y_distance
+        # self.input_circle3       = self.canvas.create_oval(self.x-self.io_circle_radius,     self.input_circle_y, self.x+10, self.y+75, fill="green",              tags=("input_circle", self.tag))
+        
         self.output_circle       = self.canvas.create_oval(self.x+self.w-self.io_circle_radius,   self.y+(self.h/2-self.io_circle_radius), self.x+self.w+10, self.y+(self.h/2+self.io_circle_radius), fill="yellow",            tags=("output_circle", self.tag))
 
         # OPTIONS: 
-        self.add_option("INPUT_NUM",  "NUM", 2, max_input_lim,default_value=2, visible_on_block=False,bindable=False)
+        self.add_option("INPUT_NUM",  "NUM", self.num_of_inputs, max_input_lim,default_value=2, visible_on_block=False,callback_on_value_change=self.changing_size_of_block)
         self.last_opt_added()
         canvas.tag_lower("background",'all')
+    def changing_size_of_block(self,num_of_inputs):
+        self.num_of_inputs = num_of_inputs
+        self.h = self.circle_y_offset + self.num_of_inputs * self.circle_y_distance
+
+        for circle in self.input_circles:
+            self.canvas.delete(circle)
+
+        self.input_circle_y =self.y+self.circle_y_offset 
+        self.input_circles = []
+        for i in range(self.num_of_inputs):
+            self.input_circles.append(self.canvas.create_oval(self.x-self.io_circle_radius,     self.input_circle_y, self.x+10, self.y+25+25*i, fill="green",              tags=("input_circle", self.tag)))
+            self.canvas.delete()
+            self.input_circle_y = self.input_circle_y + self.circle_y_distance
+        print("changin_size_of_block")
+
 class SubBlock(OptionManager):
     def __init__(self,canvas,tag,x=None,y=None,load_data = None):
         super().__init__()

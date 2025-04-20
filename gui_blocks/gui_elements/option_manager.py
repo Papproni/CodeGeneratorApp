@@ -10,7 +10,7 @@ class OptionManager:
     #       self.add_option("LOW",  "NUM", -20000, 20000)
     #   Chooseable:
     #       self.add_option("TYPE", "OPTIONBOX", default_value="LPF,HPF,NOTCH,BANDPASS")
-    def add_option(self, option_name, option_type, min_value=None, max_value=None, default_value="1", bindable=None, visible_on_block = None):
+    def add_option(self, option_name, option_type, min_value=None, max_value=None, default_value="1", bindable=None, visible_on_block = None, callback_on_value_change = None):
         
         # Handle option types: NUM (numeric entry) and OPTIONBOX (dropdown menu)
         if option_type == "NUM":
@@ -25,7 +25,7 @@ class OptionManager:
                 "type":         option_type,
                 "binded_src": None
             }
-            var.trace_add("write", lambda *args, name=option_name: self.on_variable_change(name))
+            var.trace_add("write", lambda *args, name=option_name: self.on_variable_change(name, function_to_call_on_change=callback_on_value_change))
             if(False == visible_on_block):
                 return
             self.inc_opt_counter()
@@ -98,14 +98,16 @@ class OptionManager:
             anchor="center"
         )
 
-    def on_variable_change(self, name):
+    def on_variable_change(self, name, function_to_call_on_change = None):
         data = self.option_vars[name]
         bind_src = data['binded_src']
         if(bind_src != None):
             data.get('var').set(bind_src)
         else:
             self.validate_numeric_input(data)
-
+        if(function_to_call_on_change is not None):
+            value   = int(data.get('var').get())
+            function_to_call_on_change(value)
         print("on_variable_change")
 
     def validate_numeric_input(self, data):
