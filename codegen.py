@@ -35,7 +35,6 @@ class CodeGeneratorApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Code Generator for SAB_V3")
-        self.root.wm_attributes("-topmost", True)
         root.geometry("1000x1000")
 
         self.codegen_location_src = None
@@ -76,10 +75,12 @@ class CodeGeneratorApp:
 
         file_menu = Menu(menubar, tearoff=0)
         menubar.add_cascade(label="File", menu=file_menu)
+        file_menu.add_checkbutton(label="WindowTopLock", command=self.top_lock_window)
         file_menu.add_command(label="Save", command=self.save_custom_fx)
         file_menu.add_command(label="Load", command=self.load_custom_fx)
         file_menu.add_command(label="Choose gen loc", command=self.set_gen_location)
 
+        
         io_menu = Menu(menubar, tearoff=0)
         menubar.add_cascade(label="IO", menu=io_menu)
 
@@ -118,6 +119,11 @@ class CodeGeneratorApp:
         
         special_menu.add_command(label="PID",                       command=self.add_add_block)
         special_menu.add_command(label="State Space Control",       command=self.add_add_block)
+
+    def top_lock_window(self):
+        print("top_lock_window")
+        current = bool(self.root.wm_attributes("-topmost"))
+        self.root.wm_attributes("-topmost", not current)
 
     def save_custom_fx(self):
         print("SAVE")
