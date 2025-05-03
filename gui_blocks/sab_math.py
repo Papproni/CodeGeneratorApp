@@ -72,13 +72,20 @@ class AddBlock(OptionManager):
 
         for circle in self.input_circles:
             self.canvas.delete(circle)
-
+        self.x,self.y,x2,y2 = self.canvas.coords(self.tag)
+        
+        # update old block data
+        self.canvas.coords(self.bg,self.x,  self.y, self.x+self.w, self.y+self.h)
+        self.canvas.coords(self.text,self.x+self.w/2,    self.y+self.h/2)
+        self.canvas.coords(self.output_circle,self.x+self.w-self.io_circle_radius,   self.y+(self.h/2-self.io_circle_radius), self.x+self.w+10, self.y+(self.h/2+self.io_circle_radius))
+        
         self.input_circle_y =self.y+self.circle_y_offset 
         self.input_circles = []
         for i in range(self.num_of_inputs):
             self.input_circles.append(self.canvas.create_oval(self.x-self.io_circle_radius,     self.input_circle_y, self.x+10, self.y+25+25*i, fill="green",              tags=("input_circle", self.tag)))
             self.canvas.delete()
             self.input_circle_y = self.input_circle_y + self.circle_y_distance
+        
         print("changin_size_of_block")
 
 class SubBlock(OptionManager):
