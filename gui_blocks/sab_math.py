@@ -66,6 +66,7 @@ class AddBlock(OptionManager):
         self.add_option("INPUT_NUM",  "NUM", self.num_of_inputs, max_input_lim,default_value=2, visible_on_block=False,callback_on_value_change=self.changing_size_of_block)
         self.last_opt_added()
         canvas.tag_lower("background",'all')
+    
     def changing_size_of_block(self,num_of_inputs):
         self.num_of_inputs = num_of_inputs
         self.h = self.circle_y_offset + self.num_of_inputs * self.circle_y_distance

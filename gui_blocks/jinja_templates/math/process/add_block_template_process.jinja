@@ -1,2 +1,5 @@
-// {{instance_name}}
-self->{{ instance_name }}_output_f32 = self->{{ pre_instances[0] }}_output_f32 + self->{{ pre_instances[1] }}_output_f32;
+// {{ instance_name }}
+self->{{ instance_name }}_output_f32 = 
+    {% for pre in pre_instances -%}
+        self->{{ pre }}_output_f32{% if not loop.last %} + {% endif %}
+    {%- endfor %};

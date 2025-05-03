@@ -69,7 +69,8 @@ class SAB_fx_builder():
         """
         Build a PERT graph (DAG) from the given paths.
         """
-        G = nx.DiGraph()
+        # G = nx.DiGraph()
+        G = nx.MultiDiGraph()
         for arrow in arrows:
             G.add_edge(arrow[4],arrow[3])
         return G
@@ -137,7 +138,9 @@ class SAB_fx_builder():
             for block in blocks:
                 for pre in predecessors:
                     if block.tag == pre:
-                        pre_to_render.append(f'{block.type}_{block.tag}')
+                        count = pert_graph.number_of_edges(block.tag, tag)
+                        for i in range(count):
+                            pre_to_render.append(f'{block.type}_{block.tag}')
                 if(block.tag == tag):
                     block_name = block.type
                     block_to_render = block
